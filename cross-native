@@ -1,0 +1,12 @@
+here=$(dirname "${BASH_SOURCE[0]}")
+awk -v here="$here" \
+  -v out="$out" \
+  '{
+    gsub("@HERE@", here)
+    gsub("@OUT@", out)
+    print
+  }' \
+  "$here"/cross-native.config >.config
+ct-ng oldconfig
+ct-ng build
+chmod u+w "$out"

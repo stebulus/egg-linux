@@ -1,0 +1,71 @@
+#!/bin/bash
+set -euo pipefail
+me=$(basename "${BASH_SOURCE[0]}")
+here=$(dirname "${BASH_SOURCE[0]}")
+here=$(readlink -f "$here")
+
+if [ $# -lt 2 ]; then
+  echo >&2 "usage: $0 outputdir buildscript [input ...]"
+  exit 1
+fi
+out=$(readlink -f "$1")
+shift
+script_name=$(basename "$1")
+script=$(readlink -f "$1")
+shift
+inputs=("$@")
+
+if [ -e "$out"/.built ]; then
+  shouldBuild=no
+  if [ "$script" -nt "$out"/.built ]; then
+    echo >&2 "$0: should build: $script is newer than $out"
+    shouldBuild=yes
+  elif [ -v inputs ]; then
+    for i in "${inputs[@]}"; do
+      if [ "$i"/.built -nt "$out"/.built ]; then
+        echo >&2 "$0: should build: $i is newer than $out"
+        shouldBuild=yes
+        break
+      fi
+    done
+  fi
+else
+  echo >&2 "$0: should build: $out was not built"
+  shouldBuild=yes
+fi
+
+case "$shouldBuild" in
+  yes)
+    echo >&2 "$0: building: $out"
+    unset workdir
+    trap 'if [ -v workdir ]; then rm -rf "$workdir"; fi' EXIT
+    workdir=$(mktemp -d --tmpdir "$script_name".XXXXXXXX)
+    inputspath=
+    if [ -v inputs ]; then
+      for i in "${inputs[@]}"; do
+        i=$(readlink -f "$i")
+        inputspath=$inputspath:$i/bin
+      done
+    fi
+    if [ -d "$out" ]; then
+      find "$out" -type d -exec chmod u+w {} +
+    fi
+    rm -rf "$out"
+    (
+      cd "$workdir"
+      env out="$out" \
+        src="$here"/src \
+        PATH="${inputspath:+$inputspath:}$PATH" \
+        /bin/bash -euo pipefail -- "$script"
+    )
+    touch "$out"/.built
+    ;;
+  no)
+    echo >&2 "$0: not building: $out"
+    exit 0
+    ;;
+  *)
+    echo >&2 "$0: internal error: $shouldBuild"
+    exit 2
+    ;;
+esac

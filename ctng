@@ -1,0 +1,5 @@
+tar xf "$src"/crosstool-ng-1.22.0.tar.bz2
+cd crosstool-ng
+./configure --prefix="$out"
+make
+make install

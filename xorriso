@@ -1,0 +1,5 @@
+tar xf "$src"/xorriso-1.4.2.tar.gz
+cd xorriso-1.4.2
+./configure --prefix="$out"
+make
+make install
