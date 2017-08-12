@@ -1,13 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 here=$(dirname "${BASH_SOURCE[0]}")
-here=$(readlink -f "$here")
 
 if [ $# -ne 1 ]; then
   echo >&2 "usage: $0 outputdir"
   exit 1
 fi
-out=$(readlink -f "$1")
+out=$1
 
 build() {
   module=$1
