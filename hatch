@@ -1,6 +1,5 @@
 #!/bin/bash
 set -euo pipefail
-me=$(basename "${BASH_SOURCE[0]}")
 here=$(dirname "${BASH_SOURCE[0]}")
 here=$(readlink -f "$here")
 
