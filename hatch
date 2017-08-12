@@ -10,20 +10,19 @@ if [ $# -ne 1 ]; then
 fi
 out=$(readlink -f "$1")
 
+build() {
+  module=$1
+  shift
+  "$here"/build "$out/$module" "$here/$module" "${@/#/$out/}"
+}
+
 mkdir -p "$out"
-"$here"/build "$out"/ctng "$here"/ctng
-"$here"/build "$out"/cross "$here"/cross \
-  "$out"/ctng
-"$here"/build "$out"/cross-native "$here"/cross-native \
-  "$out"/cross "$out"/ctng
-"$here"/build "$out"/static-bash "$here"/static-bash \
-  "$out"/cross
-"$here"/build "$out"/linux "$here"/linux \
-  "$out"/cross
-"$here"/build "$out"/xorriso "$here"/xorriso
-"$here"/build "$out"/grub "$here"/grub \
-  "$out"/xorriso
-"$here"/build "$out"/tree "$here"/tree \
-  "$out"/linux "$out"/static-bash
-"$here"/build "$out"/image "$here"/image \
-  "$out"/grub "$out"/xorriso "$out"/tree
+build ctng
+build cross ctng
+build cross-native cross ctng
+build static-bash cross
+build linux cross
+build xorriso
+build grub xorriso
+build tree linux static-bash
+build image grub xorriso tree
