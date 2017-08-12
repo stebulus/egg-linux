@@ -1,0 +1,2 @@
+mkdir -p "$out"
+grub-mkrescue -o "$out"/egg.iso "$tree"

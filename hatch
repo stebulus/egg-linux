@@ -23,3 +23,7 @@ mkdir -p "$out"
 "$here"/build "$out"/xorriso "$here"/xorriso
 "$here"/build "$out"/grub "$here"/grub \
   "$out"/xorriso
+"$here"/build "$out"/tree "$here"/tree \
+  "$out"/linux "$out"/static-bash
+"$here"/build "$out"/image "$here"/image \
+  "$out"/grub "$out"/xorriso "$out"/tree

@@ -1,0 +1,10 @@
+mkdir -p "$out"/boot/grub
+cat <<EOF >"$out"/boot/grub/grub.cfg
+menuentry Linux {
+  set root=(cd)
+  linux /boot/vmlinuz console=ttyS0 init=/bin/bash root=0b00
+}
+EOF
+cp -a "$linux"/* "$out"
+mkdir -p "$out"/bin
+cp "$static_bash"/bin/bash "$out"/bin/bash
