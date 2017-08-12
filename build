@@ -46,7 +46,7 @@ case "$shouldBuild" in
       for i in "${inputs[@]}"; do
         name=$(basename "$i")
         fullpath=$(readlink -f "$i")
-        inputspath=$inputspath:$fullpath/bin
+        inputspath+=${inputspath:+:}$fullpath/bin
         inputsvars+=("${name//-/_}=$fullpath")
       done
     fi
