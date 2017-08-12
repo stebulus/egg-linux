@@ -30,7 +30,7 @@ if [ -e "$out"/.built ]; then
     done
   fi
 else
-  echo >&2 "$0: should build: $out was not built"
+  echo >&2 "$0: should build: $out has not been built"
   shouldBuild=yes
 fi
 
