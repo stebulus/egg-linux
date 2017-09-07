@@ -11,7 +11,7 @@ out=$1
 build() {
   module=$1
   shift
-  "$here"/build "$out/$module" "$here/$module" "${@/#/$out/}"
+  "$here"/build "$out/$module" "$here/module/$module" "${@/#/$out/}"
 }
 
 mkdir -p "$out"
