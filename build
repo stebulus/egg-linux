@@ -58,7 +58,7 @@ case "$shouldBuild" in
       env out="$out" \
         src="$here"/src \
         PATH="${inputspath:+$inputspath:}$PATH" \
-        "${inputsvars[@]}" \
+        ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script"
     )
     touch "$out"/.built
