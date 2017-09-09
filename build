@@ -63,6 +63,7 @@ case "$shouldBuild" in
     )
     chmod u+w "$out"
     touch "$out"/.built
+    find "$out" -exec chmod a-w {} +
     ;;
   no)
     echo >&2 "$0: not building: $out"
