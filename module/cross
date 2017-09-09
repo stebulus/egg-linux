@@ -9,4 +9,3 @@ awk -v here="$here" \
   "$here"/cross.config >.config
 ct-ng oldconfig
 ct-ng build
-chmod u+w "$out"

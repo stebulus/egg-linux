@@ -61,6 +61,7 @@ case "$shouldBuild" in
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script"
     )
+    chmod u+w "$out"
     touch "$out"/.built
     ;;
   no)
