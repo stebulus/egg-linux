@@ -62,6 +62,7 @@ case "$shouldBuild" in
         inputsvars+=(
           CPATH="${inputspaths[*]/%//include}"
           LD_LIBRARY_PATH="${inputspaths[*]/%//lib}"
+          LIBRARY_PATH="${inputspaths[*]/%//lib}"
           PATH="${inputspaths[*]/%//bin}"
         )
         unset IFS
