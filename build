@@ -45,12 +45,14 @@ case "$shouldBuild" in
     trap 'if [ -v workdir ]; then cleanup "$workdir"; fi' EXIT
     workdir=$(mktemp -d --tmpdir "$script_name".XXXXXXXX)
     inputspath=
+    inputscpath=
     inputsvars=()
     if [ -v inputs ]; then
       for i in "${inputs[@]}"; do
         name=$(basename "$i")
         fullpath=$(readlink -f "$i")
         inputspath+=${inputspath:+:}$fullpath/bin
+        inputscpath+=${inputscpath:+:}$fullpath/include
         inputsvars+=("${name//-/_}=$fullpath")
       done
     fi
@@ -64,6 +66,7 @@ case "$shouldBuild" in
         out="$out" \
         src="$here"/src \
         PATH="${inputspath:-}" \
+        ${inputscpath:+CPATH="$inputscpath"} \
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script"
     )
