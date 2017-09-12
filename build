@@ -44,32 +44,32 @@ case "$shouldBuild" in
     unset workdir
     trap 'if [ -v workdir ]; then cleanup "$workdir"; fi' EXIT
     workdir=$(mktemp -d --tmpdir "$script_name".XXXXXXXX)
-    inputspath=
-    inputscpath=
-    inputslibpath=
-    inputsvars=()
-    if [ -v inputs ]; then
-      for i in "${inputs[@]}"; do
-        name=$(basename "$i")
-        fullpath=$(readlink -f "$i")
-        inputspath+=${inputspath:+:}$fullpath/bin
-        inputscpath+=${inputscpath:+:}$fullpath/include
-        inputslibpath+=${inputslibpath:+:}$fullpath/lib
-        inputsvars+=("${name//-/_}=$fullpath")
-      done
-    fi
     if [ -d "$out" ]; then
       find "$out" -type d -exec chmod u+w {} +
     fi
     rm -rf "$out"
     (
+      inputsvars=()
+      if [ -v inputs ]; then
+        inputspaths=()
+        for i in "${inputs[@]}"; do
+          name=$(basename "$i")
+          fullpath=$(readlink -f "$i")
+          inputspaths+=("$fullpath")
+          inputsvars+=("${name//-/_}=$fullpath")
+        done
+        IFS=:
+        inputsvars+=(
+          CPATH="${inputspaths[*]/%//include}"
+          LD_LIBRARY_PATH="${inputspaths[*]/%//lib}"
+          PATH="${inputspaths[*]/%//bin}"
+        )
+        unset IFS
+      fi
       cd "$workdir"
       env -i \
         out="$out" \
         src="$here"/src \
-        PATH="${inputspath:-}" \
-        ${inputscpath:+CPATH="$inputscpath"} \
-        ${inputslibpath:+LD_LIBRARY_PATH="$inputslibpath"} \
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script"
     )
