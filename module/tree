@@ -19,3 +19,7 @@ rm -rf "$out"/usr/x86_64-egg0-linux-gnu/sysroot
 ln -s ../.. "$out"/usr/x86_64-egg0-linux-gnu/sysroot
 cpuw "$cross_native"/x86_64-egg0-linux-gnu/sysroot/* "$out"
 cpuw "$static_bash"/bin/bash "$out"/bin
+
+here=${BASH_SOURCE[0]}
+mkdir -p "$out"/usr/src/egg
+cp -a "$here"/../{build,hatch,module,README,src} "$out"/usr/src/egg
