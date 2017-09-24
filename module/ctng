@@ -3,3 +3,4 @@ cd crosstool-ng
 ./configure --prefix="$out"
 make
 make install
+ln -s "$m4"/bin/m4 "$which"/bin/which "$out"/bin

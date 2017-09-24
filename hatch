@@ -110,7 +110,7 @@ build bison m4
 build flex bison m4
 build gperf
 build which
-build ctng bison flex gperf which
+build ctng bison flex gperf m4 which
 build cross ctng
 build cross-native cross ctng
 build static-bash cross
