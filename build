@@ -33,11 +33,16 @@ else
   shouldBuild=yes
 fi
 
+cleanup() {
+  find "$1" -type d -exec chmod u+w {} +
+  rm -rf "$1"
+}
+
 case "$shouldBuild" in
   yes)
     echo >&2 "$0: building: $out"
     unset workdir
-    trap 'if [ -v workdir ]; then rm -rf "$workdir"; fi' EXIT
+    trap 'if [ -v workdir ]; then cleanup "$workdir"; fi' EXIT
     workdir=$(mktemp -d --tmpdir "$script_name".XXXXXXXX)
     inputspath=
     inputsvars=()
