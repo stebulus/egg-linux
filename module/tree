@@ -7,5 +7,7 @@ menuentry Linux {
 }
 EOF
 cp -a "$linux"/* "$out"
+mkdir -p "$out"/usr
+cp -a "$cross_native"/* "$out"/usr
 mkdir -p "$out"/bin
 cp "$static_bash"/bin/bash "$out"/bin/bash
