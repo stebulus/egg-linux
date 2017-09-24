@@ -28,10 +28,11 @@ build awk cross
 build sed cross
 build diffutils cross
 build patch cross
+build findutils cross
 build linux cross
 build xorriso
 build grub xorriso
 build tree linux static-bash cross-native \
   coreutils tar gzip bzip2 xz awk sed \
-  diffutils patch
+  diffutils patch findutils
 build image grub xorriso tree
