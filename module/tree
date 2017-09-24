@@ -19,6 +19,13 @@ cpuw "$cross_native"/* "$out"/usr
 rm -rf "$out"/usr/x86_64-egg0-linux-gnu/sysroot
 ln -s ../.. "$out"/usr/x86_64-egg0-linux-gnu/sysroot
 cpuw "$cross_native"/x86_64-egg0-linux-gnu/sysroot/* "$out"
+for f in "$out"/usr/bin/x86_64-egg0-linux-gnu-*; do
+  full=$(basename "$f")
+  short=${full#x86_64-egg0-linux-gnu-}
+  if [ ! -e "$out"/usr/bin/"$short" ]; then
+    ln -s "$full" "$out"/usr/bin/"$short"
+  fi
+done
 cpuw "$static_bash"/bin/bash "$out"/bin
 ln -s bash "$out"/bin/sh
 cpuw "$coreutils"/* "$out"
