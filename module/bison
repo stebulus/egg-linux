@@ -1,0 +1,5 @@
+tar xf "$src"/bison-3.0.4.tar.xz
+cd bison-3.0.4
+./configure --prefix="$out"
+make
+make install-exec install-data

@@ -15,9 +15,11 @@ build() {
 }
 
 mkdir -p "$out"
+build m4
+build bison m4
 build gperf
 build which
-build ctng gperf which
+build ctng bison gperf which
 build cross ctng
 build cross-native cross ctng
 build static-bash cross

@@ -1,0 +1,5 @@
+tar xf "$src"/m4-1.4.17.tar.bz2
+cd m4-1.4.17
+./configure --prefix="$out"
+make
+make install
