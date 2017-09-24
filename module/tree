@@ -26,6 +26,7 @@ cpuw "$gzip"/* "$out"
 cpuw "$bzip2"/* "$out"
 cpuw "$xz"/* "$out"
 cpuw "$awk"/* "$out"
+cpuw "$sed"/* "$out"
 
 here=$(dirname "${BASH_SOURCE[0]}")
 mkdir -p "$out"/usr/src/egg
