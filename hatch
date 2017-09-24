@@ -11,10 +11,100 @@ out=$1
 build() {
   module=$1
   shift
-  "$here"/build "$out/$module" "$here/module/$module" "${@/#/$out/}"
+  "$here"/build "$out/$module" "$here/module/$module" \
+    "$out"/build-tools "${@/#/$out/}"
 }
 
-mkdir -p "$out"
+lntool() {
+  local path
+  local target
+  target=$1
+  shift
+  for tool in "$@"; do
+    path=$(type -ap "$tool" |head -n1)
+    ln -s "$path" "$target/$tool"
+  done
+}
+
+rm -rf "$out"/build-tools
+mkdir -p "$out"/build-tools/bin
+lntool "$out"/build-tools/bin \
+  ar \
+  as \
+  automake \
+  awk \
+  basename \
+  bash \
+  bc \
+  bzip2 \
+  c++ \
+  cat \
+  cc \
+  chmod \
+  cmp \
+  cp \
+  cut \
+  date \
+  diff \
+  dirname \
+  echo \
+  egrep \
+  env \
+  expand \
+  expr \
+  false \
+  file \
+  find \
+  fgrep \
+  gawk \
+  gcc \
+  g++ \
+  grep \
+  gzip \
+  head \
+  help2man \
+  id \
+  install \
+  ld \
+  libtool \
+  libtoolize \
+  ln \
+  ls \
+  make \
+  makeinfo \
+  mkdir \
+  mktemp \
+  mv \
+  nm \
+  objcopy \
+  objdump \
+  patch \
+  perl \
+  printenv \
+  pwd \
+  ranlib \
+  readelf \
+  readlink \
+  rm \
+  rmdir \
+  sed \
+  sh \
+  sleep \
+  sort \
+  stat \
+  strip \
+  tail \
+  tar \
+  touch \
+  tr \
+  true \
+  uname \
+  uniq \
+  wc \
+  wget \
+  xargs \
+  xz
+
 build m4
 build bison m4
 build flex bison m4
