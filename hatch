@@ -20,8 +20,10 @@ build cross ctng
 build cross-native cross ctng
 build static-bash cross
 build coreutils cross
+build tar cross
 build linux cross
 build xorriso
 build grub xorriso
-build tree linux static-bash cross-native coreutils
+build tree linux static-bash cross-native \
+  coreutils tar
 build image grub xorriso tree
