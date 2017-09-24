@@ -1,0 +1,5 @@
+tar xf "$src"/flex-2.6.3.tar.gz
+cd flex-2.6.3
+./configure --prefix="$out"
+make
+make install-exec
