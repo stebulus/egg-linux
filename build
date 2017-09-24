@@ -62,7 +62,7 @@ case "$shouldBuild" in
       cd "$workdir"
       env out="$out" \
         src="$here"/src \
-        PATH="${inputspath:+$inputspath:}$PATH" \
+        PATH="${inputspath:-}" \
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script"
     )
