@@ -20,6 +20,7 @@ rm -rf "$out"/usr/x86_64-egg0-linux-gnu/sysroot
 ln -s ../.. "$out"/usr/x86_64-egg0-linux-gnu/sysroot
 cpuw "$cross_native"/x86_64-egg0-linux-gnu/sysroot/* "$out"
 cpuw "$static_bash"/bin/bash "$out"/bin
+ln -s bash "$out"/bin/sh
 cpuw "$coreutils"/* "$out"
 cpuw "$tar"/* "$out"
 cpuw "$gzip"/* "$out"
