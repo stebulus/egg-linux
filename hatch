@@ -24,6 +24,7 @@ build tar cross
 build gzip cross
 build bzip2 cross
 build xz cross
+build grep cross
 build awk cross
 build sed cross
 build diffutils cross
@@ -33,6 +34,7 @@ build linux cross
 build xorriso
 build grub xorriso
 build tree linux static-bash cross-native \
-  coreutils tar gzip bzip2 xz awk sed \
+  coreutils tar gzip bzip2 xz \
+  grep awk sed \
   diffutils patch findutils
 build image grub xorriso tree
