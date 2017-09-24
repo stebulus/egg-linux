@@ -60,7 +60,8 @@ case "$shouldBuild" in
     rm -rf "$out"
     (
       cd "$workdir"
-      env out="$out" \
+      env -i \
+        out="$out" \
         src="$here"/src \
         PATH="${inputspath:-}" \
         ${inputsvars:+"${inputsvars[@]}"} \
