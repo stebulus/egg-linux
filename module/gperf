@@ -1,0 +1,5 @@
+tar xf "$src"/gperf-3.0.4.tar.gz
+cd gperf-3.0.4
+./configure --prefix="$out"
+make
+make install
