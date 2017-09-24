@@ -1,0 +1,5 @@
+tar xf "$src"/which-2.21.tar.gz
+cd which-2.21
+./configure --prefix="$out"
+make
+make install

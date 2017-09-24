@@ -15,7 +15,8 @@ build() {
 }
 
 mkdir -p "$out"
-build ctng
+build which
+build ctng which
 build cross ctng
 build cross-native cross ctng
 build static-bash cross
