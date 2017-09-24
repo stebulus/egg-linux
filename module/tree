@@ -12,6 +12,7 @@ mkdir -p "$out"/usr
 cp -a "$cross_native"/* "$out"/usr
 find "$out" -type d -exec chmod u+w {} +
 rm -rf "$out"/usr/x86_64-egg0-linux-gnu/sysroot
+ln -s ../.. "$out"/usr/x86_64-egg0-linux-gnu/sysroot
 cp -a "$cross_native"/x86_64-egg0-linux-gnu/sysroot/* "$out"
 find "$out" -type d -exec chmod u+w {} +
 mkdir -p "$out"/bin
