@@ -6,14 +6,16 @@ menuentry Linux {
   linux /boot/vmlinuz console=ttyS0 init=/bin/bash root=0b00
 }
 EOF
-cp -a "$linux"/* "$out"
-find "$out" -type d -exec chmod u+w {} +
-mkdir -p "$out"/usr
-cp -a "$cross_native"/* "$out"/usr
-find "$out" -type d -exec chmod u+w {} +
+
+cpuw() {
+  mkdir -p "${@: -1:1}"
+  cp -a "$@"
+  find "${@: -1:1}" -type d -exec chmod u+w {} +
+}
+
+cpuw "$linux"/* "$out"
+cpuw "$cross_native"/* "$out"/usr
 rm -rf "$out"/usr/x86_64-egg0-linux-gnu/sysroot
 ln -s ../.. "$out"/usr/x86_64-egg0-linux-gnu/sysroot
-cp -a "$cross_native"/x86_64-egg0-linux-gnu/sysroot/* "$out"
-find "$out" -type d -exec chmod u+w {} +
-mkdir -p "$out"/bin
-cp "$static_bash"/bin/bash "$out"/bin/bash
+cpuw "$cross_native"/x86_64-egg0-linux-gnu/sysroot/* "$out"
+cpuw "$static_bash"/bin/bash "$out"/bin
