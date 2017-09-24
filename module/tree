@@ -22,6 +22,9 @@ cpuw "$cross_native"/x86_64-egg0-linux-gnu/sysroot/* "$out"
 cpuw "$static_bash"/bin/bash "$out"/bin
 cpuw "$coreutils"/* "$out"
 cpuw "$tar"/* "$out"
+cpuw "$gzip"/* "$out"
+cpuw "$bzip2"/* "$out"
+cpuw "$xz"/* "$out"
 
 here=$(dirname "${BASH_SOURCE[0]}")
 mkdir -p "$out"/usr/src/egg

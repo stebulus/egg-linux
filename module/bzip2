@@ -1,0 +1,7 @@
+tar xf "$src"/bzip2-1.0.6.tar.gz
+cd bzip2-1.0.6
+make PREFIX="$out"/usr \
+  CC=x86_64-egg0-linux-gnu-gcc \
+  AR=x86_64-egg0-linux-gnu-ar \
+  RANLIB=x86_64-egg0-linux-gnu-ranlib \
+  install

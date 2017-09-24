@@ -21,9 +21,12 @@ build cross-native cross ctng
 build static-bash cross
 build coreutils cross
 build tar cross
+build gzip cross
+build bzip2 cross
+build xz cross
 build linux cross
 build xorriso
 build grub xorriso
 build tree linux static-bash cross-native \
-  coreutils tar
+  coreutils tar gzip bzip2 xz
 build image grub xorriso tree
