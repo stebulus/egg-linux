@@ -11,6 +11,7 @@ cpuw() {
   mkdir -p "${@: -1:1}"
   cp -a "$@"
   find "${@: -1:1}" -type d -exec chmod u+w {} +
+  rm -rf "$out"/usr/share/info
 }
 
 cpuw "$linux"/* "$out"
