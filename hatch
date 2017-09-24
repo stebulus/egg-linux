@@ -24,9 +24,10 @@ build tar cross
 build gzip cross
 build bzip2 cross
 build xz cross
+build awk cross
 build linux cross
 build xorriso
 build grub xorriso
 build tree linux static-bash cross-native \
-  coreutils tar gzip bzip2 xz
+  coreutils tar gzip bzip2 xz awk
 build image grub xorriso tree
