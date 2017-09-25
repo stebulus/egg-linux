@@ -133,10 +133,7 @@ build awk cross
 build sed cross
 build patch cross
 build linux bc cross
-build xorriso
-build grub xorriso
 build tree linux static-bash cross-native \
   coreutils tar gzip bzip2 xz \
   grep awk sed \
   patch
-build image grub xorriso tree

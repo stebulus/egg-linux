@@ -1,5 +1,0 @@
-tar xf "$src"/grub-2.02.tar.gz
-cd grub-2.02
-./configure --prefix="$out"
-make
-make install
