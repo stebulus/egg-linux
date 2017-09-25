@@ -1,0 +1,5 @@
+tar xf "$src"/file-5.19.tar.gz
+cd file-5.19
+./configure --prefix="$out"
+make
+make install

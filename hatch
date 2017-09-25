@@ -51,7 +51,6 @@ lntool "$out"/build-tools/bin \
   expand \
   expr \
   false \
-  file \
   fgrep \
   gawk \
   gcc \
@@ -109,6 +108,7 @@ build findutils
 stdenv+=("$out"/diffutils)
 stdenv+=("$out"/findutils)
 
+build file
 build ed
 build texinfo
 build bc ed texinfo
@@ -119,7 +119,7 @@ build bison m4
 build flex bison m4
 build gperf
 build which
-build ctng automake bison flex gperf m4 texinfo which
+build ctng automake bison file flex gperf m4 texinfo which
 build cross ctng
 build cross-native cross ctng
 build static-bash cross
