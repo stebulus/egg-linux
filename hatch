@@ -31,7 +31,6 @@ mkdir -p "$out"/build-tools/bin
 lntool "$out"/build-tools/bin \
   ar \
   as \
-  automake \
   awk \
   basename \
   bash \
@@ -106,11 +105,13 @@ lntool "$out"/build-tools/bin \
   xz
 
 build m4
+build autoconf m4
+build automake autoconf
 build bison m4
 build flex bison m4
 build gperf
 build which
-build ctng bison flex gperf m4 which
+build ctng automake bison flex gperf m4 which
 build cross ctng
 build cross-native cross ctng
 build static-bash cross
