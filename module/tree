@@ -36,7 +36,6 @@ cpuw "$xz"/* "$out"
 cpuw "$grep"/* "$out"
 cpuw "$awk"/* "$out"
 cpuw "$sed"/* "$out"
-cpuw "$diffutils"/* "$out"
 cpuw "$patch"/* "$out"
 
 here=$(dirname "${BASH_SOURCE[0]}")

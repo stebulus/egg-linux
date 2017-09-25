@@ -41,11 +41,9 @@ lntool "$out"/build-tools/bin \
   cat \
   cc \
   chmod \
-  cmp \
   cp \
   cut \
   date \
-  diff \
   dirname \
   echo \
   egrep \
@@ -105,7 +103,10 @@ stdenv+=("$out"/build-tools)
 build make
 stdenv+=("$out"/make)
 
+build diffutils
 build findutils
+
+stdenv+=("$out"/diffutils)
 stdenv+=("$out"/findutils)
 
 build ed
@@ -130,7 +131,6 @@ build xz cross
 build grep cross
 build awk cross
 build sed cross
-build diffutils cross
 build patch cross
 build linux bc cross
 build xorriso
@@ -138,5 +138,5 @@ build grub xorriso
 build tree linux static-bash cross-native \
   coreutils tar gzip bzip2 xz \
   grep awk sed \
-  diffutils patch
+  patch
 build image grub xorriso tree
