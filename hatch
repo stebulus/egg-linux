@@ -71,7 +71,6 @@ lntool "$out"/build-tools/bin \
   libtoolize \
   ln \
   ls \
-  makeinfo \
   mkdir \
   mktemp \
   mv \
@@ -109,6 +108,7 @@ stdenv+=("$out"/build-tools)
 build make
 stdenv+=("$out"/make)
 
+build texinfo
 build m4
 build autoconf m4
 build automake autoconf
@@ -116,7 +116,7 @@ build bison m4
 build flex bison m4
 build gperf
 build which
-build ctng automake bison flex gperf m4 which
+build ctng automake bison flex gperf m4 texinfo which
 build cross ctng
 build cross-native cross ctng
 build static-bash cross
