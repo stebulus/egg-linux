@@ -1,0 +1,5 @@
+tar xf "$src"/ed-1.12.tar.gz
+cd ed-1.12
+./configure --prefix="$out"
+make
+make install

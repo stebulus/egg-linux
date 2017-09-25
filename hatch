@@ -36,7 +36,6 @@ lntool "$out"/build-tools/bin \
   awk \
   basename \
   bash \
-  bc \
   bzip2 \
   c++ \
   cat \
@@ -108,7 +107,9 @@ stdenv+=("$out"/build-tools)
 build make
 stdenv+=("$out"/make)
 
+build ed
 build texinfo
+build bc ed texinfo
 build m4
 build autoconf m4
 build automake autoconf
@@ -131,7 +132,7 @@ build sed cross
 build diffutils cross
 build patch cross
 build findutils cross
-build linux cross
+build linux bc cross
 build xorriso
 build grub xorriso
 build tree linux static-bash cross-native \
