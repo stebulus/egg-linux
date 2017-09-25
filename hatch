@@ -54,7 +54,6 @@ lntool "$out"/build-tools/bin \
   expr \
   false \
   file \
-  find \
   fgrep \
   gawk \
   gcc \
@@ -100,12 +99,14 @@ lntool "$out"/build-tools/bin \
   uniq \
   wc \
   wget \
-  xargs \
   xz
 stdenv+=("$out"/build-tools)
 
 build make
 stdenv+=("$out"/make)
+
+build findutils
+stdenv+=("$out"/findutils)
 
 build ed
 build texinfo
@@ -131,12 +132,11 @@ build awk cross
 build sed cross
 build diffutils cross
 build patch cross
-build findutils cross
 build linux bc cross
 build xorriso
 build grub xorriso
 build tree linux static-bash cross-native \
   coreutils tar gzip bzip2 xz \
   grep awk sed \
-  diffutils patch findutils
+  diffutils patch
 build image grub xorriso tree
