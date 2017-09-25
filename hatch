@@ -8,11 +8,13 @@ if [ $# -ne 1 ]; then
 fi
 out=$1
 
+stdenv=()
+
 build() {
   module=$1
   shift
   "$here"/build "$out/$module" "$here/module/$module" \
-    "$out"/build-tools "${@/#/$out/}"
+    "${stdenv[@]}" "${@/#/$out/}"
 }
 
 lntool() {
@@ -102,8 +104,11 @@ lntool "$out"/build-tools/bin \
   wget \
   xargs \
   xz
+stdenv+=("$out"/build-tools)
 
 build make
+stdenv+=("$out"/make)
+
 build m4
 build autoconf m4
 build automake autoconf
