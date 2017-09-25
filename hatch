@@ -69,7 +69,6 @@ lntool "$out"/build-tools/bin \
   libtoolize \
   ln \
   ls \
-  make \
   makeinfo \
   mkdir \
   mktemp \
@@ -104,6 +103,7 @@ lntool "$out"/build-tools/bin \
   xargs \
   xz
 
+build make
 build m4
 build autoconf m4
 build automake autoconf
