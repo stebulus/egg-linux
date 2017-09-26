@@ -99,16 +99,15 @@ stdenv+=("$out"/build-tools)
 build make
 stdenv+=("$out"/make)
 
-build bzip2
 build xz
 build diffutils xz
 build findutils
 
-stdenv+=("$out"/bzip2)
 stdenv+=("$out"/diffutils)
 stdenv+=("$out"/findutils)
 stdenv+=("$out"/xz)
 
+build bzip2
 build patch
 build file
 build ed
@@ -121,7 +120,7 @@ build bison m4
 build flex bison m4
 build gperf
 build which
-build ctng automake bison file flex gperf m4 texinfo which
+build ctng automake bison bzip2 file flex gperf m4 patch texinfo which
 build cross ctng
 build cross-native cross ctng
 build static-bash cross

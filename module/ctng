@@ -4,6 +4,7 @@ cd crosstool-ng
 make
 make install
 ln -s \
+  "$bzip2"/bin/bzip2 \
   "$file"/bin/file \
   "$m4"/bin/m4 \
   "$which"/bin/which \
