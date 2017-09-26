@@ -1,0 +1,8 @@
+# An unusable wget to fool crosstool-ng's configure
+mkdir -p "$out"/bin
+cat <<EOF >"$out"/bin/wget
+#!/bin/sh
+echo >&2 "fake wget deliberately failing; args were: $*"
+exit 1
+EOF
+chmod +x "$out"/bin/wget

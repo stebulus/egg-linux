@@ -88,8 +88,7 @@ lntool "$out"/build-tools/bin \
   true \
   uname \
   uniq \
-  wc \
-  wget
+  wc
 stdenv+=("$out"/build-tools)
 
 build make
@@ -109,6 +108,7 @@ stdenv+=("$out"/xz)
 
 build bzip2
 build ed
+build fake-wget
 build file
 build m4
 build gperf
@@ -121,7 +121,7 @@ build bc ed texinfo
 build bison m4
 build flex bison m4
 build libtool m4
-build ctng automake bison bzip2 file flex gperf \
+build ctng automake bison bzip2 fake-wget file flex gperf \
   libtool m4 patch texinfo which
 build cross ctng
 build coreutils cross
