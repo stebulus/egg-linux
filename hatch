@@ -95,18 +95,19 @@ lntool "$out"/build-tools/bin \
   uname \
   uniq \
   wc \
-  wget \
-  xz
+  wget
 stdenv+=("$out"/build-tools)
 
 build make
 stdenv+=("$out"/make)
 
-build diffutils
+build xz
+build diffutils xz
 build findutils
 
 stdenv+=("$out"/diffutils)
 stdenv+=("$out"/findutils)
+stdenv+=("$out"/xz)
 
 build file
 build ed
@@ -127,13 +128,12 @@ build coreutils cross
 build tar cross
 build gzip cross
 build bzip2 cross
-build xz cross
 build grep cross
 build awk cross
 build sed cross
 build patch cross
 build linux bc cross
 build tree linux static-bash cross-native \
-  coreutils tar gzip bzip2 xz \
+  coreutils tar gzip bzip2 \
   grep awk sed \
   patch
