@@ -7,5 +7,6 @@ ln -s \
   "$bzip2"/bin/bzip2 \
   "$file"/bin/file \
   "$m4"/bin/m4 \
+  "$perl"/bin/perl \
   "$which"/bin/which \
   "$out"/bin

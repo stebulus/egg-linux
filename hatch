@@ -68,7 +68,6 @@ lntool "$out"/build-tools/bin \
   objcopy \
   objdump \
   od \
-  perl \
   printenv \
   pwd \
   ranlib \
@@ -114,21 +113,22 @@ build file
 build m4
 build gperf
 build patch
-build texinfo
+build perl
 build which
-build autoconf m4
-build automake autoconf
-build bc ed texinfo
-build bison m4
+build autoconf m4 perl
+build automake autoconf perl
+build bison m4 perl
 build flex bison m4
 build libtool m4
+build texinfo perl
+build bc ed texinfo
 build ctng automake bison bzip2 fake-wget file flex gperf \
-  libtool m4 patch texinfo which
+  libtool m4 patch perl texinfo which
 build cross ctng
 build coreutils cross
 build grep cross
 build gzip cross
-build linux bc cross
+build linux bc perl cross
 build sed cross
 build static-bash cross
 build tar cross
