@@ -1,4 +1,4 @@
-tar xf "$src"/m4-1.4.17.tar.bz2
+tar xf "$src"/m4-1.4.17.tar.xz
 cd m4-1.4.17
 ./configure --prefix="$out"
 make
