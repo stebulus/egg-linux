@@ -98,7 +98,8 @@ stdenv+=("$out"/make)
 build mawk
 build gawk mawk
 build xz gawk
-build diffutils gawk xz
+build bad-cmp
+build diffutils gawk xz bad-cmp
 build findutils gawk
 
 stdenv+=("$out"/diffutils)

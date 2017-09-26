@@ -1,0 +1,9 @@
+# A crude version of cmp, for bootstrapping diffutils
+mkdir -p "$out"/bin
+cat <<'EOF' >"$out"/bin/cmp
+#!/bin/sh
+a=$(cat "$1")
+b=$(cat "$2")
+test x"$a" = x"$b"
+EOF
+chmod +x "$out"/bin/cmp
