@@ -59,8 +59,6 @@ lntool "$out"/build-tools/bin \
   id \
   install \
   ld \
-  libtool \
-  libtoolize \
   ln \
   ls \
   mkdir \
@@ -119,9 +117,11 @@ build autoconf m4
 build automake autoconf
 build bison m4
 build flex bison m4
+build libtool m4
 build gperf
 build which
-build ctng automake bison bzip2 file flex gperf m4 patch texinfo which
+build ctng automake bison bzip2 file flex gperf \
+  libtool m4 patch texinfo which
 build cross ctng
 build cross-native cross ctng
 build static-bash cross

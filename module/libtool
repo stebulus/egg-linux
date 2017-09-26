@@ -1,0 +1,5 @@
+tar xf "$src"/libtool-2.4.6.tar.xz
+cd libtool-2.4.6
+./configure --prefix="$out"
+make
+make install
