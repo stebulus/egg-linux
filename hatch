@@ -71,7 +71,6 @@ lntool "$out"/build-tools/bin \
   nm \
   objcopy \
   objdump \
-  patch \
   perl \
   printenv \
   pwd \
@@ -110,6 +109,7 @@ stdenv+=("$out"/diffutils)
 stdenv+=("$out"/findutils)
 stdenv+=("$out"/xz)
 
+build patch
 build file
 build ed
 build texinfo
@@ -131,9 +131,7 @@ build gzip cross
 build grep cross
 build awk cross
 build sed cross
-build patch cross
 build linux bc cross
 build tree linux static-bash cross-native \
   coreutils tar gzip \
-  grep awk sed \
-  patch
+  grep awk sed

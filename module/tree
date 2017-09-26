@@ -34,7 +34,6 @@ cpuw "$gzip"/* "$out"
 cpuw "$grep"/* "$out"
 cpuw "$awk"/* "$out"
 cpuw "$sed"/* "$out"
-cpuw "$patch"/* "$out"
 
 here=$(dirname "${BASH_SOURCE[0]}")
 mkdir -p "$out"/usr/src/egg
