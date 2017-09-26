@@ -1,0 +1,5 @@
+tar xf "$src"/mawk-1.3.4-20161120.tgz
+cd mawk-1.3.4-20161120
+./configure --prefix="$out"
+make
+make install

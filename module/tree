@@ -32,7 +32,6 @@ cpuw "$coreutils"/* "$out"
 cpuw "$tar"/* "$out"
 cpuw "$gzip"/* "$out"
 cpuw "$grep"/* "$out"
-cpuw "$awk"/* "$out"
 cpuw "$sed"/* "$out"
 
 here=$(dirname "${BASH_SOURCE[0]}")

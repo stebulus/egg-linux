@@ -1,0 +1,5 @@
+tar xf "$src"/gawk-4.1.4.tar.gz
+cd gawk-4.1.4
+./configure --prefix="$out"
+make
+make install

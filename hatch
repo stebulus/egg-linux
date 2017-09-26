@@ -33,7 +33,6 @@ mkdir -p "$out"/build-tools/bin
 lntool "$out"/build-tools/bin \
   ar \
   as \
-  awk \
   basename \
   bash \
   c++ \
@@ -51,7 +50,6 @@ lntool "$out"/build-tools/bin \
   expr \
   false \
   fgrep \
-  gawk \
   gcc \
   g++ \
   grep \
@@ -99,12 +97,15 @@ stdenv+=("$out"/build-tools)
 build make
 stdenv+=("$out"/make)
 
-build xz
-build diffutils xz
-build findutils
+build mawk
+build gawk mawk
+build xz gawk
+build diffutils gawk xz
+build findutils gawk
 
 stdenv+=("$out"/diffutils)
 stdenv+=("$out"/findutils)
+stdenv+=("$out"/gawk)
 stdenv+=("$out"/xz)
 
 build bzip2
@@ -128,9 +129,8 @@ build coreutils cross
 build tar cross
 build gzip cross
 build grep cross
-build awk cross
 build sed cross
 build linux bc cross
 build tree linux static-bash cross-native \
   coreutils tar gzip \
-  grep awk sed
+  grep sed
