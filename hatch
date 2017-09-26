@@ -67,6 +67,7 @@ lntool "$out"/build-tools/bin \
   nm \
   objcopy \
   objdump \
+  od \
   perl \
   printenv \
   pwd \
