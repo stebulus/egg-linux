@@ -108,30 +108,29 @@ stdenv+=("$out"/gawk)
 stdenv+=("$out"/xz)
 
 build bzip2
-build patch
-build file
 build ed
-build texinfo
-build bc ed texinfo
+build file
 build m4
+build gperf
+build patch
+build texinfo
+build which
 build autoconf m4
 build automake autoconf
+build bc ed texinfo
 build bison m4
 build flex bison m4
 build libtool m4
-build gperf
-build which
 build ctng automake bison bzip2 file flex gperf \
   libtool m4 patch texinfo which
 build cross ctng
-build cross-native cross ctng
-build static-bash cross
 build coreutils cross
-build tar cross
-build gzip cross
 build grep cross
-build sed cross
+build gzip cross
 build linux bc cross
-build tree linux static-bash cross-native \
-  coreutils tar gzip \
-  grep sed
+build sed cross
+build static-bash cross
+build tar cross
+build cross-native cross ctng
+build tree coreutils cross-native grep gzip \
+  linux sed static-bash tar
