@@ -31,7 +31,6 @@ ln -s bash "$out"/bin/sh
 cpuw "$coreutils"/* "$out"
 cpuw "$tar"/* "$out"
 cpuw "$gzip"/* "$out"
-cpuw "$bzip2"/* "$out"
 cpuw "$grep"/* "$out"
 cpuw "$awk"/* "$out"
 cpuw "$sed"/* "$out"

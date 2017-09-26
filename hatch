@@ -36,7 +36,6 @@ lntool "$out"/build-tools/bin \
   awk \
   basename \
   bash \
-  bzip2 \
   c++ \
   cat \
   cc \
@@ -101,10 +100,12 @@ stdenv+=("$out"/build-tools)
 build make
 stdenv+=("$out"/make)
 
+build bzip2
 build xz
 build diffutils xz
 build findutils
 
+stdenv+=("$out"/bzip2)
 stdenv+=("$out"/diffutils)
 stdenv+=("$out"/findutils)
 stdenv+=("$out"/xz)
@@ -127,13 +128,12 @@ build static-bash cross
 build coreutils cross
 build tar cross
 build gzip cross
-build bzip2 cross
 build grep cross
 build awk cross
 build sed cross
 build patch cross
 build linux bc cross
 build tree linux static-bash cross-native \
-  coreutils tar gzip bzip2 \
+  coreutils tar gzip \
   grep awk sed \
   patch
