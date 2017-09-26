@@ -1,5 +1,5 @@
-tar xf "$src"/bc-1.06.95.tar.bz2
-cd bc-1.06.95
+tar xf "$src"/bc-1.07.1.tar.gz
+cd bc-1.07.1
 ./configure --prefix="$out"
 make
 make install
