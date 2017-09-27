@@ -55,7 +55,6 @@ lntool "$out"/build-tools/bin \
   grep \
   gzip \
   head \
-  help2man \
   id \
   install \
   ld \
@@ -119,11 +118,12 @@ build autoconf m4 perl
 build automake autoconf perl
 build bison m4 perl
 build flex bison m4
+build help2man perl
 build libtool m4
 build texinfo perl
 build bc ed texinfo
 build ctng automake bison bzip2 fake-wget file flex gperf \
-  libtool m4 patch perl texinfo which
+  help2man libtool m4 patch perl texinfo which
 build cross ctng
 build coreutils cross
 build grep cross
