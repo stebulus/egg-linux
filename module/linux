@@ -6,6 +6,7 @@ cp "$here"/linux.config .config
 make oldconfig
 make
 make INSTALL_MOD_PATH="$out" modules_install
+rm "$out"/lib/modules/4.3.0/{build,source}
 mkdir -p "$out"/boot
 cp -v arch/x86/boot/bzImage "$out"/boot/vmlinuz
 cp -v System.map "$out"/boot
