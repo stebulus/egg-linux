@@ -1,5 +1,6 @@
 tar xf "$src"/crosstool-ng-1.22.0.tar.xz
 cd crosstool-ng
+export CPATH=$CPATH:"$ncurses"/include/ncurses
 ./configure --prefix="$out"
 make
 make install
