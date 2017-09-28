@@ -1,3 +1,9 @@
+export PASS_PATH_THROUGH=x
+package build-tools
+unset PASS_PATH_THROUGH
+
+stdtool build-tools
+
 package make
 stdtool make
 

@@ -8,7 +8,7 @@ if [ $# -ne 1 ]; then
 fi
 out=$1
 
-stdenv=("$out"/build-tools)
+stdenv=()
 
 stdtool() {
   stdenv+=("$out/$1")
@@ -19,14 +19,7 @@ package() {
   module=$1
   shift
   "$here"/build "$out/$module" "$here/module/$module" \
-    "${stdenv[@]}" "${@/#/$out/}"
+    ${stdenv:+"${stdenv[@]}"} ${@:+"${@/#/$out/}"}
 }
-
-rm -rf "$out"/build-tools
-mkdir -p "$out"/build-tools/bin
-while read -r tool; do
-  path=$(type -ap "$tool" |head -n1)
-  ln -s "$path" "$out/build-tools/bin/$tool"
-done < "$here"/build-tools
 
 . "$here"/packages

@@ -58,12 +58,26 @@ case "$shouldBuild" in
           inputspaths+=("$fullpath")
           inputsvars+=("${name//-/_}=$fullpath")
         done
+        if [ -v PASS_PATH_THROUGH ]; then
+          basepath=$PATH
+        else
+          basepath=
+        fi
         IFS=:
+        if [ -v basepath ] && [ -v inputspaths ]; then
+          path=$basepath:${inputspaths[*]/%//bin}
+        elif [ -v basepath ]; then
+          path=$basepath
+        elif [ -v inputspaths ]; then
+          path=${inputspaths[*]/%//bin}
+        else
+          path=
+        fi
         inputsvars+=(
           CPATH="${inputspaths[*]/%//include}"
           LD_LIBRARY_PATH="${inputspaths[*]/%//lib}"
           LIBRARY_PATH="${inputspaths[*]/%//lib}"
-          PATH="${inputspaths[*]/%//bin}"
+          PATH="$path"
         )
         unset IFS
       fi

@@ -1,0 +1,63 @@
+mkdir -p "$out"/bin
+while read -r tool; do
+  path=$(type -ap "$tool" |head -n1)
+  ln -s "$path" "$out/bin/$tool"
+done <<EOF
+ar
+as
+basename
+bash
+c++
+cat
+cc
+chmod
+cp
+cut
+date
+dirname
+echo
+egrep
+env
+expand
+expr
+false
+fgrep
+gcc
+g++
+grep
+gzip
+head
+id
+install
+ld
+ln
+ls
+mkdir
+mktemp
+mv
+nm
+objcopy
+objdump
+od
+printenv
+pwd
+ranlib
+readelf
+readlink
+rm
+rmdir
+sed
+sh
+sleep
+sort
+stat
+strip
+tail
+tar
+touch
+tr
+true
+uname
+uniq
+wc
+EOF
