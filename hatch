@@ -8,14 +8,7 @@ if [ $# -ne 1 ]; then
 fi
 out=$1
 
-buildtool() {
-  local tool
-  tool=$1
-  path=$(type -ap "$tool" |head -n1)
-  ln -s "$path" "$out/build-tools/bin/$tool"
-}
-
-stdenv=()
+stdenv=("$out"/build-tools)
 
 stdtool() {
   stdenv+=("$out/$1")
@@ -31,5 +24,9 @@ package() {
 
 rm -rf "$out"/build-tools
 mkdir -p "$out"/build-tools/bin
+while read -r tool; do
+  path=$(type -ap "$tool" |head -n1)
+  ln -s "$path" "$out/build-tools/bin/$tool"
+done < "$here"/build-tools
 
 . "$here"/packages
