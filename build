@@ -58,16 +58,11 @@ case "$shouldBuild" in
           inputspaths+=("$fullpath")
           inputsvars+=("${name//-/_}=$fullpath")
         done
-        if [ -v PASS_PATH_THROUGH ]; then
-          basepath=$PATH
-        else
-          basepath=
-        fi
         IFS=:
-        if [ -v basepath ] && [ -v inputspaths ]; then
-          path=$basepath:${inputspaths[*]/%//bin}
-        elif [ -v basepath ]; then
-          path=$basepath
+        if [ -v PASS_PATH_THROUGH ] && [ -v inputspaths ]; then
+          path=$PATH:${inputspaths[*]/%//bin}
+        elif [ -v PASS_PATH_THROUGH ]; then
+          path=$PATH
         elif [ -v inputspaths ]; then
           path=${inputspaths[*]/%//bin}
         else
