@@ -8,130 +8,28 @@ if [ $# -ne 1 ]; then
 fi
 out=$1
 
+buildtool() {
+  local tool
+  tool=$1
+  path=$(type -ap "$tool" |head -n1)
+  ln -s "$path" "$out/build-tools/bin/$tool"
+}
+
 stdenv=()
 
-build() {
+stdtool() {
+  stdenv+=("$out/$1")
+}
+
+package() {
+  local module
   module=$1
   shift
   "$here"/build "$out/$module" "$here/module/$module" \
     "${stdenv[@]}" "${@/#/$out/}"
 }
 
-lntool() {
-  local path
-  local target
-  target=$1
-  shift
-  for tool in "$@"; do
-    path=$(type -ap "$tool" |head -n1)
-    ln -s "$path" "$target/$tool"
-  done
-}
-
 rm -rf "$out"/build-tools
 mkdir -p "$out"/build-tools/bin
-lntool "$out"/build-tools/bin \
-  ar \
-  as \
-  basename \
-  bash \
-  c++ \
-  cat \
-  cc \
-  chmod \
-  cp \
-  cut \
-  date \
-  dirname \
-  echo \
-  egrep \
-  env \
-  expand \
-  expr \
-  false \
-  fgrep \
-  gcc \
-  g++ \
-  grep \
-  gzip \
-  head \
-  id \
-  install \
-  ld \
-  ln \
-  ls \
-  mkdir \
-  mktemp \
-  mv \
-  nm \
-  objcopy \
-  objdump \
-  od \
-  printenv \
-  pwd \
-  ranlib \
-  readelf \
-  readlink \
-  rm \
-  rmdir \
-  sed \
-  sh \
-  sleep \
-  sort \
-  stat \
-  strip \
-  tail \
-  tar \
-  touch \
-  tr \
-  true \
-  uname \
-  uniq \
-  wc
-stdenv+=("$out"/build-tools)
 
-build make
-stdenv+=("$out"/make)
-
-build mawk
-build gawk mawk
-build xz gawk
-build bad-cmp
-build diffutils gawk xz bad-cmp
-build findutils gawk
-
-stdenv+=("$out"/diffutils)
-stdenv+=("$out"/findutils)
-stdenv+=("$out"/gawk)
-stdenv+=("$out"/xz)
-
-build bzip2
-build ed
-build fake-wget
-build file
-build m4
-build gperf
-build patch
-build perl
-build which
-build autoconf m4 perl
-build automake autoconf perl
-build bison m4 perl
-build flex bison m4
-build help2man perl
-build libtool m4
-build texinfo perl
-build bc ed texinfo
-build ctng automake bison bzip2 fake-wget file flex gperf \
-  help2man libtool m4 patch perl texinfo which
-build cross ctng
-build coreutils cross
-build grep cross
-build gzip cross
-build linux bc perl cross
-build sed cross
-build static-bash cross
-build tar cross
-build cross-native cross ctng
-build tree coreutils cross-native grep gzip \
-  linux sed static-bash tar
+. "$here"/packages

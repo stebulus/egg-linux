@@ -1,0 +1,104 @@
+buildtool ar
+buildtool as
+buildtool basename
+buildtool bash
+buildtool c++
+buildtool cat
+buildtool cc
+buildtool chmod
+buildtool cp
+buildtool cut
+buildtool date
+buildtool dirname
+buildtool echo
+buildtool egrep
+buildtool env
+buildtool expand
+buildtool expr
+buildtool false
+buildtool fgrep
+buildtool gcc
+buildtool g++
+buildtool grep
+buildtool gzip
+buildtool head
+buildtool id
+buildtool install
+buildtool ld
+buildtool ln
+buildtool ls
+buildtool mkdir
+buildtool mktemp
+buildtool mv
+buildtool nm
+buildtool objcopy
+buildtool objdump
+buildtool od
+buildtool printenv
+buildtool pwd
+buildtool ranlib
+buildtool readelf
+buildtool readlink
+buildtool rm
+buildtool rmdir
+buildtool sed
+buildtool sh
+buildtool sleep
+buildtool sort
+buildtool stat
+buildtool strip
+buildtool tail
+buildtool tar
+buildtool touch
+buildtool tr
+buildtool true
+buildtool uname
+buildtool uniq
+buildtool wc
+stdtool build-tools
+
+package make
+stdtool make
+
+package mawk
+package gawk mawk
+package xz gawk
+package bad-cmp
+package diffutils gawk xz bad-cmp
+package findutils gawk
+
+stdtool diffutils
+stdtool findutils
+stdtool gawk
+stdtool xz
+
+package bzip2
+package ed
+package fake-wget
+package file
+package m4
+package gperf
+package patch
+package perl
+package which
+package autoconf m4 perl
+package automake autoconf perl
+package bison m4 perl
+package flex bison m4
+package help2man perl
+package libtool m4
+package texinfo perl
+package bc ed texinfo
+package ctng automake bison bzip2 fake-wget file flex gperf \
+  help2man libtool m4 patch perl texinfo which
+package cross ctng
+package coreutils cross
+package grep cross
+package gzip cross
+package linux bc perl cross
+package sed cross
+package static-bash cross
+package tar cross
+package cross-native cross ctng
+package tree coreutils cross-native grep gzip \
+  linux sed static-bash tar
