@@ -7,5 +7,7 @@ awk -v here="$here" \
     print
   }' \
   "$here"/cross.config >.config
+unset LD_LIBRARY_PATH
+unset LIBRARY_PATH
 ct-ng oldconfig
 ct-ng build
