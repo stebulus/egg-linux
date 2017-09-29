@@ -64,11 +64,11 @@ case "$shouldBuild" in
         done
         IFS=:
         if [ -v PASS_PATH_THROUGH ] && [ -v inputspaths ]; then
-          path=$PATH:${inputspaths[*]/%//bin}
+          path=$PATH:"${inputspaths[*]/%//bin}"
         elif [ -v PASS_PATH_THROUGH ]; then
           path=$PATH
         elif [ -v inputspaths ]; then
-          path=${inputspaths[*]/%//bin}
+          path="${inputspaths[*]/%//bin}"
         else
           path=
         fi
