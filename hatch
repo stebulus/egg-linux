@@ -22,4 +22,5 @@ package() {
     ${stdenv:+"${stdenv[@]}"} ${@:+"${@/#/$out/}"}
 }
 
+mkdir -p "$out"
 . "$here"/packages
