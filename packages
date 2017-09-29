@@ -7,10 +7,10 @@ stdtool build-tools
 package make
 stdtool make
 
-package bad-cmp
-package mawk bad-cmp
+package mawk
 package gawk mawk
 package xz gawk
+package bad-cmp
 package diffutils gawk xz bad-cmp
 package findutils gawk
 
