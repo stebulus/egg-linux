@@ -39,7 +39,6 @@ package texinfo perl
 package bc ed texinfo
 package ctng automake bison bzip2 fake-wget file flex gperf \
   help2man libtool m4 ncurses patch perl texinfo which
-export LEAVE_WORKING_DIR=x
 package cross ctng
 package coreutils cross
 package grep cross
