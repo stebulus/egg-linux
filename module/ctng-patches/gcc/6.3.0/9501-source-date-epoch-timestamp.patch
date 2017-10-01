@@ -1,0 +1,124 @@
+Subject: [PATCH 4/4] Use SOURCE_DATE_EPOCH in place of __TIMESTAMP__ if the latter is newer.
+
+This brings the behaviour in line with the __DATE__ and __TIME__ macros. Note
+though the minor difference: __TIMESTAMP__ is defined as the file-modification
+date and not the "current" date or time like the other two macros. Therefore,
+we do a clamping behaviour (similar to tar --clamp-mtime).
+
+Acknowledgements
+----------------
+
+Reiner Herrmann suggested the clamping behaviour.
+
+ChangeLogs
+----------
+
+libcpp/ChangeLog:
+
+2016-11-01  Ximin Luo  <infinity0@pwned.gg>
+
+	* macro.c (_cpp_builtin_macro_text): Use SOURCE_DATE_EPOCH in place of
+	__TIMESTAMP__ if the latter is newer than the former.
+
+gcc/ChangeLog:
+
+2016-11-01  Ximin Luo  <infinity0@pwned.gg>
+
+	* doc/cppenv.texi (Environment Variables): Update SOURCE_DATE_EPOCH to
+	describe the new effect on __TIMESTAMP__.
+
+gcc/testsuite/ChangeLog:
+
+2016-11-01  Ximin Luo  <infinity0@pwned.gg>
+
+	* gcc.dg/cpp/source_date_epoch-4.c: New test.
+	* gcc.dg/cpp/source_date_epoch-5.c: New test.
+
+Index: gcc-7-20170409/libcpp/macro.c
+===================================================================
+--- gcc-7-20170409.orig/libcpp/macro.c
++++ gcc-7-20170409/libcpp/macro.c
+@@ -264,7 +264,30 @@ _cpp_builtin_macro_text (cpp_reader *pfi
+ 		struct tm *tb = NULL;
+ 		struct stat *st = _cpp_get_file_stat (file);
+ 		if (st)
+-		  tb = localtime (&st->st_mtime);
++		  {
++		    /* Set a reproducible timestamp for __DATE__ and __TIME__ macro
++		       if SOURCE_DATE_EPOCH is defined.  */
++		    if (pfile->source_date_epoch == (time_t) -2
++			&& pfile->cb.get_source_date_epoch != NULL)
++		      pfile->source_date_epoch = pfile->cb.get_source_date_epoch (pfile);
++
++		    if (pfile->source_date_epoch >= (time_t) 0)
++		      {
++			/* If SOURCE_DATE_EPOCH is set, we want reproducible
++			   timestamps so use gmtime not localtime.  */
++			if (st->st_mtime >= pfile->source_date_epoch)
++			  tb = gmtime (&pfile->source_date_epoch);
++			else
++			  /* Don't use SOURCE_DATE_EPOCH if the timestamp is
++			     older, since that means it was probably already
++			     set in a reproducible way (e.g. via source tarball
++			     extraction or some other method).  */
++			  tb = gmtime (&st->st_mtime);
++		      }
++		    else
++		      tb = localtime (&st->st_mtime);
++		  }
++
+ 		if (tb)
+ 		  {
+ 		    char *str = asctime (tb);
+Index: gcc-7-20170409/gcc/doc/cppenv.texi
+===================================================================
+--- gcc-7-20170409.orig/gcc/doc/cppenv.texi
++++ gcc-7-20170409/gcc/doc/cppenv.texi
+@@ -83,8 +83,9 @@ main input file is omitted.
+ @item SOURCE_DATE_EPOCH
+ If this variable is set, its value specifies a UNIX timestamp to be
+ used in replacement of the current date and time in the @code{__DATE__}
+-and @code{__TIME__} macros, so that the embedded timestamps become
+-reproducible.
++and @code{__TIME__} macros, and in replacement of the file modification
++date in the @code{__TIMESTAMP__} macro if the latter is newer than the
++former, so that the embedded timestamps become reproducible.
+ 
+ The value of @env{SOURCE_DATE_EPOCH} must be a UNIX timestamp,
+ defined as the number of seconds (excluding leap seconds) since
+Index: gcc-7-20170409/gcc/testsuite/gcc.dg/cpp/source_date_epoch-4.c
+===================================================================
+--- /dev/null
++++ gcc-7-20170409/gcc/testsuite/gcc.dg/cpp/source_date_epoch-4.c
+@@ -0,0 +1,13 @@
++/* __TIMESTAMP__ should use SOURCE_DATE_EPOCH if the latter is older.  */
++/* { dg-do run } */
++/* { dg-set-compiler-env-var TZ "UTC" } */
++/* { dg-set-compiler-env-var LC_ALL "C" } */
++/* { dg-set-compiler-env-var SOURCE_DATE_EPOCH "0" } */
++
++int
++main ()
++{
++  if (__builtin_strcmp (__TIMESTAMP__, "Thu Jan  1 00:00:00 1970") != 0)
++    __builtin_abort ();
++  return 0;
++}
+Index: gcc-7-20170409/gcc/testsuite/gcc.dg/cpp/source_date_epoch-5.c
+===================================================================
+--- /dev/null
++++ gcc-7-20170409/gcc/testsuite/gcc.dg/cpp/source_date_epoch-5.c
+@@ -0,0 +1,13 @@
++/* __TIMESTAMP__ should not use SOURCE_DATE_EPOCH if the latter is newer.  */
++/* { dg-do run } */
++/* { dg-set-compiler-env-var TZ "UTC" } */
++/* { dg-set-compiler-env-var LC_ALL "C" } */
++/* { dg-set-compiler-env-var SOURCE_DATE_EPOCH "253402300799" } */
++
++int
++main ()
++{
++  if (__builtin_strcmp (__TIMESTAMP__, "Fri Dec 31 23:59:59 UTC 9999") == 0)
++    __builtin_abort ();
++  return 0;
++}

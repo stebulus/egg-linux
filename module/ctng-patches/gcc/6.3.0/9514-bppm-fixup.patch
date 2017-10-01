@@ -1,0 +1,14 @@
+diff --git a/libiberty/prefix-map.c b/libiberty/prefix-map.c
+index d4cc5c9..f2b7eda 100644
+--- a/libiberty/prefix-map.c
++++ b/libiberty/prefix-map.c
+@@ -128,7 +128,8 @@ prefix_map_prepend (struct prefix_map *map, char *new_name,
+ int
+ prefix_map_parse_unquote (char *src)
+ {
+-  for (char *dest = src; 0 != (*dest = *src); ++dest, ++src)
++  char *dest;
++  for (dest = src; 0 != (*dest = *src); ++dest, ++src)
+     switch (*src)
+       {
+       case ':':

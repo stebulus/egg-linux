@@ -1,0 +1,270 @@
+Subject: [PATCH 2/3] Use BUILD_PATH_PREFIX_MAP envvar to transform __FILE__
+
+Use the BUILD_PATH_PREFIX_MAP environment variable when expanding the __FILE__
+macro, in the same way that debug-prefix-map works for debugging symbol paths.
+
+This patch follows similar lines to the earlier patch for SOURCE_DATE_EPOCH.
+Specifically, we read the environment variable not in libcpp but via a hook
+which has an implementation defined in gcc/c-family.  However, to achieve this
+is more complex than the earlier patch: we need to share the prefix_map data
+structure and associated functions between libcpp and c-family.  Therefore, we
+need to move these to libiberty.  (For comparison, the SOURCE_DATE_EPOCH patch
+did not need this because time_t et. al. are in the standard C library.)
+
+Acknowledgements
+----------------
+
+Dhole <dhole@openmailbox.org> who wrote the earlier patch for SOURCE_DATE_EPOCH
+which saved me a lot of time on figuring out what to edit.
+
+ChangeLogs
+----------
+
+gcc/ChangeLog:
+
+2017-07-21  Ximin Luo  <infinity0@pwned.gg>
+
+	* doc/invoke.texi (Environment Variables): Document form and behaviour
+	of BUILD_PATH_PREFIX_MAP.
+
+gcc/c-family/ChangeLog:
+
+2017-07-21  Ximin Luo  <infinity0@pwned.gg>
+
+	* c-common.c (cb_get_build_path_prefix_map): Define new call target.
+	* c-common.h (cb_get_build_path_prefix_map): Declare call target.
+	* c-lex.c (init_c_lex): Set the get_build_path_prefix_map callback.
+
+libcpp/ChangeLog:
+
+2017-07-21  Ximin Luo  <infinity0@pwned.gg>
+
+	* include/cpplib.h (cpp_callbacks): Add get_build_path_prefix_map
+	callback.
+	* init.c (cpp_create_reader): Initialise build_path_prefix_map field.
+	* internal.h (cpp_reader): Add new field build_path_prefix_map.
+	* macro.c (_cpp_builtin_macro_text): Set the build_path_prefix_map
+	field if unset and apply it when expanding __FILE__ macros.
+
+gcc/testsuite/ChangeLog:
+
+2017-07-21  Ximin Luo  <infinity0@pwned.gg>
+
+	* gcc.dg/cpp/build_path_prefix_map-1.c: New test.
+	* gcc.dg/cpp/build_path_prefix_map-2.c: New test.
+
+diff --git a/gcc/c-family/c-common.c b/gcc/c-family/c-common.c
+index 48f235d..2e2bc8d 100644
+--- a/gcc/c-family/c-common.c
++++ b/gcc/c-family/c-common.c
+@@ -21,6 +21,7 @@ along with GCC; see the file COPYING3.  If not see
+ 
+ #include "config.h"
+ #include "system.h"
++#include "prefix-map.h"
+ #include "coretypes.h"
+ #include "target.h"
+ #include "function.h"
+@@ -12772,4 +12773,23 @@ cb_get_source_date_epoch (cpp_reader *pfile ATTRIBUTE_UNUSED)
+   return (time_t) epoch;
+ }
+ 
++/* Read BUILD_PATH_PREFIX_MAP from environment to have deterministic relative
++   paths to replace embedded absolute paths to get reproducible results.
++   Returns NULL if BUILD_PATH_PREFIX_MAP is badly formed.  */
++
++prefix_map **
++cb_get_build_path_prefix_map (cpp_reader *pfile ATTRIBUTE_UNUSED)
++{
++  prefix_map **map = XCNEW (prefix_map *);
++
++  const char *arg = getenv ("BUILD_PATH_PREFIX_MAP");
++  if (!arg || prefix_map_parse (map, arg))
++    return map;
++
++  free (map);
++  error_at (input_location, "environment variable BUILD_PATH_PREFIX_MAP is "
++	    "not well formed; see the GCC documentation for more details.");
++  return NULL;
++}
++
+ #include "gt-c-family-c-common.h"
+diff --git a/gcc/c-family/c-common.h b/gcc/c-family/c-common.h
+index 44699f71..94c81f0 100644
+--- a/gcc/c-family/c-common.h
++++ b/gcc/c-family/c-common.h
+@@ -1477,4 +1477,9 @@ extern bool reject_gcc_builtin (const_tree, location_t = UNKNOWN_LOCATION);
+ extern void warn_duplicated_cond_add_or_warn (location_t, tree, vec<tree> **);
+ extern bool valid_array_size_p (location_t, tree, tree);
+ 
++/* Read BUILD_PATH_PREFIX_MAP from environment to have deterministic relative
++   paths to replace embedded absolute paths to get reproducible results.
++   Returns NULL if BUILD_PATH_PREFIX_MAP is badly formed.  */
++extern prefix_map **cb_get_build_path_prefix_map (cpp_reader *pfile);
++
+ #endif /* ! GCC_C_COMMON_H */
+diff --git a/gcc/c-family/c-lex.c b/gcc/c-family/c-lex.c
+index 42a4135..79c55db 100644
+--- a/gcc/c-family/c-lex.c
++++ b/gcc/c-family/c-lex.c
+@@ -81,6 +81,7 @@ init_c_lex (void)
+   cb->read_pch = c_common_read_pch;
+   cb->has_attribute = c_common_has_attribute;
+   cb->get_source_date_epoch = cb_get_source_date_epoch;
++  cb->get_build_path_prefix_map = cb_get_build_path_prefix_map;
+ 
+   /* Set the debug callbacks if we can use them.  */
+   if ((debug_info_level == DINFO_LEVEL_VERBOSE
+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+index 2ed9285..23d46ef 100644
+--- a/gcc/doc/invoke.texi
++++ b/gcc/doc/invoke.texi
+@@ -25264,6 +25264,26 @@ Recognize EUCJP characters.
+ If @env{LANG} is not defined, or if it has some other value, then the
+ compiler uses @code{mblen} and @code{mbtowc} as defined by the default locale to
+ recognize and translate multibyte characters.
++
++@item BUILD_PATH_PREFIX_MAP
++@findex BUILD_PATH_PREFIX_MAP
++If this variable is set, it specifies an ordered map used to transform
++filepaths output in debugging symbols and expansions of the @code{__FILE__}
++macro.  This may be used to achieve fully reproducible output.  In the context
++of running GCC within a higher-level build tool, it is typically more reliable
++than setting command line arguments such as @option{-fdebug-prefix-map} or
++common environment variables such as @env{CFLAGS}, since the build tool may
++save these latter values into other output outside of GCC's control.
++
++The value is of the form
++@samp{@var{dst@r{[0]}}=@var{src@r{[0]}}:@var{dst@r{[1]}}=@var{src@r{[1]}}@r{@dots{}}}.
++If any @var{dst@r{[}i@r{]}} or @var{src@r{[}i@r{]}} contains @code{%}, @code{=}
++or @code{:} characters, they must be replaced with @code{%#}, @code{%+}, and
++@code{%.} respectively.
++
++Whenever GCC emits a filepath that starts with a whole path component matching
++@var{src@r{[}i@r{]}} for some @var{i}, with rightmost @var{i} taking priority,
++the matching part is replaced with @var{dst@r{[}i@r{]}} in the final output.
+ @end table
+ 
+ @noindent
+diff --git a/gcc/testsuite/gcc.dg/cpp/build_path_prefix_map-1.c b/gcc/testsuite/gcc.dg/cpp/build_path_prefix_map-1.c
+new file mode 100644
+index 0000000..9605038
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/cpp/build_path_prefix_map-1.c
+@@ -0,0 +1,11 @@
++/* __FILE__ should strip BUILD_PATH_PREFIX_MAP if the latter is a prefix. */
++/* { dg-do run } */
++/* { dg-set-compiler-env-var BUILD_PATH_PREFIX_MAP "MACROTEST=$srcdir" } */
++
++int
++main ()
++{
++  if (__builtin_strcmp (__FILE__, "MACROTEST/gcc.dg/cpp/build_path_prefix_map-1.c") != 0)
++    __builtin_abort ();
++  return 0;
++}
+diff --git a/gcc/testsuite/gcc.dg/cpp/build_path_prefix_map-2.c b/gcc/testsuite/gcc.dg/cpp/build_path_prefix_map-2.c
+new file mode 100644
+index 0000000..4b0aacd
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/cpp/build_path_prefix_map-2.c
+@@ -0,0 +1,12 @@
++/* __FILE__ should not be relative if BUILD_PATH_PREFIX_MAP is not set, and gcc is
++   asked to compile an absolute filename as is the case with this test.  */
++/* { dg-do run } */
++/* { dg-set-compiler-env-var BUILD_PATH_PREFIX_MAP } */
++
++int
++main ()
++{
++  if (__builtin_strcmp (__FILE__, "./gcc.dg/cpp/build_path_prefix_map-2.c") == 0)
++    __builtin_abort ();
++  return 0;
++}
+diff --git a/libcpp/include/cpplib.h b/libcpp/include/cpplib.h
+index 9d70cc8..7e8ce43 100644
+--- a/libcpp/include/cpplib.h
++++ b/libcpp/include/cpplib.h
+@@ -597,6 +597,10 @@ struct cpp_callbacks
+ 
+   /* Callback to parse SOURCE_DATE_EPOCH from environment.  */
+   time_t (*get_source_date_epoch) (cpp_reader *);
++
++  /* Callback to parse BUILD_PATH_PREFIX_MAP from environment.  */
++  struct prefix_map **(*get_build_path_prefix_map) (cpp_reader *);
++
+ };
+ 
+ #ifdef VMS
+diff --git a/libcpp/init.c b/libcpp/init.c
+index e78b320..2f3537b 100644
+--- a/libcpp/init.c
++++ b/libcpp/init.c
+@@ -260,6 +260,9 @@ cpp_create_reader (enum c_lang lang, cpp_hash_table *table,
+   /* Initialize source_date_epoch to -2 (not yet set).  */
+   pfile->source_date_epoch = (time_t) -2;
+ 
++  /* Initialize build_path_prefix_map to NULL (not yet set).  */
++  pfile->build_path_prefix_map = NULL;
++
+   /* The expression parser stack.  */
+   _cpp_expand_op_stack (pfile);
+ 
+diff --git a/libcpp/internal.h b/libcpp/internal.h
+index cea32ec..5ffdbfa 100644
+--- a/libcpp/internal.h
++++ b/libcpp/internal.h
+@@ -507,6 +507,11 @@ struct cpp_reader
+      set to -1 to disable it or to a non-negative value to enable it.  */
+   time_t source_date_epoch;
+ 
++  /* Externally set prefix-map to transform absolute paths, useful for
++     reproducibility.  It should be initialized to NULL (not yet set or
++     disabled) or to a `struct prefix_map` double pointer to enable it.  */
++  struct prefix_map **build_path_prefix_map;
++
+   /* EOF token, and a token forcing paste avoidance.  */
+   cpp_token avoid_paste;
+   cpp_token eof;
+diff --git a/libcpp/macro.c b/libcpp/macro.c
+index a3b8348..6c84a80 100644
+--- a/libcpp/macro.c
++++ b/libcpp/macro.c
+@@ -26,6 +26,7 @@ along with this program; see the file COPYING3.  If not see
+ #include "system.h"
+ #include "cpplib.h"
+ #include "internal.h"
++#include "prefix-map.h"
+ 
+ typedef struct macro_arg macro_arg;
+ /* This structure represents the tokens of a macro argument.  These
+@@ -291,7 +292,17 @@ _cpp_builtin_macro_text (cpp_reader *pfile, cpp_hashnode *node,
+ 	unsigned int len;
+ 	const char *name;
+ 	uchar *buf;
++	prefix_map **map = pfile->build_path_prefix_map;
+ 	
++	/* Set a prefix-map for __FILE__ if BUILD_PATH_PREFIX_MAP is defined.  */
++	if (map == NULL && pfile->cb.get_build_path_prefix_map != NULL)
++	  {
++	    map = pfile->cb.get_build_path_prefix_map (pfile);
++	    if (map == NULL)
++	      abort ();
++	    pfile->build_path_prefix_map = map;
++	  }
++
+ 	if (node->value.builtin == BT_FILE)
+ 	  name = linemap_get_expansion_filename (pfile->line_table,
+ 						 pfile->line_table->highest_line);
+@@ -301,6 +312,11 @@ _cpp_builtin_macro_text (cpp_reader *pfile, cpp_hashnode *node,
+ 	    if (!name)
+ 	      abort ();
+ 	  }
++
++	/* Apply the prefix-map for deterministic path output.  */
++	if (map != NULL)
++	  name = prefix_map_remap_alloca (*map, name);
++
+ 	len = strlen (name);
+ 	buf = _cpp_unaligned_alloc (pfile, len * 2 + 3);
+ 	result = buf;

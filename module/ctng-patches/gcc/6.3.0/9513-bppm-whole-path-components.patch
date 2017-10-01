@@ -1,0 +1,71 @@
+Subject: [PATCH 3/3] When remapping paths, only match whole path components
+
+Change the remapping algorithm so that each old_prefix only matches paths that
+have old_prefix as a whole path component prefix.  (A whole path component is a
+part of a path that begins and ends at a directory separator or at either end
+of the path string.)
+
+This remapping algorithm is more predictable than the old algorithm, because
+there is no chance of mappings for one directory interfering with mappings for
+other directories.  It contains less corner cases and therefore it is easier
+for users to figure out how to set the mapping appropriately.  Therefore, I
+believe it is better as a standardised algorithm that other build tools might
+like to adopt, and so in our BUILD_PATH_PREFIX_MAP specification we recommend
+this algorithm - though we allow others, and explicitly mention GCC's current
+algorithm.  But it would be good for GCC to adopt this newer and cleaner one.
+
+(The original idea came from discussions with rustc developers on this topic.)
+
+This does technically break backwards-compatibility, but I was under the
+impression that this option was not seen as such a critical feature, that this
+would be too important.  Nevertheless, this part is totally independent from
+the other patches and may be included or excluded as GCC maintainers desire.
+
+Acknowledgements
+----------------
+
+Discussions with Michael Woerister and other members of the Rust compiler team
+on Github, and discussions with Daniel Shahaf on the rb-general@ mailing list
+on lists.reproducible-builds.org.
+
+ChangeLogs
+----------
+
+libiberty/ChangeLog:
+
+2017-07-21  Ximin Luo  <infinity0@pwned.gg>
+
+	* prefix-map.c: When remapping paths, only match whole path components.
+
+diff --git a/libiberty/prefix-map.c b/libiberty/prefix-map.c
+index cfbac41..d4cc5c9 100644
+--- a/libiberty/prefix-map.c
++++ b/libiberty/prefix-map.c
+@@ -87,12 +87,22 @@ struct prefix_map *
+ prefix_map_find (struct prefix_map *map, const char *old_name,
+ 		 const char **suffix, size_t *suf_len)
+ {
++  size_t len;
++
+   for (; map; map = map->next)
+-    if (filename_ncmp (old_name, map->old_prefix, map->old_len) == 0)
+-      {
+-	*suf_len = strlen (*suffix = old_name + map->old_len);
+-	break;
+-      }
++    {
++      len = map->old_len;
++      /* Ignore trailing path separators at the end of old_prefix */
++      while (len > 0 && IS_DIR_SEPARATOR (map->old_prefix[len-1])) len--;
++      /* Check if old_name matches old_prefix at a path component boundary */
++      if (! filename_ncmp (old_name, map->old_prefix, len)
++	  && (IS_DIR_SEPARATOR (old_name[len])
++	      || old_name[len] == '\0'))
++	{
++	  *suf_len = strlen (*suffix = old_name + len);
++	  break;
++	}
++    }
+ 
+   return map;
+ }
