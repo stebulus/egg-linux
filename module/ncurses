@@ -1,6 +1,0 @@
-tar xf "$src"/ncurses-6.0.tar.gz
-cd ncurses-6.0
-export CPPFLAGS=-P
-./configure --prefix="$out"
-make
-make install
