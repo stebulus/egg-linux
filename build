@@ -37,7 +37,7 @@ cleanup() {
   if [ -v LEAVE_WORKING_DIR ]; then
     echo >&2 "$1"
   else
-    find "$1" -type d -exec chmod u+w {} +
+    find "$1" -type d -execdir chmod u+w {} +
     rm -rf "$1"
   fi
 }
@@ -49,7 +49,7 @@ case "$shouldBuild" in
     trap 'if [ -v workdir ]; then cleanup "$workdir"; fi' EXIT
     workdir=$(mktemp -d --tmpdir "$script_name".XXXXXXXX)
     if [ -d "$out" ]; then
-      find "$out" -type d -exec chmod u+w {} +
+      find "$out" -type d -execdir chmod u+w {} +
     fi
     rm -rf "$out"
     (
@@ -93,7 +93,7 @@ case "$shouldBuild" in
     find "$out" ! -type l -execdir chmod u+w {} +
     find "$out" -type f -execdir strip -d {} + || true
     touch "$out"/.built
-    find "$out" ! -type l -exec chmod a-w {} +
+    find "$out" ! -type l -execdir chmod a-w {} +
     ;;
   no)
     echo >&2 "$0: not building: $out"
