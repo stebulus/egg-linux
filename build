@@ -90,7 +90,8 @@ case "$shouldBuild" in
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script"
     )
-    chmod u+w "$out"
+    find "$out" ! -type l -execdir chmod u+w {} +
+    find "$out" -type f -execdir strip -d {} + || true
     touch "$out"/.built
     find "$out" ! -type l -exec chmod a-w {} +
     ;;
