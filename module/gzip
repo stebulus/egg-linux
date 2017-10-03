@@ -5,3 +5,4 @@ cd gzip-1.8
   --host=x86_64-egg0-linux-gnu
 make
 make DESTDIR="$out" install
+sed -i -e '/^grep=/s,/.*/grep,/usr/bin/grep,' "$out"/usr/bin/zgrep
