@@ -7,3 +7,4 @@ cd bash-4.4
   --enable-static-link
 make
 make install
+rm -f "$out"/bin/bashbug
