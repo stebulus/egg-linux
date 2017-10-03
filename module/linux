@@ -4,7 +4,10 @@ cd linux-4.3
 make mrproper
 cp "$here"/linux.config .config
 make oldconfig
-make
+make \
+  KBUILD_BUILD_TIMESTAMP='Thu Jan 1 00:00:01 UTC 1970' \
+  KBUILD_BUILD_USER=user \
+  KBUILD_BUILD_HOST=host
 make INSTALL_MOD_PATH="$out" modules_install
 rm "$out"/lib/modules/4.3.0/{build,source}
 mkdir -p "$out"/boot
