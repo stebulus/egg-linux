@@ -81,12 +81,13 @@ case "$shouldBuild" in
         unset IFS
       fi
       workdirEscaped=$(sed -e 's,%,%#,g' -e 's,=,%+,g' -e 's,:,%.,g' <<< "$workdir")
+      reproWorkdirEscaped=${workdirEscaped%.*}
       cd "$workdir"
       env -i \
         out="$out" \
         src="$here"/src \
         SOURCE_DATE_EPOCH=1 \
-        BUILD_PATH_PREFIX_MAP="$workdirEscaped"= \
+        BUILD_PATH_PREFIX_MAP="$workdirEscaped=$reproWorkdirEscaped" \
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script"
     )
