@@ -1,4 +1,4 @@
-tar xf "$src"/autoconf-2.69.tar.xz
+tar xf "$here"/autoconf-2.69.tar.xz
 cd autoconf-2.69
 ./configure --prefix="$out"
 make

@@ -1,4 +1,4 @@
-tar xf "$src"/coreutils-8.28.tar.xz
+tar xf "$here"/coreutils-8.28.tar.xz
 cd coreutils-8.28
 ./configure --prefix=/usr \
   --build=x86_64-unknown-linux-gnu \

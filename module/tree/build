@@ -34,6 +34,5 @@ cpuw "$gzip"/* "$out"
 cpuw "$grep"/* "$out"
 cpuw "$sed"/* "$out"
 
-here=$(dirname "${BASH_SOURCE[0]}")
 mkdir -p "$out"/usr/src/egg
 cp -Lr "$here"/../{build,hatch,module,README,src} "$out"/usr/src/egg

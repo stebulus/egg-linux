@@ -1,4 +1,4 @@
-tar xf "$src"/automake-1.15.tar.xz
+tar xf "$here"/automake-1.15.tar.xz
 cd automake-1.15
 ./configure --prefix="$out"
 make

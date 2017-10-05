@@ -1,4 +1,4 @@
-tar xf "$src"/diffutils-3.5.tar.xz
+tar xf "$here"/diffutils-3.5.tar.xz
 cd diffutils-3.5
 ./configure --prefix="$out"
 make

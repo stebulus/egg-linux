@@ -1,4 +1,4 @@
-tar xf "$src"/tar-1.29.tar.xz
+tar xf "$here"/tar-1.29.tar.xz
 cd tar-1.29
 ./configure --prefix=/usr \
   --build=x86_64-unknown-linux-gnu \

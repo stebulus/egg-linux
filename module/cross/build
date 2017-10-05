@@ -1,4 +1,3 @@
-here=$(dirname "${BASH_SOURCE[0]}")
 awk -v here="$here" \
   -v out="$out" \
   '{

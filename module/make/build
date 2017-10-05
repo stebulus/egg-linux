@@ -1,4 +1,4 @@
-tar xf "$src"/make-3.81.tar.gz
+tar xf "$here"/make-3.81.tar.gz
 cd make-3.81
 ./configure --prefix="$out"
 sh build.sh

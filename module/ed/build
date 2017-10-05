@@ -1,4 +1,4 @@
-tar xf "$src"/ed-1.4.tar.gz
+tar xf "$here"/ed-1.4.tar.gz
 cd ed-1.4
 ./configure --prefix="$out"
 make

@@ -1,4 +1,4 @@
-tar xf "$src"/patch-2.7.5.tar.xz
+tar xf "$here"/patch-2.7.5.tar.xz
 cd patch-2.7.5
 ./configure --prefix="$out"
 make

@@ -1,4 +1,4 @@
-tar xf "$src"/findutils-4.6.0.tar.gz
+tar xf "$here"/findutils-4.6.0.tar.gz
 cd findutils-4.6.0
 ./configure --prefix="$out"
 make

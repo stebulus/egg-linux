@@ -1,4 +1,4 @@
-tar xf "$src"/flex-2.6.3.tar.gz
+tar xf "$here"/flex-2.6.3.tar.gz
 cd flex-2.6.3
 ./configure --prefix="$out"
 make
