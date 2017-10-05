@@ -1,4 +1,4 @@
-tar xf "$here"/linux-4.10.8.tar.xz
+tar xf "$linux_src"/linux-4.10.8.tar.xz
 cd linux-4.10.8
 make mrproper
 cp "$here"/config .config

@@ -11,3 +11,5 @@ ln -s \
   "$perl"/bin/perl \
   "$which"/bin/which \
   "$out"/bin
+mkdir "$out"/src
+ln -s "$toolchain_src"/* "$out"/src

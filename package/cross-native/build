@@ -1,8 +1,10 @@
 awk -v here="$here" \
   -v out="$out" \
+  -v src="$crosstool_ng/src" \
   '{
     gsub("@HERE@", here)
     gsub("@OUT@", out)
+    gsub("@SRC@", src)
     print
   }' \
   "$here"/config >.config

@@ -1,4 +1,4 @@
-tar xf "$here"/ncurses-6.0.tar.gz
+tar xf "$ncurses_src"/ncurses-6.0.tar.gz
 cd ncurses-6.0
 export CPPFLAGS=-P
 ./configure --prefix="$out"

@@ -24,8 +24,9 @@ package ed
 package fake-wget
 package file
 package gperf
+package linux-src
 package m4
-package ncurses
+package ncurses-src
 package patch
 package perl
 package which
@@ -35,15 +36,17 @@ package bison m4 perl
 package flex bison m4
 package help2man perl
 package libtool m4
+package ncurses ncurses-src
 package texinfo perl
 package bc ed texinfo
+package toolchain-src linux-src ncurses-src
 package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
-  help2man libtool m4 ncurses patch perl texinfo which
+  help2man libtool m4 ncurses patch perl texinfo toolchain-src which
 package cross crosstool-ng
 package coreutils cross
 package grep cross
 package gzip cross
-package linux bc perl cross
+package linux bc perl linux-src cross
 package sed cross
 package static-bash cross
 package tar cross
