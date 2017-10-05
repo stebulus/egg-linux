@@ -2,7 +2,7 @@ here=$(dirname "${BASH_SOURCE[0]}")
 tar xf "$src"/linux-4.10.8.tar.xz
 cd linux-4.10.8
 make mrproper
-cp "$here"/linux.config .config
+cp "$here"/config .config
 make oldconfig
 make \
   KBUILD_BUILD_TIMESTAMP='Thu Jan 1 00:00:01 UTC 1970' \

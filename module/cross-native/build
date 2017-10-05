@@ -6,7 +6,7 @@ awk -v here="$here" \
     gsub("@OUT@", out)
     print
   }' \
-  "$here"/cross-native.config >.config
+  "$here"/config >.config
 unset CPATH
 unset LD_LIBRARY_PATH
 unset LIBRARY_PATH

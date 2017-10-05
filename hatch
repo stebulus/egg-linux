@@ -18,7 +18,7 @@ package() {
   local module
   module=$1
   shift
-  "$here"/build "$out/$module" "$here/module/$module" \
+  "$here"/build "$out/$module" "$here/module/$module/build" \
     ${stdenv:+"${stdenv[@]}"} ${@:+"${@/#/$out/}"}
 }
 
