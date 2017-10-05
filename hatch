@@ -15,10 +15,10 @@ stdtool() {
 }
 
 package() {
-  local module
-  module=$1
+  local pkg
+  pkg=$1
   shift
-  "$here"/build "$out/$module" "$here/module/$module/build" \
+  "$here"/build "$out/$pkg" "$here/package/$pkg/build" \
     ${stdenv:+"${stdenv[@]}"} ${@:+"${@/#/$out/}"}
 }
 
