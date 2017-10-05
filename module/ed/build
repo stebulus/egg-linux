@@ -1,5 +1,5 @@
-tar xf "$src"/ed-1.12.tar.gz
-cd ed-1.12
+tar xf "$src"/ed-1.4.tar.gz
+cd ed-1.4
 ./configure --prefix="$out"
 make
 make install
