@@ -9,8 +9,7 @@ if [ $# -lt 2 ]; then
 fi
 out=$(readlink -f "$1")
 shift
-script=$(readlink -f "$1")
-script_dir=$(dirname "$script")
+script_dir=$(readlink -f "$1")
 package_name=$(basename "$script_dir")
 shift
 inputs=("$@")
@@ -91,7 +90,7 @@ case "$shouldBuild" in
         SOURCE_DATE_EPOCH=1 \
         BUILD_PATH_PREFIX_MAP="$workdirEscaped=$reproWorkdirEscaped" \
         ${inputsvars:+"${inputsvars[@]}"} \
-        /bin/bash -euo pipefail -- "$script"
+        /bin/bash -euo pipefail -- "$script_dir"/build
     )
     chmod u+w "$out"
     touch "$out"/.built
