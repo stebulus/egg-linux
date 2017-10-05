@@ -1,6 +1,6 @@
 here=$(dirname "${BASH_SOURCE[0]}")
-tar xf "$src"/linux-4.3.tar.xz
-cd linux-4.3
+tar xf "$src"/linux-4.10.8.tar.xz
+cd linux-4.10.8
 make mrproper
 cp "$here"/linux.config .config
 make oldconfig
