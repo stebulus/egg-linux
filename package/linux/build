@@ -2,7 +2,7 @@ tar xf "$linux_src"/linux-4.10.8.tar.xz
 cd linux-4.10.8
 make mrproper
 cp "$here"/config .config
-make oldconfig
+make olddefconfig
 make \
   KBUILD_BUILD_TIMESTAMP='Thu Jan 1 00:00:01 UTC 1970' \
   KBUILD_BUILD_USER=user \
