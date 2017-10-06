@@ -13,3 +13,4 @@ ln -s \
   "$out"/bin
 mkdir "$out"/src
 ln -s "$toolchain_src"/* "$out"/src
+ln -s "$here"/patches "$out"

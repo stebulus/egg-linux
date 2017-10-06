@@ -1,9 +1,11 @@
 awk -v here="$here" \
   -v out="$out" \
+  -v patches="$crosstool_ng/patches" \
   -v src="$crosstool_ng/src" \
   '{
     gsub("@HERE@", here)
     gsub("@OUT@", out)
+    gsub("@PATCHES@", patches)
     gsub("@SRC@", src)
     print
   }' \
