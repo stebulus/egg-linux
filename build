@@ -71,7 +71,7 @@ case "$shouldBuild" in
     rm -rf "$out"
     (
       inputsvars=()
-      bppmentries=("${workdir%.*}" "$workdir")
+      bppmentries=("/egg-workdir/$package_name" "$workdir")
       if [ -v inputs ]; then
         inputspaths=()
         for i in "${inputs[@]}"; do
