@@ -1,10 +1,12 @@
 tar xf "$here"/bash-4.4.tar.gz
 cd bash-4.4
-./configure --prefix="$out" \
+./configure --prefix=/usr \
   --build=x86_64-unknown-linux-gnu \
   --host=x86_64-egg0-linux-gnu \
   --without-bash-malloc \
   --enable-static-link
 make
-make install
-rm -f "$out"/bin/bashbug
+make DESTDIR="$out" install
+mkdir -p "$out"/bin
+mv "$out"/usr/bin/bash "$out"/bin
+rm -f "$out"/usr/bin/bashbug
