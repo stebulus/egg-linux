@@ -43,6 +43,22 @@ cleanup() {
   fi
 }
 
+bppm_escape() {
+  sed -e 's,%,%#,g' -e 's,=,%+,g' -e 's,:,%.,g'
+}
+
+bppm() {
+  local bppm
+  bppm=
+  while [ $# -gt 0 ]; do
+    a=$(bppm_escape <<< "$1")
+    b=$(bppm_escape <<< "$2")
+    bppm="$bppm:$a=$b"
+    shift 2
+  done
+  echo "${bppm#:}"
+}
+
 case "$shouldBuild" in
   yes)
     echo >&2 "$0: building: $out"
@@ -55,6 +71,7 @@ case "$shouldBuild" in
     rm -rf "$out"
     (
       inputsvars=()
+      bppmentries=("${workdir%.*}" "$workdir")
       if [ -v inputs ]; then
         inputspaths=()
         for i in "${inputs[@]}"; do
@@ -62,6 +79,7 @@ case "$shouldBuild" in
           fullpath=$(readlink -f "$i")
           inputspaths+=("$fullpath")
           inputsvars+=("${name//-/_}=$fullpath")
+          bppmentries+=(/egg-input/"$name" "$fullpath")
         done
         IFS=:
         if [ -v PASS_PATH_THROUGH ] && [ -v inputspaths ]; then
@@ -81,14 +99,13 @@ case "$shouldBuild" in
         )
         unset IFS
       fi
-      workdirEscaped=$(sed -e 's,%,%#,g' -e 's,=,%+,g' -e 's,:,%.,g' <<< "$workdir")
-      reproWorkdirEscaped=${workdirEscaped%.*}
+      pathmap=$(bppm "${bppmentries[@]}")
       cd "$workdir"
       env -i \
         out="$out" \
         here="$script_dir" \
         SOURCE_DATE_EPOCH=1 \
-        BUILD_PATH_PREFIX_MAP="$workdirEscaped=$reproWorkdirEscaped" \
+        BUILD_PATH_PREFIX_MAP="$pathmap" \
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script_dir"/build
     )
