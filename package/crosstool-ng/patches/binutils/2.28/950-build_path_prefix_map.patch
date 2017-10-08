@@ -1,6 +1,6 @@
 diff -ruN binutils-2.28-orig/gas/as.c binutils-2.28/gas/as.c
 --- binutils-2.28-orig/gas/as.c	2017-03-02 03:23:53.000000000 -0500
-+++ binutils-2.28/gas/as.c	2017-10-07 22:15:39.654683082 -0400
++++ binutils-2.28/gas/as.c	2017-10-07 23:05:16.978718290 -0400
 @@ -39,6 +39,7 @@
  #include "dwarf2dbg.h"
  #include "dw2gencfi.h"
@@ -20,7 +20,7 @@ diff -ruN binutils-2.28-orig/gas/as.c binutils-2.28/gas/as.c
        /* getopt_long_only is like getopt_long, but '-' as well as '--' can
 diff -ruN binutils-2.28-orig/gas/as.h binutils-2.28/gas/as.h
 --- binutils-2.28-orig/gas/as.h	2017-03-02 03:23:53.000000000 -0500
-+++ binutils-2.28/gas/as.h	2017-10-07 22:15:49.098683194 -0400
++++ binutils-2.28/gas/as.h	2017-10-07 23:05:16.982718290 -0400
 @@ -508,6 +508,7 @@
  
  const char *remap_debug_filename (const char *);
@@ -31,7 +31,7 @@ diff -ruN binutils-2.28-orig/gas/as.h binutils-2.28/gas/as.h
  xmemdup0 (const char *in, size_t len)
 diff -ruN binutils-2.28-orig/gas/Makefile.am binutils-2.28/gas/Makefile.am
 --- binutils-2.28-orig/gas/Makefile.am	2017-03-02 03:23:53.000000000 -0500
-+++ binutils-2.28/gas/Makefile.am	2017-10-07 22:17:03.846684078 -0400
++++ binutils-2.28/gas/Makefile.am	2017-10-07 23:05:16.982718290 -0400
 @@ -85,6 +85,7 @@
  	macro.c \
  	messages.c \
@@ -48,9 +48,49 @@ diff -ruN binutils-2.28-orig/gas/Makefile.am binutils-2.28/gas/Makefile.am
  	read.h \
  	sb.h \
  	struc-symbol.h \
+diff -ruN binutils-2.28-orig/gas/Makefile.in binutils-2.28/gas/Makefile.in
+--- binutils-2.28-orig/gas/Makefile.in	2017-03-02 03:23:53.000000000 -0500
++++ binutils-2.28/gas/Makefile.in	2017-10-07 23:05:24.066718374 -0400
+@@ -115,9 +115,9 @@
+ 	flonum-konst.$(OBJEXT) flonum-mult.$(OBJEXT) frags.$(OBJEXT) \
+ 	hash.$(OBJEXT) input-file.$(OBJEXT) input-scrub.$(OBJEXT) \
+ 	listing.$(OBJEXT) literal.$(OBJEXT) macro.$(OBJEXT) \
+-	messages.$(OBJEXT) output-file.$(OBJEXT) read.$(OBJEXT) \
+-	remap.$(OBJEXT) sb.$(OBJEXT) stabs.$(OBJEXT) subsegs.$(OBJEXT) \
+-	symbols.$(OBJEXT) write.$(OBJEXT)
++	messages.$(OBJEXT) output-file.$(OBJEXT) prefix-map.$(OBJEXT) \
++	read.$(OBJEXT) remap.$(OBJEXT) sb.$(OBJEXT) stabs.$(OBJEXT) \
++	subsegs.$(OBJEXT) symbols.$(OBJEXT) write.$(OBJEXT)
+ am_as_new_OBJECTS = $(am__objects_1)
+ as_new_OBJECTS = $(am_as_new_OBJECTS)
+ am__DEPENDENCIES_1 =
+@@ -382,6 +382,7 @@
+ 	macro.c \
+ 	messages.c \
+ 	output-file.c \
++        prefix-map.c \
+ 	read.c \
+ 	remap.c \
+ 	sb.c \
+@@ -414,6 +415,7 @@
+ 	macro.h \
+ 	obj.h \
+ 	output-file.h \
++        prefix-map.h \
+ 	read.h \
+ 	sb.h \
+ 	struc-symbol.h \
+@@ -850,6 +852,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/obj-multi.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/obj-som.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/output-file.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prefix-map.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/read.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/remap.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rl78-parse.Po@am__quote@
 diff -ruN binutils-2.28-orig/gas/prefix-map.c binutils-2.28/gas/prefix-map.c
 --- binutils-2.28-orig/gas/prefix-map.c	1969-12-31 19:00:00.000000000 -0500
-+++ binutils-2.28/gas/prefix-map.c	2017-10-07 22:15:39.654683082 -0400
++++ binutils-2.28/gas/prefix-map.c	2017-10-07 23:05:16.982718290 -0400
 @@ -0,0 +1,212 @@
 +/* Definitions for manipulating filename prefixes.
 +   Written 2017 by Ximin Luo <infinity0@pwned.gg>
@@ -266,7 +306,7 @@ diff -ruN binutils-2.28-orig/gas/prefix-map.c binutils-2.28/gas/prefix-map.c
 +}
 diff -ruN binutils-2.28-orig/gas/prefix-map.h binutils-2.28/gas/prefix-map.h
 --- binutils-2.28-orig/gas/prefix-map.h	1969-12-31 19:00:00.000000000 -0500
-+++ binutils-2.28/gas/prefix-map.h	2017-10-07 22:15:39.654683082 -0400
++++ binutils-2.28/gas/prefix-map.h	2017-10-07 23:05:16.982718290 -0400
 @@ -0,0 +1,94 @@
 +/* Declarations for manipulating filename prefixes.
 +   Written 2017 by Ximin Luo <infinity0@pwned.gg>
@@ -364,7 +404,7 @@ diff -ruN binutils-2.28-orig/gas/prefix-map.h binutils-2.28/gas/prefix-map.h
 +#endif /* _PREFIX_MAP_H */
 diff -ruN binutils-2.28-orig/gas/remap.c binutils-2.28/gas/remap.c
 --- binutils-2.28-orig/gas/remap.c	2017-03-02 03:23:53.000000000 -0500
-+++ binutils-2.28/gas/remap.c	2017-10-07 22:15:39.654683082 -0400
++++ binutils-2.28/gas/remap.c	2017-10-07 23:05:16.982718290 -0400
 @@ -20,22 +20,10 @@
  
  #include "as.h"
