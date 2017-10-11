@@ -1,5 +1,6 @@
 mkdir -p "$out"
 ln -s "$binutils_src"/* "$out"
+ln -s "$glibc_src"/* "$out"
 ln -s "$linux_src"/* "$out"
 ln -s "$ncurses_src"/* "$out"
 while read -r url; do
