@@ -19,6 +19,7 @@ stdtool findutils
 stdtool gawk
 stdtool xz
 
+package binutils-src
 package bzip2
 package ed
 package fake-wget
@@ -39,7 +40,7 @@ package libtool m4
 package ncurses ncurses-src
 package texinfo perl
 package bc ed texinfo
-package toolchain-src linux-src ncurses-src
+package toolchain-src binutils-src linux-src ncurses-src
 package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
   help2man libtool m4 ncurses patch perl texinfo toolchain-src which
 package cross crosstool-ng
