@@ -50,6 +50,5 @@ package linux bc perl linux-src cross
 package sed cross
 package static-bash cross
 package tar cross
-package cross-native cross crosstool-ng
-package tree coreutils cross-native grep gzip \
+package tree coreutils grep gzip \
   linux sed static-bash tar
