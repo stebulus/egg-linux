@@ -19,10 +19,11 @@ cpuw "$static_bash"/bin/bash "$out"/bin
 ln -s bash "$out"/bin/sh
 cpuw "$binutils"/* "$out"
 cpuw "$coreutils"/* "$out"
-cpuw "$tar"/* "$out"
-cpuw "$gzip"/* "$out"
+cpuw "$glibc"/* "$out"
 cpuw "$grep"/* "$out"
+cpuw "$gzip"/* "$out"
 cpuw "$sed"/* "$out"
+cpuw "$tar"/* "$out"
 
 mkdir -p "$out"/usr/src/egg
 cp -Lr "$here"/../../{build,hatch,package,packages,README} \
