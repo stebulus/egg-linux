@@ -6,3 +6,6 @@ cd build
   --host=x86_64-egg0-linux-gnu
 make
 make DESTDIR="$out" install
+for x in ldd sotruss tzselect xtrace; do
+  sed -i -e '1s,.*,#!/bin/bash,' "$out/usr/bin/$x"
+done
