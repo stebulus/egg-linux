@@ -5,3 +5,5 @@ cd binutils-2.28
   --host=x86_64-egg0-linux-gnu
 make
 make DESTDIR="$out" install
+# libbfd needs zlib, which is not installed; just throw all libs away
+rm -rf "$out"/usr/{include,lib}
