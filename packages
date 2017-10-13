@@ -50,11 +50,12 @@ package cross crosstool-ng
 package binutils binutils-src cross
 package coreutils cross
 package glibc binutils glibc-src cross
+package gcc glibc gcc-src cross
 package grep cross
 package gzip cross
 package linux bc perl linux-src cross
 package sed cross
 package static-bash cross
 package tar cross
-package tree binutils coreutils glibc grep gzip \
+package tree binutils coreutils gcc glibc grep gzip \
   linux sed static-bash tar
