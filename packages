@@ -24,6 +24,7 @@ package bzip2
 package ed
 package fake-wget
 package file
+package gcc-src
 package glibc-src
 package gperf
 package linux-src
@@ -41,7 +42,8 @@ package libtool m4
 package ncurses ncurses-src
 package texinfo perl
 package bc ed texinfo
-package toolchain-src binutils-src glibc-src linux-src ncurses-src
+package toolchain-src \
+  binutils-src gcc-src glibc-src linux-src ncurses-src
 package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
   help2man libtool m4 ncurses patch perl texinfo toolchain-src which
 package cross crosstool-ng

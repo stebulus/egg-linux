@@ -1,0 +1,5 @@
+mkdir -p "$out"
+while read -r url; do
+  name=$(basename "$url")
+  ln -s "$here/$name" "$out"
+done <"$here"/sources
