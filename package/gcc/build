@@ -17,3 +17,6 @@ cd build
 make
 make DESTDIR="$out" install
 ln -s gcc "$out"/usr/bin/cc
+mv --no-clobber "$out"/usr/lib64/* "$out"/usr/lib
+rmdir "$out"/usr/lib64
+ln -s lib "$out"/usr/lib64
