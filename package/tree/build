@@ -19,9 +19,9 @@ cpuw "$static_bash"/bin/bash "$out"/bin
 ln -s bash "$out"/bin/sh
 cpuw "$binutils"/* "$out"
 cpuw "$coreutils"/* "$out"
+cpuw "$cross"/x86_64-egg0-linux-gnu/sysroot/* "$out"
 cpuw "$findutils"/* "$out"
 cpuw "$gcc"/* "$out"
-cpuw "$glibc"/* "$out"
 cpuw "$grep"/* "$out"
 cpuw "$gzip"/* "$out"
 cpuw "$sed"/* "$out"
