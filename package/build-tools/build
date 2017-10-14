@@ -22,6 +22,7 @@ expand
 expr
 false
 fgrep
+find
 gcc
 g++
 grep
@@ -60,4 +61,5 @@ true
 uname
 uniq
 wc
+xargs
 EOF

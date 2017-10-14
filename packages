@@ -12,10 +12,8 @@ package gawk mawk
 package xz gawk
 package bad-cmp
 package diffutils gawk xz bad-cmp
-package findutils gawk
 
 stdtool diffutils
-stdtool findutils
 stdtool gawk
 stdtool xz
 
@@ -49,6 +47,7 @@ package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
 package cross crosstool-ng
 package binutils binutils-src cross
 package coreutils cross
+package findutils cross
 package glibc binutils glibc-src cross
 package gcc glibc gcc-src cross
 package grep cross
@@ -57,5 +56,5 @@ package linux bc perl linux-src cross
 package sed cross
 package static-bash cross
 package tar cross
-package tree binutils coreutils gcc glibc grep gzip \
+package tree binutils coreutils findutils gcc glibc grep gzip \
   linux sed static-bash tar
