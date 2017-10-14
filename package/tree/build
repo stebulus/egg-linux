@@ -19,6 +19,7 @@ cpuw "$static_bash"/bin/bash "$out"/bin
 ln -s bash "$out"/bin/sh
 cpuw "$binutils"/* "$out"
 cpuw "$coreutils"/* "$out"
+cpuw "$gcc"/* "$out"
 cpuw "$glibc"/* "$out"
 cpuw "$grep"/* "$out"
 cpuw "$gzip"/* "$out"
