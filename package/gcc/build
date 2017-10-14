@@ -16,3 +16,4 @@ cd build
   --enable-languages=c,c++
 make
 make DESTDIR="$out" install
+ln -s gcc "$out"/usr/bin/cc
