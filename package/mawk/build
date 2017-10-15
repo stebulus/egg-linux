@@ -3,3 +3,4 @@ cd mawk-1.3.4-20161120
 ./configure --prefix="$out"
 make
 make install
+ln -s mawk "$out"/bin/awk
