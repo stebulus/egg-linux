@@ -8,20 +8,21 @@ package make
 stdtool make
 
 package mawk
-package gawk mawk
-package xz gawk
-package bad-cmp
-package diffutils gawk xz bad-cmp
-
-stdtool diffutils
-stdtool gawk
+package xz mawk
 stdtool xz
+
+package bad-cmp
+package diffutils mawk xz bad-cmp
+stdtool diffutils
+
+package file mawk
+package gawk diffutils file mawk
+stdtool gawk
 
 package binutils-src
 package bzip2
 package ed
 package fake-wget
-package file
 package gcc-src
 package glibc-src
 package gperf
