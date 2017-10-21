@@ -15,8 +15,15 @@ unset LD_LIBRARY_PATH
 unset LIBRARY_PATH
 ct-ng oldconfig
 ct-ng build."$EGG_JOBS"
+rmrm() {
+  for f in "$@"; do
+    d=$(dirname "$f")
+    chmod u+w "$d"
+    rm -f "$f"
+  done
+}
 # mtrace captures path to perl on build machine
-rm "$out"/x86_64-egg0-linux-gnu/sysroot/usr/bin/mtrace
+rmrm "$out"/x86_64-egg0-linux-gnu/sysroot/usr/bin/mtrace
 # *-gdb.py include made-up path to python
-rm "$out"/x86_64-egg0-linux-gnu/sysroot/lib/libstdc++.so.6.0.22-gdb.py
-rm "$out"/x86_64-egg0-linux-gnu/lib64/libstdc++.so.6.0.22-gdb.py
+rmrm "$out"/x86_64-egg0-linux-gnu/sysroot/lib/libstdc++.so.6.0.22-gdb.py
+rmrm "$out"/x86_64-egg0-linux-gnu/lib64/libstdc++.so.6.0.22-gdb.py
