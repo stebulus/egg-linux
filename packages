@@ -10,14 +10,12 @@ stdtool make
 package bad-cmp
 package mawk
 package file mawk
-
 package xz bad-cmp file mawk
-stdtool xz
-
-package diffutils mawk xz bad-cmp
-stdtool diffutils
-
+package diffutils bad-cmp mawk xz
 package gawk diffutils file mawk
+
+stdtool xz
+stdtool diffutils
 stdtool gawk
 
 package binutils-src
