@@ -26,4 +26,5 @@ package() {
 }
 
 mkdir -p "$out"
+date -Is >> "$out"/times
 . "$here"/packages
