@@ -7,11 +7,12 @@ stdtool build-tools
 package make
 stdtool make
 
+package bad-cmp
+
 package mawk
-package xz mawk
+package xz bad-cmp mawk
 stdtool xz
 
-package bad-cmp
 package diffutils mawk xz bad-cmp
 stdtool diffutils
 

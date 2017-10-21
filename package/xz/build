@@ -1,3 +1,10 @@
+# configure script uses diff, but only for return value, like cmp
+mkdir bad-diff
+ln -s "$bad_cmp"/bin/cmp bad-diff/diff
+bad_diff=$(readlink -f bad-diff)
+PATH=$bad_diff:$PATH
+export PATH
+
 tar xf "$here"/xz-5.2.3.tar.gz
 cd xz-5.2.3
 ./configure --prefix="$out"
