@@ -1,6 +1,7 @@
 #!/bin/bash
 # A crude version of cmp, for bootstrapping diffutils
 set -euo pipefail
+if [ "$1" = -s ]; then shift; fi
 unset tmp
 trap 'if [ -v tmp ]; then rm -rf "$tmp"; fi' EXIT
 tmp=$(mktemp -d --tmpdir)
