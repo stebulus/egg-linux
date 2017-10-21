@@ -1,0 +1,11 @@
+#!/bin/bash
+# A crude version of cmp, for bootstrapping diffutils
+set -euo pipefail
+unset tmp
+trap 'if [ -v tmp ]; then rm -rf "$tmp"; fi' EXIT
+tmp=$(mktemp -d --tmpdir)
+cat "$1" |od -An -x |tr -d ' ' >"$tmp"/bytes1
+cat "$2" |od -An -x |tr -d ' ' >"$tmp"/bytes2
+paste "$tmp"/bytes1 "$tmp"/bytes2 | while read -r a b; do
+  if [ x"$a" != x"$b" ]; then exit 1; fi
+done
