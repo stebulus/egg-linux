@@ -65,6 +65,7 @@ case "$shouldBuild" in
     unset workdir
     trap 'if [ -v workdir ]; then cleanup "$workdir"; fi' EXIT
     workdir=$(mktemp -d --tmpdir "$package_name".XXXXXXXX)
+    mkdir "$workdir"/tmp
     if [ -d "$out" ]; then
       find "$out" -type d -execdir chmod u+w {} +
     fi
@@ -109,6 +110,7 @@ case "$shouldBuild" in
         here="$script_dir" \
         SOURCE_DATE_EPOCH=1 \
         BUILD_PATH_PREFIX_MAP="$pathmap" \
+        TMPDIR="$workdir"/tmp \
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script_dir"/build
     )
