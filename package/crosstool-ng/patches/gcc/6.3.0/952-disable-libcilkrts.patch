@@ -1,0 +1,21 @@
+diff -ru gcc-6.3.0-orig/libcilkrts/configure.tgt gcc-6.3.0/libcilkrts/configure.tgt
+--- gcc-6.3.0-orig/libcilkrts/configure.tgt	2014-11-13 09:03:17.000000000 -0500
++++ gcc-6.3.0/libcilkrts/configure.tgt	2017-10-21 19:57:20.523298582 -0400
+@@ -31,16 +31,4 @@
+ #  WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ #  POSSIBILITY OF SUCH DAMAGE.
+ 
+-# Disable Cilk Runtime library for non x86 architecture...for now.
+-case "${target}" in
+-  x86_64-*-*)
+-    ;;
+-  i?86-*-*)
+-    ;;
+-  *-*-*)
+-    UNSUPPORTED=1
+-    ;;
+-esac
+-
+-# Disable libcilkrts on non POSIX hosted systems.
+-. ${srcdir}/../config/target-posix
++UNSUPPORTED=1
