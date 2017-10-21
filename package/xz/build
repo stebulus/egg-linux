@@ -8,5 +8,5 @@ export PATH
 tar xf "$here"/xz-5.2.3.tar.gz
 cd xz-5.2.3
 ./configure --prefix="$out"
-make
+make -j"$EGG_JOBS"
 make install

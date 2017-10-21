@@ -14,7 +14,7 @@ cd build
   --host=x86_64-egg0-linux-gnu \
   --target=x86_64-egg0-linux-gnu \
   --enable-languages=c,c++
-make
+make -j"$EGG_JOBS"
 make DESTDIR="$out" install
 ln -s gcc "$out"/usr/bin/cc
 mv --no-clobber "$out"/usr/lib64/* "$out"/usr/lib

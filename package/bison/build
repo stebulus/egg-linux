@@ -1,5 +1,5 @@
 tar xf "$here"/bison-3.0.4.tar.xz
 cd bison-3.0.4
 ./configure --prefix="$out"
-make
+make -j"$EGG_JOBS"
 make install-exec install-data

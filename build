@@ -111,6 +111,7 @@ case "$shouldBuild" in
         SOURCE_DATE_EPOCH=1 \
         BUILD_PATH_PREFIX_MAP="$pathmap" \
         TMPDIR="$workdir"/tmp \
+        EGG_JOBS="${EGG_JOBS:-1}" \
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$script_dir"/build
     )

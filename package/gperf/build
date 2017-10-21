@@ -1,5 +1,5 @@
 tar xf "$here"/gperf-3.0.4.tar.gz
 cd gperf-3.0.4
 ./configure --prefix="$out"
-make
+make -j"$EGG_JOBS"
 make install

@@ -1,3 +1,3 @@
 tar xf "$here"/bzip2-1.0.6.tar.gz
 cd bzip2-1.0.6
-make PREFIX="$out" install
+make -j"$EGG_JOBS" PREFIX="$out" install

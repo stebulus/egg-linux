@@ -1,5 +1,5 @@
 tar xf "$here"/flex-2.6.3.tar.gz
 cd flex-2.6.3
 ./configure --prefix="$out"
-make
+make -j"$EGG_JOBS"
 make install-exec

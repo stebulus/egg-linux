@@ -2,7 +2,7 @@ tar xf "$here"/crosstool-ng-1.23.0.tar.xz
 cd crosstool-ng-1.23.0
 export CPATH=$CPATH:"$ncurses"/include/ncurses
 ./configure --prefix="$out"
-make
+make -j"$EGG_JOBS"
 make install
 ln -s \
   "$bzip2"/bin/bzip2 \

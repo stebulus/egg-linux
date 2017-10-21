@@ -7,7 +7,7 @@ cp "$here"/config.cache .  # undetectable settings when cross-compiling
   --cache-file=config.cache \
   --without-bash-malloc \
   --enable-static-link
-make
+make -j"$EGG_JOBS"
 make DESTDIR="$out" install
 mkdir -p "$out"/bin
 mv "$out"/usr/bin/bash "$out"/bin

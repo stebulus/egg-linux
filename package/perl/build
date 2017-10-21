@@ -1,5 +1,5 @@
 tar xf "$here"/perl-5.24.3.tar.gz
 cd perl-5.24.3
 ./Configure -des -Dprefix="$out"
-make
+make -j"$EGG_JOBS"
 make install

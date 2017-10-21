@@ -14,4 +14,4 @@ unset CPATH
 unset LD_LIBRARY_PATH
 unset LIBRARY_PATH
 ct-ng oldconfig
-ct-ng build
+ct-ng build."$EGG_JOBS"

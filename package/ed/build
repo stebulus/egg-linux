@@ -1,5 +1,5 @@
 tar xf "$here"/ed-1.4.tar.gz
 cd ed-1.4
 ./configure --prefix="$out"
-make
+make -j"$EGG_JOBS"
 make install

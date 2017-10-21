@@ -1,5 +1,5 @@
 tar xf "$here"/libtool-2.4.6.tar.xz
 cd libtool-2.4.6
 ./configure --prefix="$out"
-make
+make -j"$EGG_JOBS"
 make install

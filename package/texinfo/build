@@ -1,5 +1,5 @@
 tar xf "$here"/texinfo-6.5.tar.xz
 cd texinfo-6.5
 ./configure --prefix="$out"
-make
+make -j"$EGG_JOBS"
 make install
