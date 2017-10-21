@@ -8,7 +8,7 @@ package make
 stdtool make
 
 package bad-cmp
-package mawk
+package mawk bad-cmp
 package file mawk
 package xz bad-cmp file mawk
 package diffutils bad-cmp mawk xz
