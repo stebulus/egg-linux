@@ -17,3 +17,6 @@ ct-ng oldconfig
 ct-ng build."$EGG_JOBS"
 # mtrace captures path to perl on build machine
 rm "$out"/x86_64-egg0-linux-gnu/sysroot/usr/bin/mtrace
+# *-gdb.py include made-up path to python
+rm "$out"/x86_64-egg0-linux-gnu/sysroot/lib/libstdc++.so.6.0.22-gdb.py
+rm "$out"/x86_64-egg0-linux-gnu/lib64/libstdc++.so.6.0.22-gdb.py
