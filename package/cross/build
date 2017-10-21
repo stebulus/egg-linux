@@ -15,3 +15,5 @@ unset LD_LIBRARY_PATH
 unset LIBRARY_PATH
 ct-ng oldconfig
 ct-ng build."$EGG_JOBS"
+# mtrace captures path to perl on build machine
+rm "$out"/x86_64-egg0-linux-gnu/sysroot/usr/bin/mtrace
