@@ -27,4 +27,64 @@ package() {
 
 mkdir -p "$out"
 date -Is >> "$out"/times
-. "$here"/packages
+
+export PASS_PATH_THROUGH=x
+package build-tools
+unset PASS_PATH_THROUGH
+
+stdtool build-tools
+
+package make
+stdtool make
+
+package bad-cmp
+package bad-diff bad-cmp
+package mawk bad-cmp
+package file bad-diff mawk
+package xz bad-diff bad-cmp file mawk
+package diffutils bad-cmp mawk xz
+package gawk diffutils file mawk
+
+stdtool xz
+stdtool diffutils
+stdtool gawk
+
+package binutils-src
+package bzip2
+package ed
+package fake-wget
+package gcc-src
+package glibc-src
+package gperf
+package linux-src
+package m4
+package ncurses-src
+package patch
+package perl
+package which
+package autoconf m4 perl
+package automake autoconf perl
+package bison m4 perl
+package flex bison m4
+package help2man perl
+package libtool m4
+package ncurses ncurses-src
+package texinfo perl
+package bc ed texinfo
+package toolchain-src \
+  binutils-src gcc-src glibc-src linux-src ncurses-src
+package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
+  help2man libtool m4 ncurses patch perl texinfo toolchain-src which
+package cross crosstool-ng
+package binutils binutils-src cross
+package coreutils cross
+package findutils cross
+package gcc gcc-src patch cross
+package grep cross
+package gzip cross
+package linux bc perl linux-src cross
+package sed cross
+package static-bash cross
+package tar cross
+package tree binutils coreutils cross findutils gcc grep gzip \
+  linux sed static-bash tar
