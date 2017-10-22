@@ -49,7 +49,7 @@ package cross crosstool-ng
 package binutils binutils-src cross
 package coreutils cross
 package findutils cross
-package gcc gcc-src cross
+package gcc gcc-src patch cross
 package grep cross
 package gzip cross
 package linux bc perl linux-src cross

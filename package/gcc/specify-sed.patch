@@ -1,0 +1,12 @@
+diff -ru gcc-6.3.0-orig/fixincludes/fixlib.h gcc-6.3.0/fixincludes/fixlib.h
+--- gcc-6.3.0-orig/fixincludes/fixlib.h	2015-01-28 15:21:34.000000000 -0500
++++ gcc-6.3.0/fixincludes/fixlib.h	2017-10-22 07:07:54.339774362 -0400
+@@ -243,6 +243,8 @@
+ #define UNLOAD_DATA() free ((void*)pz_curr_data)
+ #endif
+ 
++#define SED_PROGRAM "/usr/bin/sed"
++
+ /*
+  *  Exported procedures
+  */

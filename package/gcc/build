@@ -1,4 +1,7 @@
 tar xf "$gcc_src"/gcc-6.3.0.tar.gz
+cd gcc-6.3.0
+patch -Np1 <"$here"/specify-sed.patch
+cd ..
 tar xf "$gcc_src"/gmp-6.1.2.tar.xz
 ln -s ../gmp-6.1.2 gcc-6.3.0/gmp
 tar xf "$gcc_src"/isl-0.16.1.tar.xz
