@@ -1,0 +1,3 @@
+# for configure scripts that use diff for the return value only, like cmp
+mkdir -p "$out"/bin
+ln -s "$bad_cmp"/bin/cmp "$out"/bin/diff
