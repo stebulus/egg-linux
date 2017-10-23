@@ -86,7 +86,8 @@ package gcc file gcc-src patch cross-toolchain build-toolchain
 package grep cross-toolchain
 package gzip cross-toolchain
 package linux bc patch perl linux-src cross-toolchain build-toolchain
+package mount cross-toolchain
 package sed cross-toolchain
 package tar cross-toolchain
 package tree binutils coreutils cross-toolchain findutils gcc grep gzip \
-  linux sed bash tar
+  linux mount sed bash tar

@@ -24,6 +24,7 @@ cpuw "$findutils"/* "$out"
 cpuw "$gcc"/* "$out"
 cpuw "$grep"/* "$out"
 cpuw "$gzip"/* "$out"
+cpuw "$mount"/* "$out"
 cpuw "$sed"/* "$out"
 cpuw "$tar"/* "$out"
 

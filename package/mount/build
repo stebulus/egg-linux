@@ -1,0 +1,14 @@
+tar xf "$here"/util-linux-2.31.tar.xz
+cd util-linux-2.31
+./configure --prefix=/usr \
+  --build=x86_64-unknown-linux-gnu \
+  --host=x86_64-egg-linux-gnu \
+  --disable-makeinstall-chown \
+  --disable-makeinstall-setuid \
+  --disable-all-programs \
+  --enable-libblkid \
+  --enable-libmount \
+  --enable-mount \
+  --enable-umount
+make -j"$EGG_JOBS"
+make DESTDIR="$out" install
