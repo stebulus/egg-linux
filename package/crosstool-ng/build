@@ -1,5 +1,6 @@
 tar xf "$here"/crosstool-ng-1.23.0.tar.xz
 cd crosstool-ng-1.23.0
+patch -Np1 <"$here"/no-id-no-hostname.patch
 export CPATH=$CPATH:"$ncurses"/include/ncurses
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"
