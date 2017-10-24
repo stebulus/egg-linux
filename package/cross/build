@@ -14,6 +14,7 @@ unset CPATH
 unset LD_LIBRARY_PATH
 unset LIBRARY_PATH
 ct-ng oldconfig
+echo "CT_ALLOW_BUILD_AS_ROOT_SURE=y" >>.config
 ct-ng build."$EGG_JOBS"
 rmrm() {
   for f in "$@"; do
