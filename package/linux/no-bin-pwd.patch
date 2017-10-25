@@ -1,0 +1,80 @@
+Only in linux-4.10.8-orig: linux-4.10.8
+diff -ru linux-4.10.8-orig/Makefile linux-4.10.8/Makefile
+--- linux-4.10.8-orig/Makefile	2017-03-31 04:33:52.000000000 -0400
++++ linux-4.10.8/Makefile	2017-10-24 20:15:51.529939509 -0400
+@@ -137,7 +137,7 @@
+ # check that the output directory actually exists
+ saved-output := $(KBUILD_OUTPUT)
+ KBUILD_OUTPUT := $(shell mkdir -p $(KBUILD_OUTPUT) && cd $(KBUILD_OUTPUT) \
+-								&& /bin/pwd)
++								&& pwd)
+ $(if $(KBUILD_OUTPUT),, \
+      $(error failed to create output directory "$(saved-output)"))
+ 
+@@ -947,7 +947,7 @@
+ 	$(Q)$(MAKE) -f $(srctree)/Makefile headers_check
+ endif
+ ifdef CONFIG_GDB_SCRIPTS
+-	$(Q)ln -fsn `cd $(srctree) && /bin/pwd`/scripts/gdb/vmlinux-gdb.py
++	$(Q)ln -fsn `cd $(srctree) && pwd`/scripts/gdb/vmlinux-gdb.py
+ endif
+ ifdef CONFIG_TRIM_UNUSED_KSYMS
+ 	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/adjust_autoksyms.sh \
+@@ -1218,7 +1218,7 @@
+ 	@rm -rf $(MODLIB)/kernel
+ 	@rm -f $(MODLIB)/source
+ 	@mkdir -p $(MODLIB)/kernel
+-	@ln -s `cd $(srctree) && /bin/pwd` $(MODLIB)/source
++	@ln -s `cd $(srctree) && pwd` $(MODLIB)/source
+ 	@if [ ! $(objtree) -ef  $(MODLIB)/build ]; then \
+ 		rm -f $(MODLIB)/build ; \
+ 		ln -s $(CURDIR) $(MODLIB)/build ; \
+@@ -1607,11 +1607,11 @@
+ # Clear a bunch of variables before executing the submake
+ tools/: FORCE
+ 	$(Q)mkdir -p $(objtree)/tools
+-	$(Q)$(MAKE) LDFLAGS= MAKEFLAGS="$(filter --j% -j,$(MAKEFLAGS))" O=$(shell cd $(objtree) && /bin/pwd) subdir=tools -C $(src)/tools/
++	$(Q)$(MAKE) LDFLAGS= MAKEFLAGS="$(filter --j% -j,$(MAKEFLAGS))" O=$(shell cd $(objtree) && pwd) subdir=tools -C $(src)/tools/
+ 
+ tools/%: FORCE
+ 	$(Q)mkdir -p $(objtree)/tools
+-	$(Q)$(MAKE) LDFLAGS= MAKEFLAGS="$(filter --j% -j,$(MAKEFLAGS))" O=$(shell cd $(objtree) && /bin/pwd) subdir=tools -C $(src)/tools/ $*
++	$(Q)$(MAKE) LDFLAGS= MAKEFLAGS="$(filter --j% -j,$(MAKEFLAGS))" O=$(shell cd $(objtree) && pwd) subdir=tools -C $(src)/tools/ $*
+ 
+ # Single targets
+ # ---------------------------------------------------------------------------
+diff -ru linux-4.10.8-orig/scripts/gdb/linux/Makefile linux-4.10.8/scripts/gdb/linux/Makefile
+--- linux-4.10.8-orig/scripts/gdb/linux/Makefile	2017-03-31 04:33:52.000000000 -0400
++++ linux-4.10.8/scripts/gdb/linux/Makefile	2017-10-24 20:15:40.337939377 -0400
+@@ -1,6 +1,6 @@
+ always := gdb-scripts
+ 
+-SRCTREE := $(shell cd $(srctree) && /bin/pwd)
++SRCTREE := $(shell cd $(srctree) && pwd)
+ 
+ $(obj)/gdb-scripts:
+ ifneq ($(KBUILD_SRC),)
+diff -ru linux-4.10.8-orig/tools/power/cpupower/Makefile linux-4.10.8/tools/power/cpupower/Makefile
+--- linux-4.10.8-orig/tools/power/cpupower/Makefile	2017-03-31 04:33:52.000000000 -0400
++++ linux-4.10.8/tools/power/cpupower/Makefile	2017-10-24 20:15:26.437939212 -0400
+@@ -26,7 +26,7 @@
+ 
+ ifneq ($(OUTPUT),)
+ # check that the output directory actually exists
+-OUTDIR := $(shell cd $(OUTPUT) && /bin/pwd)
++OUTDIR := $(shell cd $(OUTPUT) && pwd)
+ $(if $(OUTDIR),, $(error output directory "$(OUTPUT)" does not exist))
+ endif
+ 
+diff -ru linux-4.10.8-orig/tools/scripts/Makefile.include linux-4.10.8/tools/scripts/Makefile.include
+--- linux-4.10.8-orig/tools/scripts/Makefile.include	2017-03-31 04:33:52.000000000 -0400
++++ linux-4.10.8/tools/scripts/Makefile.include	2017-10-24 20:15:30.277939258 -0400
+@@ -12,7 +12,7 @@
+ 
+ # check that the output directory actually exists
+ ifneq ($(OUTPUT),)
+-OUTDIR := $(shell cd $(OUTPUT) && /bin/pwd)
++OUTDIR := $(shell cd $(OUTPUT) && pwd)
+ $(if $(OUTDIR),, $(error output directory "$(OUTPUT)" does not exist))
+ endif
+ 

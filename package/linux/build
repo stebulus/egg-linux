@@ -1,5 +1,6 @@
 tar xf "$linux_src"/linux-4.10.8.tar.xz
 cd linux-4.10.8
+patch -Np1 <"$here"/no-bin-pwd.patch
 make mrproper
 cp "$here"/config .config
 make olddefconfig

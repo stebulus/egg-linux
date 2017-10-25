@@ -82,7 +82,7 @@ package findutils cross
 package gcc gcc-src patch cross
 package grep cross
 package gzip cross
-package linux bc perl linux-src cross
+package linux bc patch perl linux-src cross
 package sed cross
 package static-bash cross
 package tar cross
