@@ -2,8 +2,8 @@ mkdir -p "$out"/boot/grub
 cat <<EOF >"$out"/boot/grub/grub.cfg
 set timeout=3
 menuentry Linux {
-  set root=(hd0)
-  linux /boot/vmlinuz init=/bin/bash root=0810
+  set root=(hd0,gpt2)
+  linux /boot/vmlinuz init=/bin/bash root=0812
 }
 EOF
 
