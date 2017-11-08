@@ -14,4 +14,13 @@ ln -s \
   "$out"/bin
 mkdir "$out"/src
 ln -s "$toolchain_src"/* "$out"/src
-ln -s "$here"/patches "$out"
+cp -a "$here"/patches "$out"
+noUsrBinFilePatch() {
+  mkdir -p "$out/patches/$1/$2"
+  cp "$toolchain_src/$1-$2"-no-usr-bin-file.patch "$out/patches/$1/$2"
+}
+noUsrBinFilePatch gcc 6.3.0
+noUsrBinFilePatch gmp 6.1.2
+noUsrBinFilePatch isl 0.16.1
+noUsrBinFilePatch mpc 1.0.3
+noUsrBinFilePatch mpfr 3.1.5

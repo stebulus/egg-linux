@@ -1,14 +1,19 @@
 tar xf "$gcc_src"/gcc-6.3.0.tar.gz
 cd gcc-6.3.0
 patch -Np1 <"$here"/specify-sed.patch
+patch -Np1 <"$gcc_src"/gcc-6.3.0-no-usr-bin-file.patch
 cd ..
 tar xf "$gcc_src"/gmp-6.1.2.tar.xz
+patch -d gmp-6.1.2 -Np1 <"$gcc_src"/gmp-6.1.2-no-usr-bin-file.patch
 ln -s ../gmp-6.1.2 gcc-6.3.0/gmp
 tar xf "$gcc_src"/isl-0.16.1.tar.xz
+patch -d isl-0.16.1 -Np1 <"$gcc_src"/isl-0.16.1-no-usr-bin-file.patch
 ln -s ../isl-0.16.1 gcc-6.3.0/isl
 tar xf "$gcc_src"/mpc-1.0.3.tar.gz
+patch -d mpc-1.0.3 -Np1 <"$gcc_src"/mpc-1.0.3-no-usr-bin-file.patch
 ln -s ../mpc-1.0.3 gcc-6.3.0/mpc
 tar xf "$gcc_src"/mpfr-3.1.5.tar.xz
+patch -d mpfr-3.1.5 -Np1 <"$gcc_src"/mpfr-3.1.5-no-usr-bin-file.patch
 ln -s ../mpfr-3.1.5 gcc-6.3.0/mpfr
 mkdir build
 cd build

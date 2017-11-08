@@ -3,3 +3,4 @@ while read -r url; do
   name=$(basename "$url")
   ln -s "$here/$name" "$out"
 done <"$here"/sources
+cp "$here"/*.patch "$out"

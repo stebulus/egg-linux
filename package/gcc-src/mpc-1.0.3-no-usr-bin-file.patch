@@ -1,0 +1,119 @@
+diff -ru mpc-1.0.3-orig/configure mpc-1.0.3/configure
+--- mpc-1.0.3-orig/configure	2015-02-16 07:40:14.000000000 -0500
++++ mpc-1.0.3/configure	2017-11-08 07:29:40.330845672 -0500
+@@ -5658,7 +5658,7 @@
+ 
+ bsdi[45]*)
+   lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (shared object|dynamic lib)'
+-  lt_cv_file_magic_cmd='/usr/bin/file -L'
++  lt_cv_file_magic_cmd='file -L'
+   lt_cv_file_magic_test_file=/shlib/libc.so
+   ;;
+ 
+@@ -5699,7 +5699,7 @@
+       # Not sure whether the presence of OpenBSD here was a mistake.
+       # Let's accept both of them until this is cleared up.
+       lt_cv_deplibs_check_method='file_magic (FreeBSD|OpenBSD|DragonFly)/i[3-9]86 (compact )?demand paged shared library'
+-      lt_cv_file_magic_cmd=/usr/bin/file
++      lt_cv_file_magic_cmd=file
+       lt_cv_file_magic_test_file=`echo /usr/lib/libc.so.*`
+       ;;
+     esac
+@@ -5713,7 +5713,7 @@
+   ;;
+ 
+ hpux10.20* | hpux11*)
+-  lt_cv_file_magic_cmd=/usr/bin/file
++  lt_cv_file_magic_cmd=file
+   case $host_cpu in
+   ia64*)
+     lt_cv_deplibs_check_method='file_magic (s[0-9][0-9][0-9]|ELF-[0-9][0-9]) shared object file - IA64'
+@@ -5760,7 +5760,7 @@
+ 
+ newos6*)
+   lt_cv_deplibs_check_method='file_magic ELF [0-9][0-9]*-bit [ML]SB (executable|dynamic lib)'
+-  lt_cv_file_magic_cmd=/usr/bin/file
++  lt_cv_file_magic_cmd=file
+   lt_cv_file_magic_test_file=/usr/lib/libnls.so
+   ;;
+ 
+@@ -6906,7 +6906,7 @@
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-    case `/usr/bin/file conftest.$ac_objext` in
++    case `file conftest.$ac_objext` in
+       *ELF-32*)
+ 	HPUX_IA64_MODE=32
+ 	;;
+@@ -6927,7 +6927,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+     if test yes = "$lt_cv_prog_gnu_ld"; then
+-      case `/usr/bin/file conftest.$ac_objext` in
++      case `file conftest.$ac_objext` in
+ 	*32-bit*)
+ 	  LD="${LD-ld} -melf32bsmip"
+ 	  ;;
+@@ -6939,7 +6939,7 @@
+ 	;;
+       esac
+     else
+-      case `/usr/bin/file conftest.$ac_objext` in
++      case `file conftest.$ac_objext` in
+ 	*32-bit*)
+ 	  LD="${LD-ld} -32"
+ 	  ;;
+@@ -6965,7 +6965,7 @@
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+     emul=elf
+-    case `/usr/bin/file conftest.$ac_objext` in
++    case `file conftest.$ac_objext` in
+       *32-bit*)
+ 	emul="${emul}32"
+ 	;;
+@@ -6973,7 +6973,7 @@
+ 	emul="${emul}64"
+ 	;;
+     esac
+-    case `/usr/bin/file conftest.$ac_objext` in
++    case `file conftest.$ac_objext` in
+       *MSB*)
+ 	emul="${emul}btsmip"
+ 	;;
+@@ -6981,7 +6981,7 @@
+ 	emul="${emul}ltsmip"
+ 	;;
+     esac
+-    case `/usr/bin/file conftest.$ac_objext` in
++    case `file conftest.$ac_objext` in
+       *N32*)
+ 	emul="${emul}n32"
+ 	;;
+@@ -7005,14 +7005,14 @@
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-    case `/usr/bin/file conftest.o` in
++    case `file conftest.o` in
+       *32-bit*)
+ 	case $host in
+ 	  x86_64-*kfreebsd*-gnu)
+ 	    LD="${LD-ld} -m elf_i386_fbsd"
+ 	    ;;
+ 	  x86_64-*linux*)
+-	    case `/usr/bin/file conftest.o` in
++	    case `file conftest.o` in
+ 	      *x86-64*)
+ 		LD="${LD-ld} -m elf32_x86_64"
+ 		;;
+@@ -7118,7 +7118,7 @@
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-    case `/usr/bin/file conftest.o` in
++    case `file conftest.o` in
+     *64-bit*)
+       case $lt_cv_prog_gnu_ld in
+       yes*)
