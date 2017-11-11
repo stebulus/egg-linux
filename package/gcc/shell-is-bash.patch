@@ -1,0 +1,15 @@
+SHELL is used in mkheaders, which ends up on the host, so we should
+fix it for reproducibility rather than autodetecting it.  Also,
+use the bash on the PATH, not necessarily /bin/bash.
+
+diff -ru gcc-6.3.0-orig/fixincludes/configure gcc-6.3.0/fixincludes/configure
+--- gcc-6.3.0-orig/fixincludes/configure	2016-12-21 02:53:16.000000000 -0500
++++ gcc-6.3.0/fixincludes/configure	2017-11-11 06:35:53.574609297 -0500
+@@ -131,6 +131,7 @@
+ # CDPATH.
+ (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
+ 
++CONFIG_SHELL=bash
+ if test "x$CONFIG_SHELL" = x; then
+   as_bourne_compatible="if test -n \"\${ZSH_VERSION+set}\" && (emulate sh) >/dev/null 2>&1; then :
+   emulate sh

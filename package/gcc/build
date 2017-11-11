@@ -3,6 +3,7 @@ cd gcc-6.3.0
 patch -Np1 <"$here"/specify-sed.patch
 patch -Np1 <"$here"/sort-old-objs.patch
 patch -Np1 <"$gcc_src"/gcc-6.3.0-no-usr-bin-file.patch
+patch -Np1 <"$here"/shell-is-bash.patch
 cd ..
 tar xf "$gcc_src"/gmp-6.1.2.tar.xz
 patch -d gmp-6.1.2 -Np1 <"$gcc_src"/gmp-6.1.2-no-usr-bin-file.patch
