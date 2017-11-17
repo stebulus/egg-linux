@@ -30,52 +30,54 @@ date -Is >> "$out"/times
 
 export PASS_PATH_THROUGH=x
 package build-tools
+package build-toolchain
 unset PASS_PATH_THROUGH
 
 stdtool build-tools
 
-package make
+package make build-toolchain
 stdtool make
 
 package bad-cmp
 package bad-diff bad-cmp
-package mawk bad-cmp
-package file bad-diff mawk
-package xz bad-diff bad-cmp file mawk
-package diffutils bad-cmp mawk xz
-package gawk diffutils file mawk
+package mawk bad-cmp build-toolchain
+package file bad-diff mawk build-toolchain
+package xz bad-diff bad-cmp file mawk build-toolchain
+package diffutils bad-cmp mawk xz build-toolchain
+package gawk diffutils file mawk build-toolchain
 
 stdtool xz
 stdtool diffutils
 stdtool gawk
 
 package binutils-src
-package bzip2
-package ed
+package bzip2 build-toolchain
+package ed build-toolchain
 package fake-wget
 package gcc-src
 package glibc-src
-package gperf
+package gperf build-toolchain
 package linux-src
-package m4
+package m4 build-toolchain
 package ncurses-src
-package patch
-package perl
-package which
-package autoconf m4 perl
-package automake autoconf perl
-package bison m4 perl
-package flex bison m4
-package help2man perl
-package libtool m4
-package ncurses ncurses-src
-package texinfo perl
-package bc ed texinfo
+package patch build-toolchain
+package perl build-toolchain
+package which build-toolchain
+package autoconf m4 perl build-toolchain
+package automake autoconf perl build-toolchain
+package bison m4 perl build-toolchain
+package flex bison m4 build-toolchain
+package help2man perl build-toolchain
+package libtool m4 build-toolchain
+package ncurses ncurses-src build-toolchain
+package texinfo perl build-toolchain
+package bc ed texinfo build-toolchain
 package toolchain-src \
   binutils-src gcc-src glibc-src linux-src ncurses-src
 package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
-  help2man libtool m4 ncurses patch perl texinfo toolchain-src which
-package cross crosstool-ng
+  help2man libtool m4 ncurses patch perl texinfo toolchain-src which \
+  build-toolchain
+package cross crosstool-ng build-toolchain
 package binutils binutils-src cross
 package coreutils cross
 package findutils cross
