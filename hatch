@@ -86,7 +86,7 @@ package grep cross-toolchain
 package gzip cross-toolchain
 package linux bc patch perl linux-src cross-toolchain build-toolchain
 package sed cross-toolchain
-package static-bash cross-toolchain
+package static-bash cross-toolchain build-toolchain
 package tar cross-toolchain
 package tree binutils coreutils cross-toolchain findutils gcc grep gzip \
   linux sed static-bash tar
