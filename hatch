@@ -77,16 +77,16 @@ package toolchain-src \
 package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
   help2man libtool m4 ncurses patch perl texinfo toolchain-src which \
   build-toolchain
-package cross crosstool-ng build-toolchain
-package binutils binutils-src cross
-package coreutils cross
-package findutils cross
-package gcc file gcc-src patch cross
-package grep cross
-package gzip cross
-package linux bc patch perl linux-src cross
-package sed cross
-package static-bash cross
-package tar cross
-package tree binutils coreutils cross findutils gcc grep gzip \
+package cross-toolchain crosstool-ng build-toolchain
+package binutils binutils-src cross-toolchain
+package coreutils cross-toolchain
+package findutils cross-toolchain
+package gcc file gcc-src patch cross-toolchain
+package grep cross-toolchain
+package gzip cross-toolchain
+package linux bc patch perl linux-src cross-toolchain
+package sed cross-toolchain
+package static-bash cross-toolchain
+package tar cross-toolchain
+package tree binutils coreutils cross-toolchain findutils gcc grep gzip \
   linux sed static-bash tar
