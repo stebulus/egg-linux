@@ -81,7 +81,7 @@ package cross-toolchain crosstool-ng build-toolchain
 package binutils binutils-src cross-toolchain build-toolchain
 package coreutils cross-toolchain
 package findutils cross-toolchain
-package gcc file gcc-src patch cross-toolchain
+package gcc file gcc-src patch cross-toolchain build-toolchain
 package grep cross-toolchain
 package gzip cross-toolchain
 package linux bc patch perl linux-src cross-toolchain
