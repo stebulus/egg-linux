@@ -84,7 +84,7 @@ package findutils cross-toolchain
 package gcc file gcc-src patch cross-toolchain build-toolchain
 package grep cross-toolchain
 package gzip cross-toolchain
-package linux bc patch perl linux-src cross-toolchain
+package linux bc patch perl linux-src cross-toolchain build-toolchain
 package sed cross-toolchain
 package static-bash cross-toolchain
 package tar cross-toolchain
