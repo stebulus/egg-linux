@@ -28,7 +28,7 @@ cpuw "$sed"/* "$out"
 cpuw "$tar"/* "$out"
 
 mkdir -p "$out"/usr/src/egg
-cp -Lr "$here"/../../{build,hatch,package,README} \
+cp -aL "$here"/../../{build,hatch,package,README} \
   "$out"/usr/src/egg
 
 mkdir -p "$out"/dev

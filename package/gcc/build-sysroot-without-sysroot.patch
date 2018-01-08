@@ -1,0 +1,19 @@
+If configured with --with-build-sysroot but without --sysroot,
+then the stock code sets target_header_dir (which is used for
+autodetecting features of the target glibc at configure time) to
+native_system_header_dir (which is a host path, not a build path).
+Instead, prepend the build sysroot in this case.
+
+diff -ru gcc-6.3.0-orig/gcc/configure gcc-6.3.0/gcc/configure
+--- gcc-6.3.0-orig/gcc/configure	2016-12-11 11:23:04.000000000 -0500
++++ gcc-6.3.0/gcc/configure	2018-01-13 17:16:57.498066822 -0500
+@@ -12283,6 +12283,9 @@
+   fi
+ else
+   target_header_dir=${native_system_header_dir}
++  if test "x$with_build_sysroot" != "x"; then
++    target_header_dir="${with_build_sysroot}${target_header_dir}"
++  fi
+ fi
+ 
+ # If this is a cross-compiler that does not
