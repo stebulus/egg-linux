@@ -15,7 +15,7 @@ cpuw() {
 }
 
 cpuw "$linux"/* "$out"
-cpuw "$static_bash"/bin/bash "$out"/bin
+cpuw "$bash"/bin/bash "$out"/bin
 ln -s bash "$out"/bin/sh
 cpuw "$binutils"/* "$out"
 cpuw "$coreutils"/* "$out"

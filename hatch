@@ -89,4 +89,4 @@ package linux bc patch perl linux-src cross-toolchain build-toolchain
 package sed cross-toolchain
 package tar cross-toolchain
 package tree binutils coreutils cross-toolchain findutils gcc grep gzip \
-  linux sed static-bash tar
+  linux sed bash tar
