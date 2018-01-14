@@ -26,17 +26,16 @@ cd build
   --host=x86_64-egg-linux-gnu \
   --target=x86_64-egg-linux-gnu \
   --enable-languages=c,c++
+make -j"$EGG_JOBS" configure-gcc  # to create gcc/configargs.h
+awk -v ct="$cross_toolchain" '
+  /configuration_arguments/ { gsub(ct, "/egg-input/cross-toolchain") }
+  { print }
+  ' \
+  gcc/configargs.h >patched-configargs.h
+mv patched-configargs.h gcc/configargs.h
 make -j"$EGG_JOBS"
 make DESTDIR="$out" install-no-fixedincludes
 ln -s gcc "$out"/usr/bin/cc
 mv --no-clobber "$out"/usr/lib64/* "$out"/usr/lib
 rmdir "$out"/usr/lib64
 ln -s lib "$out"/usr/lib64
-awk -v ct="$cross_toolchain" '
-  /configuration_arguments/ { gsub(ct, "/egg-input/cross-toolchain") }
-  { print }
-  ' \
-  "$out"/usr/lib/gcc/x86_64-egg-linux-gnu/6.3.0/plugin/include/configargs.h \
-  > "$here"/patched-configargs.h
-mv "$here"/patched-configargs.h \
-  "$out"/usr/lib/gcc/x86_64-egg-linux-gnu/6.3.0/plugin/include/configargs.h
