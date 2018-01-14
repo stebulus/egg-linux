@@ -32,3 +32,11 @@ ln -s gcc "$out"/usr/bin/cc
 mv --no-clobber "$out"/usr/lib64/* "$out"/usr/lib
 rmdir "$out"/usr/lib64
 ln -s lib "$out"/usr/lib64
+awk -v ct="$cross_toolchain" '
+  /configuration_arguments/ { gsub(ct, "/egg-input/cross-toolchain") }
+  { print }
+  ' \
+  "$out"/usr/lib/gcc/x86_64-egg-linux-gnu/6.3.0/plugin/include/configargs.h \
+  > "$here"/patched-configargs.h
+mv "$here"/patched-configargs.h \
+  "$out"/usr/lib/gcc/x86_64-egg-linux-gnu/6.3.0/plugin/include/configargs.h
