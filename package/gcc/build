@@ -27,7 +27,7 @@ cd build
   --target=x86_64-egg-linux-gnu \
   --enable-languages=c,c++
 make -j"$EGG_JOBS"
-make DESTDIR="$out" install
+make DESTDIR="$out" install-no-fixedincludes
 ln -s gcc "$out"/usr/bin/cc
 mv --no-clobber "$out"/usr/lib64/* "$out"/usr/lib
 rmdir "$out"/usr/lib64
