@@ -19,7 +19,7 @@ cpuw "$static_bash"/bin/bash "$out"/bin
 ln -s bash "$out"/bin/sh
 cpuw "$binutils"/* "$out"
 cpuw "$coreutils"/* "$out"
-cpuw "$cross_toolchain"/x86_64-egg0-linux-gnu/sysroot/* "$out"
+cpuw "$cross_toolchain"/x86_64-egg-linux-gnu/sysroot/* "$out"
 cpuw "$findutils"/* "$out"
 cpuw "$gcc"/* "$out"
 cpuw "$grep"/* "$out"

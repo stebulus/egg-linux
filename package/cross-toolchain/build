@@ -24,7 +24,7 @@ rmrm() {
   done
 }
 # mtrace captures path to perl on build machine
-rmrm "$out"/x86_64-egg0-linux-gnu/sysroot/usr/bin/mtrace
+rmrm "$out"/x86_64-egg-linux-gnu/sysroot/usr/bin/mtrace
 # *-gdb.py include made-up path to python
-rmrm "$out"/x86_64-egg0-linux-gnu/sysroot/lib/libstdc++.so.6.0.22-gdb.py
-rmrm "$out"/x86_64-egg0-linux-gnu/lib64/libstdc++.so.6.0.22-gdb.py
+rmrm "$out"/x86_64-egg-linux-gnu/sysroot/lib/libstdc++.so.6.0.22-gdb.py
+rmrm "$out"/x86_64-egg-linux-gnu/lib64/libstdc++.so.6.0.22-gdb.py

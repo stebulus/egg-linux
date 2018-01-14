@@ -2,6 +2,6 @@ tar xf "$here"/sed-4.4.tar.xz
 cd sed-4.4
 ./configure --prefix=/usr \
   --build=x86_64-unknown-linux-gnu \
-  --host=x86_64-egg0-linux-gnu
+  --host=x86_64-egg-linux-gnu
 make -j"$EGG_JOBS"
 make DESTDIR="$out" install
