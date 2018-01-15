@@ -25,6 +25,7 @@ cd build
   --build=x86_64-unknown-linux-gnu \
   --host=x86_64-egg-linux-gnu \
   --target=x86_64-egg-linux-gnu \
+  --disable-multilib \
   --enable-languages=c,c++
 make -j"$EGG_JOBS" configure-gcc  # to create gcc/configargs.h
 awk -v ct="$cross_toolchain" '
@@ -36,6 +37,3 @@ mv patched-configargs.h gcc/configargs.h
 make -j"$EGG_JOBS"
 make DESTDIR="$out" install-no-fixedincludes
 ln -s gcc "$out"/usr/bin/cc
-mv --no-clobber "$out"/usr/lib64/* "$out"/usr/lib
-rmdir "$out"/usr/lib64
-ln -s lib "$out"/usr/lib64
