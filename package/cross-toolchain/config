@@ -131,7 +131,7 @@ CT_ARCH_SUFFIX=""
 # Generic target options
 #
 # CT_MULTILIB is not set
-CT_DEMULTILIB=y
+# CT_DEMULTILIB is not set
 CT_ARCH_USE_MMU=y
 CT_ARCH_SUPPORTS_32=y
 CT_ARCH_SUPPORTS_64=y
