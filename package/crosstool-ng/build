@@ -24,3 +24,4 @@ noUsrBinFilePatch gmp 6.1.2
 noUsrBinFilePatch isl 0.16.1
 noUsrBinFilePatch mpc 1.0.3
 noUsrBinFilePatch mpfr 3.1.5
+cp "$toolchain_src"/gcc-6.3.0-sort-old-objects.patch "$out"/patches/gcc/6.3.0
