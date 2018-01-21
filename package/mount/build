@@ -1,0 +1,17 @@
+tar xf "$here"/util-linux-2.31.tar.xz
+cd util-linux-2.31
+./configure --prefix=/usr \
+  --build=x86_64-unknown-linux-gnu \
+  --host=x86_64-egg-linux-gnu \
+  --disable-makeinstall-chown \
+  --disable-makeinstall-setuid \
+  --disable-all-programs \
+  --enable-libblkid \
+  --enable-libmount \
+  --enable-mount \
+  --enable-umount \
+  --enable-static-programs=mount,umount
+make -j"$EGG_JOBS"
+mkdir -p "$out"/bin
+cp -a mount.static "$out"/bin/mount
+cp -a umount.static "$out"/bin/umount
