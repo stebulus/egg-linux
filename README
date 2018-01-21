@@ -1,3 +1,39 @@
 Egg Linux
 
 "A penguin is an egg's way of making another egg."
+
+This is a small reproducible and self-reproducing Linux distribution.
+
+How to use:
+
+1. Fetch package sources:
+
+    find package -name sources -execdir wget -P {} \;
+
+2. Build:
+
+    ./hatch x
+
+3. Install to a USB key (on device file USBDEV):
+
+    dd if=/dev/zero of=USBDEV bs=1M count=1
+    parted USBDEV
+      mklabel gpt
+      mkaprt primary 1MB 2MB
+      set 1 bios_grub on
+      mkpart primary et2 2MB 100%
+    mke2fs -t ext2 USBDEV
+    mount USBDEV /mnt
+    cp -aT x/tree /mnt
+    chown -R root:root /mnt
+    grub-install --boot-directory=/mnt/boot USBDEV
+    umount /mnt
+
+4. Boot from that USB key.  The init is bash.
+
+5. If you want to test that it can reproduce itself, then build it
+from that bash:
+
+    export PATH=/usr/bin:/usr/sbin:/bin:/sbin
+    mount -o remount,rw /
+    /usr/src/egg/hatch /tmp/y
