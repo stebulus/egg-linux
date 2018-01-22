@@ -8,7 +8,7 @@ How to use:
 
 1. Fetch package sources:
 
-    find package -name sources -execdir wget -P {} \;
+    find package -name sources -execdir wget -i {} \;
 
 2. Build:
 
