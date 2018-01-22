@@ -30,6 +30,7 @@ readlink
 rm
 rmdir
 sed
+sha256sum
 sleep
 sort
 stat

@@ -91,3 +91,6 @@ package sed cross-toolchain
 package tar cross-toolchain
 package tree binutils coreutils cross-toolchain findutils gcc grep gzip \
   linux mount sed bash tar
+package checksums tree
+
+sha256sum "$out"/checksums/sha256sums
