@@ -20,7 +20,7 @@ if [ -e "$out"/.built ]; then
   if [ -n "$newer" ]; then
     echo >&2 "$0: should build: $newer is newer than $out"
     shouldBuild=yes
-  elif [ -v inputs ]; then
+  elif [ ${#inputs[@]} -ne 0 ]; then
     for i in "${inputs[@]}"; do
       if [ "$i"/.built -nt "$out"/.built ]; then
         echo >&2 "$0: should build: $i is newer than $out"
@@ -76,7 +76,7 @@ case "$shouldBuild" in
         "/egg-workdir/$package_name" "$workdir"
         "/egg-output/$package_name" "$out"
       )
-      if [ -v inputs ]; then
+      if [ ${#inputs[@]} -ne 0 ]; then
         inputspaths=()
         for i in "${inputs[@]}"; do
           name=$(basename "$i")
@@ -86,11 +86,11 @@ case "$shouldBuild" in
           bppmentries+=(/egg-input/"$name" "$fullpath")
         done
         IFS=:
-        if [ -v PASS_PATH_THROUGH ] && [ -v inputspaths ]; then
+        if [ -v PASS_PATH_THROUGH ] && [ ${#inputspaths[@]} -ne 0 ]; then
           path=$PATH:"${inputspaths[*]/%//bin}"
         elif [ -v PASS_PATH_THROUGH ]; then
           path=$PATH
-        elif [ -v inputspaths ]; then
+        elif [ ${#inputspaths[@]} -ne 0 ]; then
           path="${inputspaths[*]/%//bin}"
         else
           path=
