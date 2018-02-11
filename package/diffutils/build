@@ -1,5 +1,5 @@
-tar xf "$here"/diffutils-3.5.tar.xz
-cd diffutils-3.5
+tar xf "$here"/diffutils-3.6.tar.xz
+cd diffutils-3.6
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"
 make install
