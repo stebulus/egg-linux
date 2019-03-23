@@ -12,6 +12,10 @@ sed -i -e '1597 {
     q1
   }' job.c
 
+# Workaround for undefined reference to `__alloca'
+# http://gnu-make.2324884.n4.nabble.com/undefined-reference-to-alloca-tp18308.html
+sed -i -e 's/# if _GNU_GLOB_INTERFACE_VERSION == GLOB_INTERFACE_VERSION/# if _GNU_GLOB_INTERFACE_VERSION >= GLOB_INTERFACE_VERSION/' glob/glob.c
+
 ./configure --prefix="$out"
 sh build.sh
 ./make install
