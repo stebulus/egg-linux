@@ -58,9 +58,9 @@ package gcc-src
 package glibc-src
 package gperf build-toolchain
 package linux-src
-package m4 build-toolchain
-package ncurses-src
 package patch build-toolchain
+package m4 patch build-toolchain
+package ncurses-src
 package perl build-toolchain
 package which build-toolchain
 package autoconf m4 perl build-toolchain
