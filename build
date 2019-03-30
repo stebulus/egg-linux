@@ -4,19 +4,19 @@ here=$(dirname "${BASH_SOURCE[0]}")
 here=$(readlink -f "$here")
 
 if [ $# -lt 2 ]; then
-  echo >&2 "usage: $0 outputdir buildscript [input ...]"
+  echo >&2 "usage: $0 outputdir packagedir [input ...]"
   exit 1
 fi
 out=$(readlink -f "$1")
 shift
-script_dir=$(readlink -f "$1")
-package_name=$(basename "$script_dir")
+package_dir=$(readlink -f "$1")
+package_name=$(basename "$package_dir")
 shift
 inputs=("$@")
 
 if [ -e "$out"/.built ]; then
   shouldBuild=no
-  newer=$(find "$script_dir" -newer "$out"/.built -print -quit)
+  newer=$(find "$package_dir" -newer "$out"/.built -print -quit)
   if [ -n "$newer" ]; then
     echo >&2 "$0: should build: $newer is newer than $out"
     shouldBuild=yes
@@ -107,13 +107,13 @@ case "$shouldBuild" in
       cd "$workdir"
       env -i \
         out="$out" \
-        here="$script_dir" \
+        here="$package_dir" \
         SOURCE_DATE_EPOCH=1 \
         BUILD_PATH_PREFIX_MAP="$pathmap" \
         TMPDIR="$workdir"/tmp \
         EGG_JOBS="${EGG_JOBS:-1}" \
         ${inputsvars:+"${inputsvars[@]}"} \
-        /bin/bash -euo pipefail -- "$script_dir"/build
+        /bin/bash -euo pipefail -- "$package_dir"/build
     )
     chmod u+w "$out"
     touch "$out"/.built
