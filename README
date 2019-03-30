@@ -10,6 +10,10 @@ How to use:
 
     find package -name sources -execdir wget -nc -i {} +
 
+   To check that all sources were downloaded, run this command again;
+   when all sources are present, it will only emit lines of the form
+   `File ‘...’ already there; not retrieving.`
+
 2. Build:
 
     ./hatch x
