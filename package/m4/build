@@ -1,5 +1,6 @@
-tar xf "$here"/m4-1.4.17.tar.xz
-cd m4-1.4.17
+tar xf "$here"/m4-1.4.18.tar.xz
+cd m4-1.4.18
+patch -Np1 <"$here"/m4-1.4.18-glibc-change-work-around.patch
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"
 make install
