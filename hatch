@@ -8,12 +8,17 @@ if [ $# -ne 1 ]; then
 fi
 out=$1
 
+# stdtool foo
+# Add the package foo to the "standard environment", making it
+# available to all (subsequent) package builds even when it's not
+# listed explicitly as an input.
 stdenv=()
-
 stdtool() {
   stdenv+=("$out/$1")
 }
 
+# package foo [input ...]
+# Build package foo with the given inputs (in addition to stdtools).
 package() {
   local pkg start finish
   pkg=$1
