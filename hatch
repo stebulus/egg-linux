@@ -28,16 +28,16 @@ package() {
 mkdir -p "$out"
 date -Is >> "$out"/times
 
+# tools provided by the build machine
 export PASS_PATH_THROUGH=x
 package build-tools
 package build-toolchain
 unset PASS_PATH_THROUGH
-
 stdtool build-tools
 
+# bootstrap the standard environment
 package make build-toolchain
 stdtool make
-
 package bad-cmp
 package bad-diff bad-cmp
 package mawk bad-cmp build-toolchain
@@ -45,39 +45,49 @@ package file bad-diff mawk build-toolchain
 package xz bad-diff bad-cmp file mawk build-toolchain
 package diffutils bad-cmp mawk xz build-toolchain
 package gawk diffutils file mawk build-toolchain
-
 stdtool xz
 stdtool diffutils
 stdtool gawk
 
+# link-only packages to share sources among multiple users below
 package binutils-src
-package bzip2 build-toolchain
-package ed build-toolchain
-package fake-wget
 package gcc-src
 package glibc-src
-package gperf build-toolchain
 package linux-src
-package patch build-toolchain
-package m4 patch build-toolchain
 package ncurses-src
-package perl build-toolchain
+
+# prerequisites of the cross toolchain -- basic
+# ("basic" ~= "not needing another language to be installed")
+package bzip2 build-toolchain
+package ed build-toolchain
+package gperf build-toolchain
+package ncurses ncurses-src build-toolchain
+package patch build-toolchain
 package which build-toolchain
+
+# prerequisites of the cross toolchain -- fancy
+# ("fancy" ~= "m4, perl, and things that need them")
+package m4 patch build-toolchain
+package perl build-toolchain
 package autoconf m4 perl build-toolchain
 package automake autoconf perl build-toolchain
 package bison m4 perl build-toolchain
 package flex bison m4 build-toolchain
 package help2man perl build-toolchain
 package libtool m4 build-toolchain
-package ncurses ncurses-src build-toolchain
 package texinfo file perl build-toolchain
 package bc ed texinfo build-toolchain
+
+# the cross toolchain
+package fake-wget
 package toolchain-src \
   binutils-src gcc-src glibc-src linux-src ncurses-src
 package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
   help2man libtool m4 ncurses patch perl texinfo toolchain-src which \
   build-toolchain
 package cross-toolchain crosstool-ng build-toolchain
+
+# packages to be installed on the target
 package bash cross-toolchain build-toolchain
 package binutils binutils-src cross-toolchain build-toolchain
 package coreutils cross-toolchain
@@ -89,6 +99,8 @@ package linux bc patch perl linux-src cross-toolchain build-toolchain
 package mount cross-toolchain
 package sed cross-toolchain
 package tar cross-toolchain
+
+# the filesystem of the target
 package tree binutils coreutils cross-toolchain findutils gcc grep gzip \
   linux mount sed bash tar
 package checksums tree
