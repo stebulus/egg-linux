@@ -1,0 +1,21 @@
+diff -ru crosstool-ng-1.23.0-orig/configure crosstool-ng-1.23.0/configure
+--- crosstool-ng-1.23.0-orig/configure	2017-04-20 01:07:05.000000000 -0400
++++ crosstool-ng-1.23.0/configure	2019-04-01 20:25:10.865168183 -0400
+@@ -5799,7 +5799,7 @@
+     for ac_exec_ext in '' $ac_executable_extensions; do
+       ac_path_BASH_SHELL="$as_dir/$ac_prog$ac_exec_ext"
+       as_fn_executable_p "$ac_path_BASH_SHELL" || continue
+-ver=`$ac_path_BASH_SHELL --version 2>/dev/null| $EGREP '^GNU bash, version (3\.[1-9]|4)'`
++ver=`$ac_path_BASH_SHELL --version 2>/dev/null| $EGREP '^GNU bash, version (3\.[1-9]|4|5)'`
+                 test -z "$ac_cv_path_BASH_SHELL" && ac_cv_path_BASH_SHELL=$ac_path_BASH_SHELL
+                 test -n "$ver" && ac_cv_path_BASH_SHELL="$ac_path_BASH_SHELL" ac_path_BASH_SHELL_found=: acx_version_BASH_SHELL_ok=:
+       $ac_path_BASH_SHELL_found && break 3
+@@ -5818,7 +5818,7 @@
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_BASH_SHELL" >&5
+ $as_echo "$ac_cv_path_BASH_SHELL" >&6; }
+      if test -n "BASH_SHELL"; then :
+-  ver=`$ac_path_BASH_SHELL --version 2>/dev/null| $EGREP '^GNU bash, version (3\.[1-9]|4)'`
++  ver=`$ac_path_BASH_SHELL --version 2>/dev/null| $EGREP '^GNU bash, version (3\.[1-9]|4|5)'`
+            test -n "$ver" && acx_version_BASH_SHELL_ok=:
+ fi
+      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GNU bash >= 3.1" >&5
