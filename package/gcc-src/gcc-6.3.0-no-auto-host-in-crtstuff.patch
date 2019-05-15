@@ -1,0 +1,19 @@
+diff -ru gcc-6.3.0-orig/libgcc/crtstuff.c gcc-6.3.0-patched/libgcc/crtstuff.c
+--- gcc-6.3.0-orig/libgcc/crtstuff.c	2016-01-04 14:30:50.000000000 +0000
++++ gcc-6.3.0-patched/libgcc/crtstuff.c	2019-05-15 17:44:46.690642807 +0000
+@@ -48,15 +48,6 @@
+ /* Target machine header files require this define. */
+ #define IN_LIBGCC2
+ 
+-/* FIXME: Including auto-host is incorrect, but until we have
+-   identified the set of defines that need to go into auto-target.h,
+-   this will have to do.  */
+-#include "auto-host.h"
+-#undef caddr_t
+-#undef pid_t
+-#undef rlim_t
+-#undef ssize_t
+-#undef vfork
+ #include "tconfig.h"
+ #include "tsystem.h"
+ #include "coretypes.h"
