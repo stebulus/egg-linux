@@ -78,7 +78,7 @@ package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
   help2man libtool m4 ncurses patch perl texinfo toolchain-src which \
   build-toolchain
 package cross-toolchain crosstool-ng build-toolchain
-package bash cross-toolchain build-toolchain
+package bash cross-toolchain build-toolchain patch
 package binutils binutils-src cross-toolchain build-toolchain
 package coreutils cross-toolchain
 package findutils cross-toolchain
