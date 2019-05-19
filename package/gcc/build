@@ -6,6 +6,7 @@ patch -Np1 <"$gcc_src"/gcc-6.3.0-no-usr-bin-file.patch
 patch -Np1 <"$gcc_src"/gcc-6.3.0-no-auto-host-in-crtstuff.patch
 patch -Np1 <"$here"/shell-is-bash.patch
 patch -Np1 <"$here"/build-sysroot-without-sysroot.patch
+patch -Np1 <"$here"/no-autodetect-lib32.patch
 cd ..
 tar xf "$gcc_src"/gmp-6.1.2.tar.xz
 patch -d gmp-6.1.2 -Np1 <"$gcc_src"/gmp-6.1.2-no-usr-bin-file.patch
