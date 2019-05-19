@@ -1,4 +1,4 @@
 mkdir -p "$out"
 cd "$tree"
-find . -type f -exec sha256sum {} + |
+find . -path ./usr/src/egg -prune -o -type f -exec sha256sum {} + |
 LC_ALL=C sort -k2,2 > "$out"/sha256sums
