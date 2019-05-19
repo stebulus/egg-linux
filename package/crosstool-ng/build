@@ -1,6 +1,7 @@
 tar xf "$here"/crosstool-ng-1.23.0.tar.xz
 cd crosstool-ng-1.23.0
 patch -Np1 <"$here"/no-id-no-hostname.patch
+patch -Np1 <"$here"/bash5.patch
 export CPATH=$CPATH:"$ncurses"/include/ncurses
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"
@@ -25,3 +26,4 @@ noUsrBinFilePatch isl 0.16.1
 noUsrBinFilePatch mpc 1.0.3
 noUsrBinFilePatch mpfr 3.1.5
 cp "$toolchain_src"/gcc-6.3.0-sort-old-objects.patch "$out"/patches/gcc/6.3.0
+cp "$toolchain_src"/gcc-6.3.0-no-auto-host-in-crtstuff.patch "$out"/patches/gcc/6.3.0

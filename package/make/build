@@ -12,6 +12,15 @@ sed -i -e '1597 {
     q1
   }' job.c
 
+# Use alloca shims even when glibc present.
+# Edit with sed because we don't have patch yet; to mitigate the
+# fragility, fail explicitly if the substitution doesn't work.
+sed -i -e '210 {
+    s/ && !defined __GNU_LIBRARY__$//
+    t
+    q1
+  }' glob/glob.c
+
 ./configure --prefix="$out"
 sh build.sh
 ./make install

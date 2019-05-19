@@ -1,0 +1,27 @@
+Don't try to detect whether to use 'lib' or 'lib32' on the target
+based on the presence or absence of files on the build system.
+
+This call to the make function 'wildcard' was added in
+https://github.com/gcc-mirror/gcc/commit/f48da45c36a82ae8915f8e29f53594fc50d212a3
+which also added the comment that erroneously says it checks what's
+found on the target.
+
+diff -ru gcc-6.3.0-orig/gcc/config/i386/t-linux64 gcc-6.3.0-patched/gcc/config/i386/t-linux64
+--- gcc-6.3.0-orig/gcc/config/i386/t-linux64	2016-01-04 09:30:50.000000000 -0500
++++ gcc-6.3.0-patched/gcc/config/i386/t-linux64	2019-05-19 09:46:06.714881804 -0400
+@@ -21,7 +21,7 @@
+ # /lib and /usr/lib, while other distributions install libraries into /lib64
+ # and /usr/lib64.  The LSB does not enforce the use of /lib64 and /usr/lib64,
+ # it doesn't tell anything about the 32bit libraries on those systems.  Set
+-# MULTILIB_OSDIRNAMES according to what is found on the target.
++# MULTILIB_OSDIRNAMES to use lib32.
+ 
+ # To support i386, x86-64 and x32 libraries, the directory structrue
+ # should be:
+@@ -34,5 +34,5 @@
+ MULTILIB_OPTIONS    = $(subst $(comma),/,$(TM_MULTILIB_CONFIG))
+ MULTILIB_DIRNAMES   = $(patsubst m%, %, $(subst /, ,$(MULTILIB_OPTIONS)))
+ MULTILIB_OSDIRNAMES = m64=../lib64$(call if_multiarch,:x86_64-linux-gnu)
+-MULTILIB_OSDIRNAMES+= m32=$(if $(wildcard $(shell echo $(SYSTEM_HEADER_DIR))/../../usr/lib32),../lib32,../lib)$(call if_multiarch,:i386-linux-gnu)
++MULTILIB_OSDIRNAMES+= m32=../lib32$(call if_multiarch,:i386-linux-gnu)
+ MULTILIB_OSDIRNAMES+= mx32=../libx32$(call if_multiarch,:x86_64-linux-gnux32)

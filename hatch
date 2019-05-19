@@ -93,7 +93,7 @@ package crosstool-ng automake bison bzip2 fake-wget file flex gperf \
 package cross-toolchain crosstool-ng build-toolchain
 
 # packages to be installed on the target
-package bash cross-toolchain build-toolchain
+package bash cross-toolchain build-toolchain patch
 package binutils binutils-src cross-toolchain build-toolchain
 package coreutils cross-toolchain
 package findutils cross-toolchain

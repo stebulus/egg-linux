@@ -1,0 +1,34 @@
+Don't run `uname -r` on the build system to try to determine the
+properties of the host system.
+
+diff -ru bash-4.4.12-orig/configure bash-4.4.12-patched/configure
+--- bash-4.4.12-orig/configure	2016-09-07 16:57:01.000000000 -0400
++++ bash-4.4.12-patched/configure	2019-05-17 08:34:17.768292836 -0400
+@@ -16063,11 +16063,7 @@
+ solaris2.10*)	LOCAL_CFLAGS=-DSOLARIS  ;;
+ solaris2*)	LOCAL_CFLAGS=-DSOLARIS ;;
+ lynxos*)	LOCAL_CFLAGS=-DRECYCLES_PIDS ;;
+-linux*)		LOCAL_LDFLAGS=-rdynamic		 # allow dynamic loading
+-		case "`uname -r`" in
+-		2.[456789]*|[34]*)	$as_echo "#define PGRP_PIPE 1" >>confdefs.h
+- ;;
+-		esac ;;
++linux*)		LOCAL_LDFLAGS=-rdynamic	;;	 # allow dynamic loading
+ *qnx6*)		LOCAL_CFLAGS="-Dqnx -Dqnx6" LOCAL_LIBS="-lncurses" ;;
+ *qnx*)		LOCAL_CFLAGS="-Dqnx -F -3s" LOCAL_LDFLAGS="-3s" LOCAL_LIBS="-lunix -lncurses" ;;
+ powerux*)	LOCAL_LIBS="-lgen" ;;
+diff -ru bash-4.4.12-orig/configure.ac bash-4.4.12-patched/configure.ac
+--- bash-4.4.12-orig/configure.ac	2016-09-07 16:56:28.000000000 -0400
++++ bash-4.4.12-patched/configure.ac	2019-05-17 08:34:34.160293030 -0400
+@@ -1091,10 +1091,7 @@
+ solaris2.10*)	LOCAL_CFLAGS=-DSOLARIS  ;;
+ solaris2*)	LOCAL_CFLAGS=-DSOLARIS ;;
+ lynxos*)	LOCAL_CFLAGS=-DRECYCLES_PIDS ;;
+-linux*)		LOCAL_LDFLAGS=-rdynamic		 # allow dynamic loading
+-		case "`uname -r`" in
+-		2.[[456789]]*|[[34]]*)	AC_DEFINE(PGRP_PIPE) ;;
+-		esac ;;
++linux*)		LOCAL_LDFLAGS=-rdynamic	;;	 # allow dynamic loading
+ *qnx6*)		LOCAL_CFLAGS="-Dqnx -Dqnx6" LOCAL_LIBS="-lncurses" ;;
+ *qnx*)		LOCAL_CFLAGS="-Dqnx -F -3s" LOCAL_LDFLAGS="-3s" LOCAL_LIBS="-lunix -lncurses" ;;
+ powerux*)	LOCAL_LIBS="-lgen" ;;
