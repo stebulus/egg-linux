@@ -34,15 +34,6 @@ else
   shouldBuild=yes
 fi
 
-cleanup() {
-  if [ -v LEAVE_WORKING_DIR ]; then
-    echo >&2 "$1"
-  else
-    find "$1" -type d -execdir chmod u+w {} +
-    rm -rf "$1"
-  fi
-}
-
 bppm_escape() {
   sed -e 's,%,%#,g' -e 's,=,%+,g' -e 's,:,%.,g'
 }
@@ -63,7 +54,7 @@ case "$shouldBuild" in
   yes)
     echo >&2 "$0: building: $out"
     unset workdir
-    trap 'if [ -v workdir ]; then cleanup "$workdir"; fi' EXIT
+    trap '[ -v workdir ] && echo >&2 "leaving behind: $workdir"' EXIT
     workdir=$(mktemp -d --tmpdir "$package_name".XXXXXXXX)
     mkdir "$workdir"/tmp
     if [ -d "$out" ]; then
@@ -115,6 +106,12 @@ case "$shouldBuild" in
         ${inputsvars:+"${inputsvars[@]}"} \
         /bin/bash -euo pipefail -- "$package_dir"/build
     )
+    if [ ! -v LEAVE_WORKING_DIR ]; then
+      echo >&2 "cleaning up: $workdir"
+      find "$workdir" -type d -execdir chmod u+w {} +
+      rm -rf "$workdir"
+      unset workdir
+    fi
     chmod u+w "$out"
     touch "$out"/.built
     find "$out" ! -type l -execdir chmod a-w {} +
