@@ -2,6 +2,13 @@ mkdir -p "$out"/bin
 here=$(dirname "${BASH_SOURCE[0]}")
 cat "$here"/toolset/* |
 while read -r tool; do
+  set +e
   path=$(type -ap "$tool" |head -n1)
+  ret=$?
+  set -e
+  if [ "$ret" != 0 ]; then
+    echo >&2 "$0: not found: $tool"
+    false
+  fi
   ln -s "$path" "$out/bin/$tool"
 done
