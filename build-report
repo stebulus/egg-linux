@@ -12,6 +12,7 @@ buildDir=$3
 out=$4
 
 mkdir -p "$out"/build-machine
+echo "$reporter" >"$out"/reporter
 date -uI >"$out"/date
 sha256sum "$buildDir"/checksums/sha256sums |cut -c-64 \
   >"$out"/result-checksum
