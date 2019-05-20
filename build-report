@@ -19,5 +19,5 @@ git -C "$eggLinuxDir" rev-parse HEAD >"$out"/egg-linux-commit
 gcc --version |head -n1 >"$out"/build-machine/gcc-version
 lsb_release -d |sed 's/.*:\s*//' >"$out"/build-machine/lsb-release
 uname -a >"$out"/build-machine/uname
-ldd /bin/true |sed 's,=>, ,' |awk '$1 ~ /^libc.so/ { print $2 }' \
-  >"$out"/build-machine/libc-version
+libc=$(ldd /bin/true |sed 's,=>, ,' |awk '$1 ~ /^libc.so/ { print $2 }')
+"$libc" --version >"$out"/build-machine/libc-version
