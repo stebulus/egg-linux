@@ -22,3 +22,21 @@ lsb_release -d |sed 's/.*:\s*//' >"$out"/build-machine/lsb-release
 uname -a >"$out"/build-machine/uname
 libc=$(ldd /bin/true |sed 's,=>, ,' |awk '$1 ~ /^libc.so/ { print $2 }')
 "$libc" --version |head -n1 >"$out"/build-machine/libc-version
+
+set +e
+curl -sS --connect-timeout 2 http://169.254.169.254/latest/meta-data >/dev/null
+curl_ret=$?
+set -e
+case "$curl_ret" in
+  0)
+    curl -sS http://169.254.169.254/latest/meta-data/ami-id \
+      >"$out"/build-machine/ec2-ami-id
+    curl -sS http://169.254.169.254/latest/meta-data/instance-type \
+      >"$out"/build-machine/ec2-instance-type
+    ;;
+  28)  # timeout; just means it's not an EC2 instance, probably
+    ;;
+  *)
+    echo >&2 "$0: error: curl exited with code $curl_ret"
+    exit 1
+esac
