@@ -46,7 +46,5 @@ from that bash:
 
     ./build-report YOURNAME . x /tmp/egg-build-report
 
-and then open a PR at [egg-linux-build-results][0]
+and then open a PR at https://github.com/stebulus/egg-linux-build-results
 to add the contents of `/tmp/egg-build-report`.
-
-[0]: https://github.com/stebulus/egg-linux-build-results
