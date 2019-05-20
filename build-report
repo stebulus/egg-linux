@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ $# -ne 4 ]; then
+  echo >&2 "usage: $0 yourname egglinuxdir builddir outputdir"
+  echo >&2 "e.g., after './hatch x': $0 $(id -un) . x /tmp/egg-build-report"
+  exit 2
+fi
+reporter=$1
+eggLinuxDir=$2
+buildDir=$3
+out=$4
+
+mkdir -p "$out"/build-machine
+date -uI >"$out"/date
+sha256sum "$buildDir"/checksums/sha256sums |cut -c-64 \
+  >"$out"/result-checksum
+git -C "$eggLinuxDir" rev-parse HEAD >"$out"/egg-linux-commit
+gcc --version |head -n1 >"$out"/build-machine/gcc-version
+lsb_release -d |sed 's/.*:\s*//' >"$out"/build-machine/lsb-release
+uname -a >"$out"/build-machine/uname
+ldd /bin/true |sed 's,=>, ,' |awk '$1 ~ /^libc.so/ { print $2 }' \
+  >"$out"/build-machine/libc-version

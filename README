@@ -41,3 +41,12 @@ from that bash:
     export PATH=/usr/bin:/usr/sbin:/bin:/sbin
     mount -o remount,rw /
     /usr/src/egg/hatch /tmp/y
+
+6. If you like, let me know how it went: run
+
+    ./build-report YOURNAME . x /tmp/egg-build-report
+
+and then open a PR at [egg-linux-build-results][0]
+to add the contents of `/tmp/egg-build-report`.
+
+[0]: https://github.com/stebulus/egg-linux-build-results
