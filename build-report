@@ -24,7 +24,7 @@ libc=$(ldd /bin/true |sed 's,=>, ,' |awk '$1 ~ /^libc.so/ { print $2 }')
 "$libc" --version |head -n1 >"$out"/build-machine/libc-version
 
 set +e
-curl -sS --connect-timeout 2 http://169.254.169.254/latest/meta-data >/dev/null
+curl_err=$(curl -sS --connect-timeout 2 http://169.254.169.254/latest/meta-data 2>&1 >/dev/null)
 curl_ret=$?
 set -e
 case "$curl_ret" in
@@ -34,9 +34,10 @@ case "$curl_ret" in
     curl -sS http://169.254.169.254/latest/meta-data/instance-type \
       >"$out"/build-machine/ec2-instance-type
     ;;
-  28)  # timeout; just means it's not an EC2 instance, probably
+  28)  # timed out; just means it's not an EC2 instance, probably
     ;;
   *)
+    echo >&2 "$curl_err"
     echo >&2 "$0: error: curl exited with code $curl_ret"
     exit 1
 esac
