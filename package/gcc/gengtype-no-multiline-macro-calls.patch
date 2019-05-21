@@ -1,0 +1,77 @@
+Collapse some multi-line macro calls onto single lines, to avoid
+susceptibility to variations in cpp.
+
+Details:
+
+These calls expand to things involving __LINE__, which behaves
+differently with different implementations of cpp when the call
+itself spans multiple lines.  For example, the call on lines 1326-1329
+of gengtype.c,
+
+    	  subfields = create_field (subfields, t,
+    				    xasprintf (".fld[%lu].%s",
+    					       (unsigned long) aindex,
+    					       subname));
+
+is expanded by the cpp from gcc 9.1.1 on an Arch Linux machine [0] into
+
+       subfields = create_field_all (subfields,t,xasprintf (".fld[%lu].%s", (unsigned long) aindex, subname), 0, this_file, 1326)
+    
+    
+                         ;
+
+while the cpp from gcc 4.8.4 on an Ubuntu 14.04 machine [1] expands
+it to
+
+       subfields = create_field_all (subfields,t,xasprintf (".fld[%lu].%s", (unsigned long) aindex, subname), 0, this_file,
+    
+    
+     1329
+                   )
+    
+    
+                         ;
+
+[0]: https://github.com/stebulus/egg-linux-build-reports/6
+[1]: https://github.com/stebulus/egg-linux-build-reports/1
+
+This variability matters to Egg because these source locations get
+written to gtype.state, which gets installed on the host.
+
+diff -ru gcc-6.3.0-orig/gcc/gengtype.c gcc-6.3.0-patched/gcc/gengtype.c
+--- gcc-6.3.0-orig/gcc/gengtype.c	2016-01-12 21:51:11.000000000 -0500
++++ gcc-6.3.0-patched/gcc/gengtype.c	2019-05-20 20:08:50.469193409 -0400
+@@ -1323,10 +1323,7 @@
+ 	      break;
+ 	    }
+ 
+-	  subfields = create_field (subfields, t,
+-				    xasprintf (".fld[%lu].%s",
+-					       (unsigned long) aindex,
+-					       subname));
++	  subfields = create_field (subfields, t, xasprintf (".fld[%lu].%s", (unsigned long) aindex, subname));
+ 	  subfields->opt = nodot;
+ 	  if (t == note_union_tp)
+ 	    subfields->opt =
+@@ -1346,9 +1343,7 @@
+ 	  /* Add the "block_sym" field if SYMBOL_REF_HAS_BLOCK_INFO_P
+ 	     holds.  */
+ 	  type_p field_tp = find_structure ("block_symbol", TYPE_STRUCT);
+-	  subfields
+-	    = create_optional_field (subfields, field_tp, "block_sym",
+-				     "SYMBOL_REF_HAS_BLOCK_INFO_P (&%0)");
++	  subfields = create_optional_field (subfields, field_tp, "block_sym", "SYMBOL_REF_HAS_BLOCK_INFO_P (&%0)");
+ 	}
+ 
+       sname = xasprintf ("rtx_def_%s", rtx_name[i]);
+@@ -5196,9 +5191,7 @@
+       POS_HERE (do_scalar_typedef ("JCF_u2", &pos));
+       POS_HERE (do_scalar_typedef ("void", &pos));
+       POS_HERE (do_scalar_typedef ("machine_mode", &pos));
+-      POS_HERE (do_typedef ("PTR", 
+-			    create_pointer (resolve_typedef ("void", &pos)),
+-			    &pos));
++      POS_HERE (do_typedef ("PTR", create_pointer (resolve_typedef ("void", &pos)), &pos));
+ #undef POS_HERE
+       read_input_list (inputlist);
+       for (i = 0; i < num_gt_files; i++)
