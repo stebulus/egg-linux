@@ -42,9 +42,12 @@ from that bash:
     mount -o remount,rw /
     /usr/src/egg/hatch /tmp/y
 
-6. If you like, let me know how it went: run
+6. If you like, let me know how it went: on your original machine, run
 
-    ./build-report YOURNAME . x /tmp/egg-build-report
+    git clone https://github.com/stebulus/egg-linux-build-reports
+    cd egg-linux-build-reports
+    MYNAME=$(id -un)
+    ./build-report "$MYNAME" ../egg-linux ../egg-linux/x ./report
+    tar zcf report.tar.gz report
 
-and then open a PR at https://github.com/stebulus/egg-linux-build-reports
-to add the contents of `/tmp/egg-build-report`.
+and then email me `report.tar.gz`.  (Or make a PR.)
