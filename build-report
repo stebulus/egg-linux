@@ -16,7 +16,7 @@ echo "$reporter" >"$out"/reporter
 date -uI >"$out"/date
 sha256sum "$buildDir"/checksums/sha256sums |cut -c-64 \
   >"$out"/result-checksum
-git -C "$eggLinuxDir" rev-parse HEAD >"$out"/egg-linux-commit
+git --work-tree "$eggLinuxDir" rev-parse HEAD >"$out"/egg-linux-commit
 gcc --version |head -n1 >"$out"/build-machine/gcc-version
 lsb_release -d |sed 's/.*:\s*//' >"$out"/build-machine/lsb-release
 uname -a >"$out"/build-machine/uname
