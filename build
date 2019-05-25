@@ -55,7 +55,7 @@ case "$shouldBuild" in
     echo >&2 "$0: building: $out"
     unset workdir
     trap '[ -v workdir ] && echo >&2 "leaving behind: $workdir"' EXIT
-    workdir=$(mktemp -d --tmpdir "$package_name".XXXXXXXX)
+    workdir=$(mktemp -dt "$package_name".XXXXXXXX)
     mkdir "$workdir"/tmp
     if [ -d "$out" ]; then
       find "$out" -type d -execdir chmod u+w {} +
