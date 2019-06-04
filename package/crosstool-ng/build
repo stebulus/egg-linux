@@ -2,11 +2,8 @@ tar xf "$here"/crosstool-ng-1.23.0.tar.xz
 cd crosstool-ng-1.23.0
 patch -Np1 <"$here"/no-id-no-hostname.patch
 patch -Np1 <"$here"/bash5.patch
-export CPATH=$CPATH:"$ncurses"/include/ncurses
-# configure's autodetection might find ncursesw on the build system
-echo "ac_cv_search_initscr=-lncurses" >config.cache
-./configure --prefix="$out" \
-  --cache=config.cache
+patch -Np1 <"$here"/no-nconf.patch
+./configure --prefix="$out"
 make -j"$EGG_JOBS"
 make install
 ln -s \

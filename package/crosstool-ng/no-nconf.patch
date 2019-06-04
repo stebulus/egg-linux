@@ -1,0 +1,45 @@
+The build sometimes gets confused between the ncurses we installed
+and the system ncurses on the build machine.  Just avoid the whole
+thing by not building nconf.
+
+diff -ru crosstool-ng-1.23.0-orig/kconfig/Makefile crosstool-ng-1.23.0/kconfig/Makefile
+--- crosstool-ng-1.23.0-orig/kconfig/Makefile	2017-04-13 15:43:42.000000000 +0000
++++ crosstool-ng-1.23.0/kconfig/Makefile	2019-06-04 12:38:44.000000000 +0000
+@@ -2,7 +2,7 @@
+ # Hmmm! Cheesy build!
+ # Or: where I can unveil my make-fu... :-]
+ 
+-all: conf mconf nconf
++all: conf mconf
+ 	@true   # Just be silent, you fscking son of a fscking beach...
+ 
+ # Build flags
+@@ -52,14 +52,13 @@
+ nconf: LDFLAGS += -lmenu -lpanel $(LIBS)
+ 
+ # These are generated files:
+-ALL_OBJS = $(sort $(COMMON_OBJ) $(LX_OBJ) $(conf_OBJ) $(mconf_OBJ) $(nconf_OBJ))
+-ALL_DEPS = $(sort $(COMMON_DEP) $(LX_DEP) $(conf_DEP) $(mconf_DEP) $(nconf_DEP))
++ALL_OBJS = $(sort $(COMMON_OBJ) $(LX_OBJ) $(conf_OBJ) $(mconf_OBJ))
++ALL_DEPS = $(sort $(COMMON_DEP) $(LX_DEP) $(conf_DEP) $(mconf_DEP))
+ 
+ # Cheesy auto-dependencies
+ DEPS = $(COMMON_DEP)
+ DEPS += $(conf_DEP)
+ DEPS += $(mconf_DEP) $(LX_DEP)
+-DEPS += $(nconf_DEP)
+ -include $(DEPS)
+ 
+ # Build the dependency for C files
+diff -ru crosstool-ng-1.23.0-orig/Makefile.in crosstool-ng-1.23.0/Makefile.in
+--- crosstool-ng-1.23.0-orig/Makefile.in	2017-04-13 15:43:42.000000000 +0000
++++ crosstool-ng-1.23.0/Makefile.in	2019-06-04 12:38:58.000000000 +0000
+@@ -341,7 +341,7 @@
+ 	 done
+ 	@$(install) -m 644 samples/samples.mk "$(DESTDIR)$(libdir)/samples/samples.mk"
+ 
+-KCONFIG_FILES := conf mconf nconf kconfig.mk
++KCONFIG_FILES := conf mconf kconfig.mk
+ install-lib-kconfig: $(DESTDIR)$(libdir) install-lib-main
+ 	@echo "  INST    'kconfig/'"
+ 	@mkdir -p "$(DESTDIR)$(libdir)/kconfig"
