@@ -48,7 +48,7 @@ package bad-diff bad-cmp
 package mawk bad-cmp build-toolchain
 package file bad-diff mawk build-toolchain
 package xz bad-diff bad-cmp file mawk build-toolchain
-package diffutils bad-cmp mawk xz build-toolchain
+package diffutils bad-diff bad-cmp mawk xz build-toolchain
 package gawk diffutils file mawk build-toolchain
 stdtool xz
 stdtool diffutils
