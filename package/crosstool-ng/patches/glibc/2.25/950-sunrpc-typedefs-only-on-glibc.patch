@@ -1,0 +1,39 @@
+u_char and caddr_t are usual in BSD libc; this code apparently wants
+them, and (except on some listed BSD systems) defines them itself
+from __u_char and __caddr_t, which I suppose to be glibc internals.
+This breaks on musl, and indeed the check seems backwards: we should
+only use libc-internal names when we have affirmative reason to
+believe they're defined, not in the default case.
+
+--- glibc-2.25/sunrpc/rpc/types.h
++++ glibc-2.25-patched/sunrpc/rpc/types.h
+@@ -69,12 +69,7 @@
+ #include <sys/types.h>
+ #endif
+ 
+-#if defined __APPLE_CC__ || defined __FreeBSD__
+-# define __u_char_defined
+-# define __daddr_t_defined
+-#endif
+-
+-#ifndef __u_char_defined
++#ifdef __GLIBC__
+ typedef __u_char u_char;
+ typedef __u_short u_short;
+ typedef __u_int u_int;
+@@ -82,13 +77,11 @@
+ typedef __quad_t quad_t;
+ typedef __u_quad_t u_quad_t;
+ typedef __fsid_t fsid_t;
+-# define __u_char_defined
+-#endif
+-#ifndef __daddr_t_defined
+ typedef __daddr_t daddr_t;
+ typedef __caddr_t caddr_t;
+-# define __daddr_t_defined
+ #endif
++# define __u_char_defined
++# define __daddr_t_defined
+ 
+ #include <sys/time.h>
+ #include <sys/param.h>
