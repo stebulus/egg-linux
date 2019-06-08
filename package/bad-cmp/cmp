@@ -4,7 +4,7 @@ set -euo pipefail
 if [ "$1" = -s ]; then shift; fi
 unset tmp
 trap 'if [ -v tmp ]; then rm -rf "$tmp"; fi' EXIT
-tmp=$(mktemp -d --tmpdir)
+tmp=$(mktemp -dt)
 cat "$1" |od -An -x |tr -d ' ' >"$tmp"/bytes1
 cat "$2" |od -An -x |tr -d ' ' >"$tmp"/bytes2
 paste "$tmp"/bytes1 "$tmp"/bytes2 | while read -r a b; do
