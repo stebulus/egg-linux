@@ -1,4 +1,4 @@
-tar xf "$here"/help2man-1.47.5.tar.xz
+tar xf help2man-1.47.5.tar.xz
 cd help2man-1.47.5
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"

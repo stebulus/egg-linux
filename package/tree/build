@@ -31,6 +31,12 @@ cpuw "$tar"/* "$out"
 mkdir -p "$out"/usr/src/egg
 cp -aL "$here"/../../{build,hatch,package,README} \
   "$out"/usr/src/egg
+mkdir "$out"/usr/src/egg/downloads
+find "$out"/usr/src/egg/package -name sources -exec cat {} + |
+  while read -r url; do
+    source=$(basename "$url")
+    cp "$here"/../../downloads/"$source" "$out"/usr/src/egg/downloads
+  done
 
 mkdir -p "$out"/dev
 mkdir -p "$out"/proc

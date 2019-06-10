@@ -1,4 +1,4 @@
-tar xf "$here"/file-5.19.tar.gz
+tar xf file-5.19.tar.gz
 cd file-5.19
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"

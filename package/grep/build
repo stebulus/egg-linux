@@ -1,4 +1,4 @@
-tar xf "$here"/grep-3.0.tar.xz
+tar xf grep-3.0.tar.xz
 cd grep-3.0
 ./configure --prefix=/usr \
   --build=x86_64-unknown-linux-gnu \

@@ -1,4 +1,4 @@
-tar xf "$here"/gzip-1.8.tar.xz
+tar xf gzip-1.8.tar.xz
 cd gzip-1.8
 ./configure --prefix=/usr \
   --build=x86_64-unknown-linux-gnu \

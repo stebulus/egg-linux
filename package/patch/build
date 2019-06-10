@@ -1,4 +1,4 @@
-tar xf "$here"/patch-2.7.5.tar.xz
+tar xf patch-2.7.5.tar.xz
 cd patch-2.7.5
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"

@@ -1,4 +1,4 @@
-tar xf "$here"/diffutils-3.6.tar.xz
+tar xf diffutils-3.6.tar.xz
 cd diffutils-3.6
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"

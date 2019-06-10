@@ -1,4 +1,4 @@
-tar xf "$here"/bison-3.0.5.tar.xz
+tar xf bison-3.0.5.tar.xz
 cd bison-3.0.5
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"

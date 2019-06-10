@@ -1,4 +1,4 @@
-tar xf "$here"/xz-5.2.3.tar.gz
+tar xf xz-5.2.3.tar.gz
 cd xz-5.2.3
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"

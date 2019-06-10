@@ -1,4 +1,4 @@
-tar xf "$here"/bash-4.4.12.tar.gz
+tar xf bash-4.4.12.tar.gz
 cd bash-4.4.12
 cp "$here"/config.cache .  # undetectable settings when cross-compiling
 patch -Np1 <"$here"/bash-4.4-no-uname-r.patch

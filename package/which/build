@@ -1,4 +1,4 @@
-tar xf "$here"/which-2.21.tar.gz
+tar xf which-2.21.tar.gz
 cd which-2.21
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"

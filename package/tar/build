@@ -1,4 +1,4 @@
-tar xf "$here"/tar-1.29.tar.xz
+tar xf tar-1.29.tar.xz
 cd tar-1.29
 echo "tar_cv_path_RSH=no" >config.cache
 ./configure --prefix=/usr \

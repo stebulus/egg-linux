@@ -1,4 +1,4 @@
-tar xf "$here"/sed-4.4.tar.xz
+tar xf sed-4.4.tar.xz
 cd sed-4.4
 ./configure --prefix=/usr \
   --build=x86_64-unknown-linux-gnu \

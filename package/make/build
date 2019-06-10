@@ -1,4 +1,4 @@
-tar xf "$here"/make-3.81.tar.gz
+tar xf make-3.81.tar.gz
 cd make-3.81
 
 # Use memmove instead of strcpy, since out & in may overlap.

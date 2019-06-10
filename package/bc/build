@@ -1,4 +1,4 @@
-tar xf "$here"/bc-1.07.1.tar.gz
+tar xf bc-1.07.1.tar.gz
 cd bc-1.07.1
 ./configure --prefix="$out"
 make -j"$EGG_JOBS"

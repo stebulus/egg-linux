@@ -1,2 +1,3 @@
 mkdir -p "$out"
-ln -s "$here"/glibc-2.25.tar.xz "$out"
+source=$(readlink -f glibc-2.25.tar.xz)
+ln -s "$source" "$out"

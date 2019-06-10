@@ -1,4 +1,4 @@
-tar xf "$here"/crosstool-ng-1.23.0.tar.xz
+tar xf crosstool-ng-1.23.0.tar.xz
 cd crosstool-ng-1.23.0
 patch -Np1 <"$here"/no-id-no-hostname.patch
 patch -Np1 <"$here"/bash5.patch
