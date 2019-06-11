@@ -8,7 +8,7 @@ How to use:
 
 1. Fetch package sources:
 
-    wget -nc -P downloads $(find package -name sources -exec cat {} +)
+    wget -nc -P downloads $(cat package/*/sources)
 
    To check that all sources were downloaded, run this command again;
    when all sources are present, it will only emit lines of the form
