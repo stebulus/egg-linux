@@ -16,9 +16,9 @@ inputs=("$@")
 
 if [ -e "$out"/.built ]; then
   shouldBuild=no
-  newer=$(find "$package_dir" -newer "$out"/.built -print |head -n1)
+  newer=$(find "$package_dir" -newer "$out"/.built)
   if [ -n "$newer" ]; then
-    echo >&2 "$0: should build: $newer is newer than $out"
+    echo >&2 "$0: should build: $package_dir contents are newer than $out"
     shouldBuild=yes
   elif [ ${#inputs[@]} -ne 0 ]; then
     for i in "${inputs[@]}"; do
