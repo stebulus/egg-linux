@@ -6,20 +6,12 @@ cd make-3.81
 # fragility, fail explicitly if the substitution doesn't work.
 # This fix is adapted from Debian; see
 # http://http.debian.net/debian/pool/main/m/make-dfsg/make-dfsg_3.81-8.2.diff.gz
-sed -i -e '1597 {
-    s/strcpy (out, in)/memmove(out, in, strlen(in)+1)/
-    t
-    q1
-  }' job.c
+sed -i -e '1597{s/strcpy (out, in)/memmove(out, in, strlen(in)+1)/;t;q1}' job.c
 
 # Use alloca shims even when glibc present.
 # Edit with sed because we don't have patch yet; to mitigate the
 # fragility, fail explicitly if the substitution doesn't work.
-sed -i -e '210 {
-    s/ && !defined __GNU_LIBRARY__$//
-    t
-    q1
-  }' glob/glob.c
+sed -i -e '210{s/ && !defined __GNU_LIBRARY__$//;t;q1}' glob/glob.c
 
 ./configure --prefix="$out"
 sh build.sh

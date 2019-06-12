@@ -16,9 +16,9 @@ inputs=("$@")
 
 if [ -e "$out"/.built ]; then
   shouldBuild=no
-  newer=$(find "$package_dir" -newer "$out"/.built -print -quit)
+  newer=$(find "$package_dir" -newer "$out"/.built)
   if [ -n "$newer" ]; then
-    echo >&2 "$0: should build: $newer is newer than $out"
+    echo >&2 "$0: should build: $package_dir contents are newer than $out"
     shouldBuild=yes
   elif [ ${#inputs[@]} -ne 0 ]; then
     for i in "${inputs[@]}"; do
@@ -55,10 +55,10 @@ case "$shouldBuild" in
     echo >&2 "$0: building: $out"
     unset workdir
     trap '[ -v workdir ] && echo >&2 "leaving behind: $workdir"' EXIT
-    workdir=$(mktemp -dt "$package_name".XXXXXXXX)
+    workdir=$(mktemp -dt "$package_name".XXXXXX)
     mkdir "$workdir"/tmp
     if [ -d "$out" ]; then
-      find "$out" -type d -execdir chmod u+w {} +
+      find "$out" -type d -exec chmod u+w {} +
     fi
     rm -rf "$out"
     (
@@ -115,13 +115,13 @@ case "$shouldBuild" in
     )
     if [ ! -v LEAVE_WORKING_DIR ]; then
       echo >&2 "cleaning up: $workdir"
-      find "$workdir" -type d -execdir chmod u+w {} +
+      find "$workdir" -type d -exec chmod u+w {} +
       rm -rf "$workdir"
       unset workdir
     fi
     chmod u+w "$out"
     touch "$out"/.built
-    find "$out" ! -type l -execdir chmod a-w {} +
+    find "$out" ! -type l -exec chmod a-w {} +
     ;;
   no)
     echo >&2 "$0: not building: $out"

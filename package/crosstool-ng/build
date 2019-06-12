@@ -3,7 +3,9 @@ cd crosstool-ng-1.23.0
 patch -Np1 <"$here"/no-id-no-hostname.patch
 patch -Np1 <"$here"/bash5.patch
 patch -Np1 <"$here"/no-nconf.patch
-./configure --prefix="$out"
+patch -Np1 <"$here"/no-sed-s.patch
+echo ac_cv_header_libintl_h=no >config.cache
+./configure --prefix="$out" --cache=config.cache
 make -j"$EGG_JOBS"
 make install
 ln -s \

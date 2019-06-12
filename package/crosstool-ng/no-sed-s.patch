@@ -1,0 +1,44 @@
+Don't use sed -s.
+
+The -s option is a GNU extension to treat multiple files as separate inputs
+instead of one big stream. It serves no purpose in these invocations because
+there aren't multiple files, and it fails with sed other than GNU sed.
+
+--- crosstool-ng-1.23.0/scripts/gen_in_frags.sh
++++ crosstool-ng-1.23.0-patched/scripts/gen_in_frags.sh
+@@ -65,7 +65,7 @@
+     printf '\n'
+     for entry in "${@}"; do
+         file="${base_dir}/${entry}.in"
+-        _entry=$(printf '%s\n' "${entry}" |"${sed}" -r -s -e 's/[-.+]/_/g;')
++        _entry=$(printf '%s\n' "${entry}" |"${sed}" -r -e 's/[-.+]/_/g;')
+         printf 'config %s_%s\n' "${cfg_prefix}" "${_entry}"
+         printf '    bool\n'
+         printf '    prompt "%s"\n' "${entry}"
+@@ -84,7 +84,7 @@
+ 
+     for entry in "${@}"; do
+         file="${base_dir}/${entry}.in"
+-        _entry=$(printf '%s\n' "${entry}" |"${sed}" -r -s -e 's/[-.+]/_/g;')
++        _entry=$(printf '%s\n' "${entry}" |"${sed}" -r -e 's/[-.+]/_/g;')
+         printf '\n'
+         if [ "${cond}" = "Y" -o "${cond}" = "y" ]; then
+             printf 'config %s_%s_AVAILABLE\n' "${cfg_prefix}" "${_entry}"
+@@ -107,7 +107,7 @@
+     printf '# Generated file, do not edit!!!\n'
+     for entry in "${@}"; do
+         file="${base_dir}/${entry}.in"
+-        _entry=$(printf '%s\n' "${entry}" |"${sed}" -r -s -e 's/[-.+]/_/g;')
++        _entry=$(printf '%s\n' "${entry}" |"${sed}" -r -e 's/[-.+]/_/g;')
+         if [ -f "${file}.2" ]; then
+             printf '\n'
+             printf 'if %s_%s\n' "${cfg_prefix}" "${_entry}"
+@@ -135,7 +135,7 @@
+     printf '\n'
+     for entry in "${@}"; do
+         file="${base_dir}/${entry}.in"
+-        _entry=$(printf '%s\n' "${entry}" |"${sed}" -r -s -e 's/[-.+]/_/g;')
++        _entry=$(printf '%s\n' "${entry}" |"${sed}" -r -e 's/[-.+]/_/g;')
+         printf 'menuconfig %s_%s\n' "${cfg_prefix}" "${_entry}"
+         printf '    bool\n'
+         if "${grep}" -E '^## default' ${file} >/dev/null 2>&1; then
