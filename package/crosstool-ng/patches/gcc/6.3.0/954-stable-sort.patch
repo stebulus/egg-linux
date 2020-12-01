@@ -1,0 +1,41 @@
+Stabilize a couple sorts.
+
+To accommodate differences between musl's qsort and glibc's qsort,
+which otherwise yield differences in code generation when bootstrapping
+on Alpine and Debian.
+
+Backport of changes in gcc-8.1.0:
+https://github.com/gcc-mirror/gcc/commit/5804f6271247b02199abdd62a89c0c2bf807b656
+https://gcc.gnu.org/legacy-ml/gcc/2018-01/msg00068.html
+
+diff -ru gcc-6.3.0/gcc/ira-color.c gcc-6.3.0-patched/gcc/ira-color.c
+--- gcc-6.3.0/gcc/ira-color.c	2016-03-31 13:51:13.000000000 -0400
++++ gcc-6.3.0-patched/gcc/ira-color.c	2020-12-01 08:44:46.779340322 -0500
+@@ -300,7 +300,8 @@
+   else if (hv2->cost < hv1->cost)
+     return -1;
+   else
+-    return 0;
++    return SORTGT(allocno_hard_regs_hasher::hash(hv2),
++                  allocno_hard_regs_hasher::hash(hv1));
+ }
+ 
+ 
+diff -ru gcc-6.3.0/gcc/tree-ssa-loop-im.c gcc-6.3.0-patched/gcc/tree-ssa-loop-im.c
+--- gcc-6.3.0/gcc/tree-ssa-loop-im.c	2016-11-23 09:31:16.000000000 -0500
++++ gcc-6.3.0-patched/gcc/tree-ssa-loop-im.c	2020-12-01 08:43:39.500306996 -0500
+@@ -1511,8 +1511,12 @@
+   basic_block bb2 = *(basic_block *)const_cast<void *>(bb2_);
+   struct loop *loop1 = bb1->loop_father;
+   struct loop *loop2 = bb2->loop_father;
+-  if (loop1->num == loop2->num)
+-    return 0;
++  if (loop1->num == loop2->num) {
++    if (bb1->index == bb2->index)
++      return 0;
++    else
++      return bb1->index < bb2->index ? -1 : 1;
++  }
+   return bb_loop_postorder[loop1->num] < bb_loop_postorder[loop2->num] ? -1 : 1;
+ }
+ 

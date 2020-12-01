@@ -1,0 +1,79 @@
+Stabilize the sorting of iv_common_cand structs.
+
+Ideally we'd make the sort deterministic by considering more details
+of the structure being compared, but in this case it seems that
+we'd need to compare the base and step fields, which are objects
+of type tree, whose contents are complicated.  Implementing a total
+comparison function for these objects would presumably involve a case
+analysis similar to the one in the function add_expr in gcc/tree.c,
+which computes hash codes for such objects.
+
+So instead, we stabilize the sort by force: we record the original
+positions of the objects and take thse positions into account in the
+comparison function.
+
+diff -ru gcc-6.3.0/gcc/tree-ssa-loop-ivopts.c gcc-6.3.0-patched2/gcc/tree-ssa-loop-ivopts.c
+--- gcc-6.3.0/gcc/tree-ssa-loop-ivopts.c	2016-04-12 09:38:46.000000000 -0400
++++ gcc-6.3.0-patched2/gcc/tree-ssa-loop-ivopts.c	2020-12-06 15:23:08.167402169 -0500
+@@ -258,6 +263,12 @@
+   hashval_t hash;
+ };
+ 
++struct iv_common_cand_ord
++{
++  unsigned pos;
++  iv_common_cand *cand;
++};
++
+ /* Hashtable helpers.  */
+ 
+ struct iv_common_cand_hasher : delete_ptr_hash <iv_common_cand>
+@@ -3157,15 +3166,17 @@
+ static int
+ common_cand_cmp (const void *p1, const void *p2)
+ {
+-  unsigned n1, n2;
+-  const struct iv_common_cand *const *const ccand1
+-    = (const struct iv_common_cand *const *)p1;
+-  const struct iv_common_cand *const *const ccand2
+-    = (const struct iv_common_cand *const *)p2;
+-
+-  n1 = (*ccand1)->uses.length ();
+-  n2 = (*ccand2)->uses.length ();
+-  return n2 - n1;
++  unsigned n1, n2, i, id1, id2;
++  const struct iv_common_cand_ord *const cand_ord1
++    = (const struct iv_common_cand_ord *)p1;
++  const struct iv_common_cand_ord *const cand_ord2
++    = (const struct iv_common_cand_ord *)p2;
++
++  n1 = cand_ord1->cand->uses.length ();
++  n2 = cand_ord2->cand->uses.length ();
++  if (n1 != n2)
++    return n2 - n1;
++  return cand_ord2->pos - cand_ord1->pos;
+ }
+ 
+ /* Adds IV candidates based on common candidated recorded.  */
+@@ -3175,8 +3186,20 @@
+ {
+   unsigned i, j;
+   struct iv_cand *cand_1, *cand_2;
++  struct iv_common_cand_ord cand_ord;
++  auto_vec<iv_common_cand_ord> sortee;
++
++  sortee.reserve(data->iv_common_cands.length());
++  for (i = 0; i < data->iv_common_cands.length (); i++) {
++    cand_ord.pos = i;
++    cand_ord.cand = data->iv_common_cands[i];
++    sortee.quick_push(cand_ord);
++  }
++  sortee.qsort(common_cand_cmp);
++  for (i = 0; i < data->iv_common_cands.length (); i++) {
++    data->iv_common_cands[i] = sortee[i].cand;
++  }
+ 
+-  data->iv_common_cands.qsort (common_cand_cmp);
+   for (i = 0; i < data->iv_common_cands.length (); i++)
+     {
+       struct iv_common_cand *ptr = data->iv_common_cands[i];
