@@ -1,0 +1,37 @@
+From 60caac32597e2d438e0b1234c835362e28798693 Mon Sep 17 00:00:00 2001
+From: Alexander Monakov <amonakov@ispras.ru>
+Date: Thu, 20 Jul 2017 18:15:55 +0300
+Subject: [PATCH 2/2] lra-assigns.c: fix pseudo_compare_func
+
+	* lra-assigns.c (pseudo_compare_func): Fix comparison step based on
+	non_spilled_static_chain_regno_p.
+
+From-SVN: r250395
+
+Backport from 8.1.0:
+https://github.com/gcc-mirror/gcc/commit/f0a404561c4abc2fcb6015cc96ca779b8eecc411
+---
+ gcc/lra-assigns.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/gcc/lra-assigns.c b/gcc/lra-assigns.c
+index 88a9185ee6d..32a287b4cf5 100644
+--- a/gcc/lra-assigns.c
++++ b/gcc/lra-assigns.c
+@@ -234,10 +234,9 @@ pseudo_compare_func (const void *v1p, const void *v2p)
+ 
+   /* Assign hard reg to static chain pointer first pseudo when
+      non-local goto is used.  */
+-  if (non_spilled_static_chain_regno_p (r1))
+-    return -1;
+-  else if (non_spilled_static_chain_regno_p (r2))
+-    return 1;
++  if ((diff = (non_spilled_static_chain_regno_p (r2)
++	       - non_spilled_static_chain_regno_p (r1))) != 0)
++    return diff;
+ 
+   /* Prefer to assign more frequently used registers first.  */
+   if ((diff = lra_reg_info[r2].freq - lra_reg_info[r1].freq) != 0)
+-- 
+2.25.0
+

@@ -1,0 +1,54 @@
+From de2769abcae442f7a1e78e40572666400452bc88 Mon Sep 17 00:00:00 2001
+From: Alexander Monakov <amonakov@ispras.ru>
+Date: Tue, 19 Sep 2017 13:16:20 +0300
+Subject: [PATCH 1/2] lra: make reload_pseudo_compare_func a proper comparator
+
+	PR rtl-optimization/57878
+	PR rtl-optimization/68988
+	* lra-assigns.c (reload_pseudo_compare_func): Remove fragmentation
+	avoidance test involving non_reload_pseudos.  Move frequency test
+	below the general fragmentation avoidance test.
+
+From-SVN: r252972
+
+Backport from 8.1.0:
+https://github.com/gcc-mirror/gcc/commit/ffaea1170332667a1533a354dfcedc6d0de4aa5e
+---
+ gcc/lra-assigns.c | 15 +++------------
+ 1 file changed, 3 insertions(+), 12 deletions(-)
+
+diff --git a/gcc/lra-assigns.c b/gcc/lra-assigns.c
+index fb3de849ec1..88a9185ee6d 100644
+--- a/gcc/lra-assigns.c
++++ b/gcc/lra-assigns.c
+@@ -206,24 +206,15 @@ reload_pseudo_compare_func (const void *v1p, const void *v2p)
+   if ((diff = (ira_class_hard_regs_num[cl1]
+ 	       - ira_class_hard_regs_num[cl2])) != 0)
+     return diff;
+-  if ((diff
+-       = (ira_reg_class_max_nregs[cl2][lra_reg_info[r2].biggest_mode]
+-	  - ira_reg_class_max_nregs[cl1][lra_reg_info[r1].biggest_mode])) != 0
+-      /* The code below executes rarely as nregs == 1 in most cases.
+-	 So we should not worry about using faster data structures to
+-	 check reload pseudos.  */
+-      && ! bitmap_bit_p (&non_reload_pseudos, r1)
+-      && ! bitmap_bit_p (&non_reload_pseudos, r2))
+-    return diff;
+-  if ((diff = (regno_assign_info[regno_assign_info[r2].first].freq
+-	       - regno_assign_info[regno_assign_info[r1].first].freq)) != 0)
+-    return diff;
+   /* Allocate bigger pseudos first to avoid register file
+      fragmentation.  */
+   if ((diff
+        = (ira_reg_class_max_nregs[cl2][lra_reg_info[r2].biggest_mode]
+ 	  - ira_reg_class_max_nregs[cl1][lra_reg_info[r1].biggest_mode])) != 0)
+     return diff;
++  if ((diff = (regno_assign_info[regno_assign_info[r2].first].freq
++	       - regno_assign_info[regno_assign_info[r1].first].freq)) != 0)
++    return diff;
+   /* Put pseudos from the thread nearby.  */
+   if ((diff = regno_assign_info[r1].first - regno_assign_info[r2].first) != 0)
+     return diff;
+-- 
+2.25.0
+
