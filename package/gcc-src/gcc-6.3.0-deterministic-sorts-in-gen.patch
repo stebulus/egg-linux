@@ -1,0 +1,271 @@
+From 6a9c038a8b0d5c1204ef0aff3b866501bbbd1319 Mon Sep 17 00:00:00 2001
+From: Steven Taschuk <steven@amotlpaa.org>
+Date: Tue, 8 Dec 2020 19:24:25 -0500
+Subject: [PATCH] Make sorts in gcc/gen* deterministic (or stable)
+
+---
+ gcc/genautomata.c | 98 +++++++++++++++++++++++++++--------------------
+ gcc/genopinit.c   |  6 ++-
+ gcc/genrecog.c    | 31 +++++++++++----
+ 3 files changed, 85 insertions(+), 50 deletions(-)
+
+diff --git a/gcc/genautomata.c b/gcc/genautomata.c
+index e3a6c59056d..c6ed130dc5d 100644
+--- a/gcc/genautomata.c
++++ b/gcc/genautomata.c
+@@ -1090,6 +1090,17 @@ regexp_mode_check_failed (enum regexp_mode mode,
+ 
+ #endif /* #if CHECKING_P && (GCC_VERSION >= 2007) */
+ 
++static int
++compare (int a, int b)
++{
++  if (a < b)
++    return -1;
++  else if (a > b)
++    return 1;
++  else
++    return 0;
++}
++
+ #define XCREATENODE(T) ((T *) create_node (sizeof (T)))
+ #define XCREATENODEVEC(T, N) ((T *) create_node (sizeof (T) * (N)))
+ #define XCREATENODEVAR(T, S) ((T *) create_node ((S)))
+@@ -3327,14 +3338,10 @@ free_alt_states (alt_state_t alt_states_list)
+ static int
+ alt_state_cmp (const void *alt_state_ptr_1, const void *alt_state_ptr_2)
+ {
+-  if ((*(const alt_state_t *) alt_state_ptr_1)->state->unique_num
+-      == (*(const alt_state_t *) alt_state_ptr_2)->state->unique_num)
+-    return 0;
+-  else if ((*(const alt_state_t *) alt_state_ptr_1)->state->unique_num
+-	   < (*(const alt_state_t *) alt_state_ptr_2)->state->unique_num)
+-    return -1;
+-  else
+-    return 1;
++  int id1, id2;
++  id1 = (*(const alt_state_t *) alt_state_ptr_1)->state->unique_num;
++  id2 = (*(const alt_state_t *) alt_state_ptr_2)->state->unique_num;
++  return compare(id1, id2);
+ }
+ 
+ /* The function sorts ALT_STATES_LIST and removes duplicated alt
+@@ -5962,34 +5969,45 @@ state_is_differed (state_t state, state_t another_state,
+ 
+ /* Compares two states pointed to by STATE_PTR_1 and STATE_PTR_2
+    and return -1, 0 or 1.  This function can be used as predicate for
+-   qsort().  It requires the member presence_signature[] of both
+-   states be filled.  */
++   qsort(), but you should use compare_states_for_equiv_sort for that
++   instead, to make the sort deterministic.  Both functions require
++   the member presence_signature[] of both states to be filled. */
+ static int
+ compare_states_for_equiv (const void *state_ptr_1,
+ 			  const void *state_ptr_2)
+ {
+   const_state_t const s1 = *(const_state_t const*)state_ptr_1;
+   const_state_t const s2 = *(const_state_t const*)state_ptr_2;
+-  unsigned int sz, si;
+-  if (s1->num_out_arcs < s2->num_out_arcs)
+-    return -1;
+-  else if (s1->num_out_arcs > s2->num_out_arcs)
+-    return 1;
++  unsigned int sz, si, diff;
++  diff = compare(s1->num_out_arcs, s2->num_out_arcs);
++  if (diff != 0) return diff;
+ 
+   sz = (description->query_units_num + sizeof (int) * CHAR_BIT - 1)
+ 	/ (sizeof (int) * CHAR_BIT);
+ 
+-  for (si = 0; si < sz; si++)
+-    if (s1->presence_signature[si] < s2->presence_signature[si])
+-      return -1;
+-    else if (s1->presence_signature[si] > s2->presence_signature[si])
+-      return 1;
++  for (si = 0; si < sz; si++) {
++    diff = compare(s1->presence_signature[si],
++                   s2->presence_signature[si]);
++    if (diff != 0) return diff;
++  }
+   return 0;
+ }
+ 
++static int
++compare_states_for_equiv_sort (const void *state_ptr_1,
++                               const void *state_ptr_2)
++{
++  int diff, id1, id2;
++  diff = compare_states_for_equiv (state_ptr_1, state_ptr_2);
++  if (diff == 0)
++      diff = compare((*(const_state_t *)state_ptr_1)->unique_num,
++                     (*(const_state_t *)state_ptr_2)->unique_num);
++  return diff;
++}
++
+ /* The function makes initial partition of STATES on equivalent
+    classes and saves it into CLASSES.  This function requires the input
+-   to be sorted via compare_states_for_equiv().  */
++   to be sorted via compare_states_for_equiv_sort().  */
+ static int
+ init_equiv_class (vec<state_t> states, vec<state_t> *classes)
+ {
+@@ -6102,7 +6120,7 @@ evaluate_equiv_classes (automaton_t automaton, vec<state_t> *equiv_classes)
+   all_achieved_states.create (1500);
+   pass_states (automaton, add_achieved_state);
+   pass_states (automaton, cache_presence);
+-  all_achieved_states.qsort (compare_states_for_equiv);
++  all_achieved_states.qsort (compare_states_for_equiv_sort);
+ 
+   odd_iteration_flag = 0;
+   new_equiv_class_num = init_equiv_class (all_achieved_states,
+@@ -6559,14 +6577,15 @@ static int
+ compare_max_occ_cycle_nums (const void *unit_decl_1,
+ 			    const void *unit_decl_2)
+ {
+-  if ((DECL_UNIT (*(const_decl_t const*) unit_decl_1)->max_occ_cycle_num)
+-      < (DECL_UNIT (*(const_decl_t const*) unit_decl_2)->max_occ_cycle_num))
+-    return 1;
+-  else if ((DECL_UNIT (*(const_decl_t const*) unit_decl_1)->max_occ_cycle_num)
+-	   == (DECL_UNIT (*(const_decl_t const*) unit_decl_2)->max_occ_cycle_num))
+-    return 0;
+-  else
+-    return -1;
++  int diff;
++  const_unit_decl_t decl1, decl2;
++  decl1 = DECL_UNIT (*(const_decl_t const*) unit_decl_1);
++  decl2 = DECL_UNIT (*(const_decl_t const*) unit_decl_2);
++  diff = -compare(decl1->max_occ_cycle_num,
++                  decl2->max_occ_cycle_num);
++  if (diff != 0) return diff;
++  /* be deterministic when max_occ_cycle_nums are equal */
++  return strcmp(decl1->name, decl2->name);
+ }
+ 
+ /* The function makes heuristic assigning automata to units.  Actually
+@@ -7502,17 +7521,14 @@ static int
+ compare_transition_els_num (const void *state_ptr_1,
+ 			    const void *state_ptr_2)
+ {
+-  const int transition_els_num_1
+-    = out_state_arcs_num (*(const_state_t const*) state_ptr_1);
+-  const int transition_els_num_2
+-    = out_state_arcs_num (*(const_state_t const*) state_ptr_2);
+-
+-  if (transition_els_num_1 < transition_els_num_2)
+-    return 1;
+-  else if (transition_els_num_1 == transition_els_num_2)
+-    return 0;
+-  else
+-    return -1;
++  int diff;
++  const_state_t state1 = *(const_state_t *)state_ptr_1;
++  const_state_t state2 = *(const_state_t *)state_ptr_2;
++  diff = -compare(out_state_arcs_num(state1),
++                  out_state_arcs_num(state2));
++  if (diff == 0)
++      diff = compare(state1->unique_num, state2->unique_num);
++  return diff;
+ }
+ 
+ /* The function adds element EL_VALUE to vector VECT for a table state
+diff --git a/gcc/genopinit.c b/gcc/genopinit.c
+index 6d7ad4ffc38..fae9ee96684 100644
+--- a/gcc/genopinit.c
++++ b/gcc/genopinit.c
+@@ -68,9 +68,13 @@ optab_kind_cmp (const void *va, const void *vb)
+ static int
+ optab_rcode_cmp (const void *va, const void *vb)
+ {
++  int diff;
+   const optab_def *a = (const optab_def *)va;
+   const optab_def *b = (const optab_def *)vb;
+-  return a->rcode - b->rcode;
++  diff = a->rcode - b->rcode;
++  if (diff == 0)
++      diff = a->op - b->op;
++  return diff;
+ }
+ 
+ static const char *header_file_name = "init-opinit.h";
+diff --git a/gcc/genrecog.c b/gcc/genrecog.c
+index 47e42660fcc..dd1a713a85e 100644
+--- a/gcc/genrecog.c
++++ b/gcc/genrecog.c
+@@ -3261,7 +3261,11 @@ struct state_size
+ };
+ 
+ /* Pairs a transition with information about its target state.  */
+-typedef std::pair <transition *, state_size> subroutine_candidate;
++struct subroutine_candidate {
++  struct transition *transition;
++  state_size size;
++  unsigned pos;
++};
+ 
+ /* Sort two subroutine_candidates so that the one with the largest
+    number of statements comes last.  */
+@@ -3269,8 +3273,14 @@ typedef std::pair <transition *, state_size> subroutine_candidate;
+ static int
+ subroutine_candidate_cmp (const void *a, const void *b)
+ {
+-  return int (((const subroutine_candidate *) a)->second.num_statements
+-	      - ((const subroutine_candidate *) b)->second.num_statements);
++  int diff;
++  const subroutine_candidate *sc1, *sc2;
++  sc1 = (const subroutine_candidate *) a;
++  sc2 = (const subroutine_candidate *) b;
++  diff = int (sc1->size.num_statements - sc2->size.num_statements);
++  if (diff == 0)
++    diff = sc2->pos - sc1->pos;  /* for a stable sort */
++  return diff;
+ }
+ 
+ /* Turn S into a subroutine of type TYPE and add it to PROCS.  Return a new
+@@ -3296,10 +3306,12 @@ create_subroutine (routine_type type, state *s, vec <state *> &procs)
+ static state_size
+ find_subroutines (routine_type type, state *s, vec <state *> &procs)
+ {
++  subroutine_candidate cand;
+   auto_vec <subroutine_candidate, 16> candidates;
+   state_size size;
+   size.num_statements = 0;
+   size.depth = 0;
++  cand.pos = 0;
+   for (decision *d = s->first; d; d = d->next)
+     {
+       if (!d->test.single_outcome_p ())
+@@ -3347,7 +3359,10 @@ find_subroutines (routine_type type, state *s, vec <state *> &procs)
+ 		/* Assume for now that we'll keep the target state in the
+ 		   same routine as S, but record it as a subroutine candidate
+ 		   if S grows too big.  */
+-		candidates.safe_push (subroutine_candidate (trans, to_size));
++                cand.transition = trans;
++                cand.size = to_size;
++		candidates.safe_push (cand);
++                cand.pos++;
+ 	    }
+ 	}
+     }
+@@ -3360,15 +3375,15 @@ find_subroutines (routine_type type, state *s, vec <state *> &procs)
+ 	     && size.num_statements > MAX_NUM_STATEMENTS)
+ 	{
+ 	  /* Peel off a candidate and force it into a subroutine.  */
+-	  subroutine_candidate cand = candidates.pop ();
+-	  size.num_statements -= cand.second.num_statements;
+-	  cand.first->to = create_subroutine (type, cand.first->to, procs);
++	  cand = candidates.pop ();
++	  size.num_statements -= cand.size.num_statements;
++	  cand.transition->to = create_subroutine (type, cand.transition->to, procs);
+ 	}
+     }
+   /* Update the depth for subroutine candidates that we decided not to
+      split out.  */
+   for (unsigned int i = 0; i < candidates.length (); ++i)
+-    size.depth = MAX (size.depth, candidates[i].second.depth);
++    size.depth = MAX (size.depth, candidates[i].size.depth);
+   size.depth += 1;
+   return size;
+ }
+-- 
+2.25.0
+

@@ -29,3 +29,4 @@ noUsrBinFilePatch mpc 1.0.3
 noUsrBinFilePatch mpfr 3.1.5
 cp "$toolchain_src"/gcc-6.3.0-sort-old-objects.patch "$out"/patches/gcc/6.3.0
 cp "$toolchain_src"/gcc-6.3.0-no-auto-host-in-crtstuff.patch "$out"/patches/gcc/6.3.0
+cp "$toolchain_src"/gcc-6.3.0-deterministic-sorts-in-gen.patch "$out"/patches/gcc/6.3.0
