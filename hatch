@@ -73,7 +73,7 @@ package which build-toolchain
 # prerequisites of the cross toolchain -- fancy
 # ("fancy" ~= "m4, perl, and things that need them")
 package m4 patch build-toolchain
-package perl build-toolchain
+package perl patch build-toolchain
 package autoconf m4 perl build-toolchain
 package automake autoconf perl build-toolchain
 package bison m4 perl build-toolchain
