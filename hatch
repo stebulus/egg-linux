@@ -14,7 +14,9 @@ out=$1
 # Add the package foo to the "standard environment", making it
 # available to all (subsequent) package builds even when it's not
 # listed explicitly as an input.
+echo before set stdenv $PATH
 stdenv=()
+echo after set stdenv $PATH
 stdtool() {
   stdenv+=("$out/$1")
 }
