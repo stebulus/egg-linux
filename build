@@ -2,6 +2,7 @@
 set -euo pipefail
 here=$(dirname "${BASH_SOURCE[0]}")
 here=$(readlink -f "$here")
+bash=$(type -p bash)
 
 if [ $# -lt 2 ]; then
   echo >&2 "usage: $0 outputdir packagedir [input ...]"
@@ -111,7 +112,7 @@ case "$shouldBuild" in
         TMPDIR="$workdir"/tmp \
         EGG_JOBS="${EGG_JOBS:-1}" \
         ${inputsvars:+"${inputsvars[@]}"} \
-        /bin/bash -euo pipefail -- "$package_dir"/build
+        "$bash" -euo pipefail -- "$package_dir"/build
     )
     if [ ! -v LEAVE_WORKING_DIR ]; then
       echo >&2 "cleaning up: $workdir"
