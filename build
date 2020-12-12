@@ -65,8 +65,7 @@ case "$shouldBuild" in
       if [ -e "$package_dir"/sources ]; then
         while read -r source; do
           source=$(basename "$source")
-          source=$(readlink -f "$here/downloads/$source")
-          ln -s "$source" "$workdir"
+          ln -s "$here/downloads/$source" "$workdir"
         done <"$package_dir"/sources
       fi
       inputsvars=()
