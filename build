@@ -2,10 +2,6 @@
 set -euo pipefail
 here=$(dirname "${BASH_SOURCE[0]}")
 here=$(readlink -f "$here")
-bash=$(type -p bash)
-
-echo inside build $PATH
-echo $bash
 
 if [ $# -lt 2 ]; then
   echo >&2 "usage: $0 outputdir packagedir [input ...]"
@@ -97,9 +93,6 @@ case "$shouldBuild" in
         else
           path=
         fi
-        echo "--- setting up path"
-        env
-        echo "--- end setting up path"
         inputsvars+=(
           CPATH="${inputspaths[*]/%//include}"
           LD_LIBRARY_PATH="${inputspaths[*]/%//lib}"
@@ -118,7 +111,7 @@ case "$shouldBuild" in
         TMPDIR="$workdir"/tmp \
         EGG_JOBS="${EGG_JOBS:-1}" \
         ${inputsvars:+"${inputsvars[@]}"} \
-        "$bash" -euo pipefail -- "$package_dir"/build
+        bash -euo pipefail -- "$package_dir"/build
     )
     if [ ! -v LEAVE_WORKING_DIR ]; then
       echo >&2 "cleaning up: $workdir"

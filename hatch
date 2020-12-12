@@ -2,8 +2,6 @@
 set -euo pipefail
 here=$(dirname "${BASH_SOURCE[0]}")
 
-echo inside hatch $PATH
-
 if [ $# -ne 1 ]; then
   echo >&2 "usage: $0 outputdir"
   exit 1
@@ -14,9 +12,7 @@ out=$1
 # Add the package foo to the "standard environment", making it
 # available to all (subsequent) package builds even when it's not
 # listed explicitly as an input.
-echo before set stdenv $PATH
 stdenv=()
-echo after set stdenv $PATH
 stdtool() {
   stdenv+=("$out/$1")
 }
@@ -28,7 +24,6 @@ package() {
   pkg=$1
   shift
   start=$(date -u +%s)
-  echo before build $PATH
   "$here"/build "$out/$pkg" "$here/package/$pkg" \
     ${stdenv:+"${stdenv[@]}"} ${@:+"${@/#/$out/}"}
   finish=$(date -u +%s)
