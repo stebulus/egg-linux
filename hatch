@@ -40,6 +40,9 @@ package build-toolchain
 unset PASS_PATH_THROUGH
 stdtool build-tools
 
+package ncurses-src
+false
+
 # bootstrap the standard environment
 package make build-toolchain
 stdtool make

@@ -4,3 +4,4 @@ while read -r url; do
   source=$(readlink -f "$source")
   ln -s "$source" "$out"
 done <"$here"/sources
+ls -lF
