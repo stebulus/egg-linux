@@ -5,6 +5,7 @@ here=$(readlink -f "$here")
 bash=$(type -p bash)
 
 echo inside build $PATH
+echo $bash
 
 if [ $# -lt 2 ]; then
   echo >&2 "usage: $0 outputdir packagedir [input ...]"
