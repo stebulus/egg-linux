@@ -1,6 +1,7 @@
 basename
 cat
 chmod
+comm
 cp
 cut
 date
