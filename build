@@ -74,8 +74,8 @@ case "$shouldBuild" in
         "/egg-workdir/$package_name" "$workdir"
         "/egg-output/$package_name" "$out"
       )
+      inputspaths=()
       if [ ${#inputs[@]} -ne 0 ]; then
-        inputspaths=()
         for i in "${inputs[@]}"; do
           name=$(basename "$i")
           fullpath=$(readlink -f "$i")
@@ -84,23 +84,25 @@ case "$shouldBuild" in
           bppmentries+=(/egg-input/"$name" "$fullpath")
         done
         IFS=:
-        if [ -v PASS_PATH_THROUGH ] && [ ${#inputspaths[@]} -ne 0 ]; then
-          path=$PATH:"${inputspaths[*]/%//bin}"
-        elif [ -v PASS_PATH_THROUGH ]; then
-          path=$PATH
-        elif [ ${#inputspaths[@]} -ne 0 ]; then
-          path="${inputspaths[*]/%//bin}"
-        else
-          path=
-        fi
         inputsvars+=(
           CPATH="${inputspaths[*]/%//include}"
           LD_LIBRARY_PATH="${inputspaths[*]/%//lib}"
           LIBRARY_PATH="${inputspaths[*]/%//lib}"
-          PATH="$path"
         )
         unset IFS
       fi
+      IFS=:
+      if [ -v PASS_PATH_THROUGH ] && [ ${#inputspaths[@]} -ne 0 ]; then
+        path=$PATH:"${inputspaths[*]/%//bin}"
+      elif [ -v PASS_PATH_THROUGH ]; then
+        path=$PATH
+      elif [ ${#inputspaths[@]} -ne 0 ]; then
+        path="${inputspaths[*]/%//bin}"
+      else
+        path=
+      fi
+      inputsvars+=(PATH="$path")
+      unset IFS
       pathmap=$(bppm "${bppmentries[@]}")
       cd "$workdir"
       env -i \
