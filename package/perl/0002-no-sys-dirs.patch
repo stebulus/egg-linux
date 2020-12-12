@@ -1,7 +1,19 @@
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
---- perl-5.20.0-orig/Configure	2014-05-26 15:34:18.000000000 +0200
-+++ perl-5.20.0/Configure	2014-06-25 10:43:35.368285986 +0200
-@@ -106,15 +106,7 @@
+diff -ru perl-5.24.3/cflags.SH perl-5.24.3-patched/cflags.SH
+--- perl-5.24.3/cflags.SH	2017-06-30 17:03:20.000000000 -0400
++++ perl-5.24.3-patched/cflags.SH	2020-12-12 13:58:34.627805754 -0500
+@@ -164,7 +164,7 @@
+ 
+ case "$gccversion" in
+ '') ;;
+-[12]*) ;; # gcc versions 1 (gasp!) and 2 are not good for this.
++[12].*) ;; # gcc versions 1 (gasp!) and 2 are not good for this.
+ Intel*) ;; # # Is that you, Intel C++?
+ #
+ # NOTE 1: the -std=c89 without -pedantic is a bit pointless.
+diff -ru perl-5.24.3/Configure perl-5.24.3-patched/Configure
+--- perl-5.24.3/Configure	2017-09-22 10:26:35.000000000 -0400
++++ perl-5.24.3-patched/Configure	2020-12-12 13:58:42.835663748 -0500
+@@ -111,15 +111,7 @@
  fi
  
  : Proper PATH setting
@@ -18,8 +30,8 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  
  for p in $paths
  do
-@@ -1337,8 +1329,7 @@
- archname=''
+@@ -1425,8 +1417,7 @@
+ i_whoami=''
  : Possible local include directories to search.
  : Set locincpth to "" in a hint file to defeat local include searches.
 -locincpth="/usr/local/include /opt/local/include /usr/gnu/include"
@@ -28,8 +40,8 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  :
  : no include file wanted by default
  inclwanted=''
-@@ -1349,17 +1340,12 @@
- 
+@@ -1440,17 +1431,12 @@
+ archobjs=''
  libnames=''
  : change the next line if compiling for Xenix/286 on Xenix/386
 -xlibpth='/usr/lib/386 /lib/386'
@@ -49,8 +61,8 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  
  : Private path used by Configure to find libraries.  Its value
  : is prepended to libpth. This variable takes care of special
-@@ -1391,8 +1377,6 @@
- libswanted="$libswanted m crypt sec util c cposix posix ucb bsd BSD"
+@@ -1483,8 +1469,6 @@
+ libswanted="$libswanted sun m crypt sec util c cposix posix ucb bsd BSD"
  : We probably want to search /usr/shlib before most other libraries.
  : This is only used by the lib/ExtUtils/MakeMaker.pm routine extliblist.
 -glibpth=`echo " $glibpth " | sed -e 's! /usr/shlib ! !'`
@@ -58,7 +70,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  : Do not use vfork unless overridden by a hint file.
  usevfork=false
  
-@@ -2446,7 +2430,6 @@
+@@ -2541,7 +2525,6 @@
  zip
  "
  pth=`echo $PATH | sed -e "s/$p_/ /g"`
@@ -66,7 +78,25 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  for file in $loclist; do
  	eval xxx=\$$file
  	case "$xxx" in
-@@ -4936,7 +4919,7 @@
+@@ -4686,7 +4669,7 @@
+ fi
+ $rm -f try try.*
+ case "$gccversion" in
+-1*) cpp=`./loc gcc-cpp $cpp $pth` ;;
++1.*) cpp=`./loc gcc-cpp $cpp $pth` ;;
+ esac
+ case "$gccversion" in
+ '') gccosandvers='' ;;
+@@ -4726,7 +4709,7 @@
+ # gcc 3.* complain about adding -Idirectories that they already know about,
+ # so we will take those off from locincpth.
+ case "$gccversion" in
+-3*)
++3.*)
+     echo "main(){}">try.c
+     for incdir in $locincpth; do
+        warn=`$cc $ccflags -I$incdir -c try.c 2>&1 | \
+@@ -5031,7 +5014,7 @@
  : Set private lib path
  case "$plibpth" in
  '') if ./mips; then
@@ -75,7 +105,41 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
      fi;;
  esac
  case "$libpth" in
-@@ -8600,13 +8583,8 @@
+@@ -5452,13 +5435,13 @@
+ case "$hint" in
+ default|recommended)
+ 	case "$gccversion" in
+-	1*) dflt="$dflt -fpcc-struct-return" ;;
++	1.*) dflt="$dflt -fpcc-struct-return" ;;
+ 	esac
+ 	case "$optimize:$DEBUGGING" in
+ 	*-g*:old) dflt="$dflt -DDEBUGGING";;
+ 	esac
+ 	case "$gccversion" in
+-	2*) if $test -d /etc/conf/kconfig.d &&
++	2.*) if $test -d /etc/conf/kconfig.d &&
+ 			$contains _POSIX_VERSION $usrinc/sys/unistd.h >/dev/null 2>&1
+ 		then
+ 			# Interactive Systems (ISC) POSIX mode.
+@@ -5467,7 +5450,7 @@
+ 		;;
+ 	esac
+ 	case "$gccversion" in
+-	1*) ;;
++	1.*) ;;
+ 	2.[0-8]*) ;;
+ 	?*)	set strict-aliasing -fno-strict-aliasing
+ 		eval $checkccflag
+@@ -5585,7 +5568,7 @@
+     ;;
+ esac
+ case "$gccversion" in
+-1*) cppflags="$cppflags -D__GNUC__"
++1.*) cppflags="$cppflags -D__GNUC__"
+ esac
+ case "$mips_type" in
+ '');;
+@@ -8879,13 +8862,8 @@
  echo " "
  case "$sysman" in
  '')
@@ -91,7 +155,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  	;;
  esac
  if $test -d "$sysman"; then
-@@ -19900,9 +19878,10 @@
+@@ -21126,9 +21104,10 @@
  case "$full_ar" in
  '') full_ar=$ar ;;
  esac
@@ -103,28 +167,36 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  
  : see what type gids are declared as in the kernel
  echo " "
-Only in perl-5.20.0/: Configure.orig
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/ext/Errno/Errno_pm.PL perl-5.20.0/ext/Errno/Errno_pm.PL
---- perl-5.20.0-orig/ext/Errno/Errno_pm.PL	2014-05-26 15:34:20.000000000 +0200
-+++ perl-5.20.0/ext/Errno/Errno_pm.PL	2014-06-25 10:31:24.317970047 +0200
-@@ -134,12 +126,7 @@
+@@ -23379,7 +23358,7 @@
+ 
+ : add -D_FORTIFY_SOURCE if feasible and not already there
+ case "$gccversion" in
+-[4567].*)	case "$optimize$ccflags" in
++[456789].*|[1-9][0-9]*)	case "$optimize$ccflags" in
+ 	*-O*)	case "$ccflags$cppsymbols" in
+ 		*_FORTIFY_SOURCE=*) # Don't add it again.
+ 			echo "You seem to have -D_FORTIFY_SOURCE already, not adding it." >&4
+Only in perl-5.24.3-patched: Configure.orig
+diff -ru perl-5.24.3/ext/Errno/Errno_pm.PL perl-5.24.3-patched/ext/Errno/Errno_pm.PL
+--- perl-5.24.3/ext/Errno/Errno_pm.PL	2017-06-30 17:03:22.000000000 -0400
++++ perl-5.24.3-patched/ext/Errno/Errno_pm.PL	2020-12-12 14:01:33.736755686 -0500
+@@ -123,11 +123,7 @@
  	if ($dep =~ /(\S+errno\.h)/) {
  	     $file{$1} = 1;
  	}
 -    } elsif ($^O eq 'linux' &&
 -	      $Config{gccversion} ne '' && 
--	      $Config{gccversion} !~ /intel/i &&
+-	      $Config{gccversion} !~ /intel/i
 -	      # might be using, say, Intel's icc
--	      $linux_errno_h
 -	     ) {
 +    } elsif (0) {
-	$file{$linux_errno_h} = 1;
-     } elsif ($^O eq 'haiku') {
-	# hidden in a special place
-Only in perl-5.20.0/ext/Errno: Errno_pm.PL.orig
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/freebsd.sh perl-5.20.0/hints/freebsd.sh
---- perl-5.20.0-orig/hints/freebsd.sh	2014-01-31 22:55:51.000000000 +0100
-+++ perl-5.20.0/hints/freebsd.sh	2014-06-25 10:25:53.263964680 +0200
+     # When cross-compiling we may store a path for gcc's "sysroot" option:
+     my $sysroot = $Config{sysroot} || '';
+ 	# Some Linuxes have weird errno.hs which generate
+Only in perl-5.24.3-patched/ext/Errno: Errno_pm.PL.orig
+diff -ru perl-5.24.3/hints/freebsd.sh perl-5.24.3-patched/hints/freebsd.sh
+--- perl-5.24.3/hints/freebsd.sh	2017-06-30 17:03:22.000000000 -0400
++++ perl-5.24.3-patched/hints/freebsd.sh	2020-12-12 13:58:42.839663679 -0500
 @@ -119,21 +119,21 @@
          objformat=`/usr/bin/objformat`
          if [ x$objformat = xaout ]; then
@@ -153,9 +225,9 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/freebsd.sh perl-5.20.0/hints/
         ldflags="-Wl,-E "
          lddlflags="-shared "
          cccdlflags='-DPIC -fPIC'
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/linux.sh
---- perl-5.20.0-orig/hints/linux.sh	2014-05-26 15:34:20.000000000 +0200
-+++ perl-5.20.0/hints/linux.sh	2014-06-25 10:33:47.354883843 +0200
+diff -ru perl-5.24.3/hints/linux.sh perl-5.24.3-patched/hints/linux.sh
+--- perl-5.24.3/hints/linux.sh	2017-06-30 17:03:22.000000000 -0400
++++ perl-5.24.3-patched/hints/linux.sh	2020-12-12 14:02:12.756103045 -0500
 @@ -150,25 +150,6 @@
      ;;
  esac
@@ -182,8 +254,8 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
  case "$plibpth" in
  '') plibpth=`LANG=C LC_ALL=C $gcc $ccflags $ldflags -print-search-dirs | grep libraries |
  	cut -f2- -d= | tr ':' $trnl | grep -v 'gcc' | sed -e 's:/$::'`
-@@ -178,32 +159,6 @@
-     ;;
+@@ -195,32 +176,6 @@
+   ;;
  esac
  
 -case "$libc" in
@@ -212,10 +284,10 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
 -    ;;
 -esac
 -
- if ${sh:-/bin/sh} -c exit; then
-   echo ''
-   echo 'You appear to have a working bash.  Good.'
-@@ -367,33 +322,6 @@
+ # Are we using ELF?  Thanks to Kenneth Albanowski <kjahds@kjahds.com>
+ # for this test.
+ cat >try.c <<'EOM'
+@@ -384,33 +339,6 @@
  	;;
  esac
  
@@ -249,3 +321,4 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
  # Linux on Synology.
  if [ -f /etc/synoinfo.conf -a -d /usr/syno ]; then
      # Tested on Synology DS213 and DS413
+Only in perl-5.24.3-patched/hints: linux.sh.orig
