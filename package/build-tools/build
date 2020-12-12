@@ -1,4 +1,3 @@
-echo $PATH
 mkdir -p "$out"/bin
 here=$(dirname "${BASH_SOURCE[0]}")
 cat "$here"/toolset/* |
