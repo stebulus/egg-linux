@@ -33,6 +33,7 @@ sed
 sha256sum
 sleep
 sort
+split
 stat
 tail
 touch
