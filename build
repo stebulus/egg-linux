@@ -69,9 +69,6 @@ case "$shouldBuild" in
           ln -s "$source" "$workdir"
         done <"$package_dir"/sources
       fi
-      echo "foo -- bar"
-      ls -lF "$workdir"
-      echo "foo -- bar"
       inputsvars=()
       bppmentries=(
         "/egg-workdir/$package_name" "$workdir"
