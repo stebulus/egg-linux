@@ -1,7 +1,7 @@
 mkdir -p "$out"
 while read -r url; do
   name=$(basename "$url")
-  name=$(readlink -f ./"$name")
+  name=$(readlink "$name")
   ln -s "$name" "$out"
 done <"$here"/sources
 cp "$here"/*.patch "$out"

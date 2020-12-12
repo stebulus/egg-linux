@@ -6,6 +6,6 @@ ln -s "$linux_src"/* "$out"
 ln -s "$ncurses_src"/* "$out"
 while read -r url; do
   source=$(basename "$url")
-  source=$(readlink -f "$source")
+  source=$(readlink "$source")
   ln -s "$source" "$out"
 done <"$here"/sources
