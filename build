@@ -97,6 +97,9 @@ case "$shouldBuild" in
         else
           path=
         fi
+        echo "--- setting up path"
+        env
+        echo "--- end setting up path"
         inputsvars+=(
           CPATH="${inputspaths[*]/%//include}"
           LD_LIBRARY_PATH="${inputspaths[*]/%//lib}"
