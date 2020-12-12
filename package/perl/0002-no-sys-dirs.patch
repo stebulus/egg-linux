@@ -159,7 +159,7 @@ diff -ru perl-5.24.3/hints/freebsd.sh perl-5.24.3-patched/hints/freebsd.sh
 diff -ru perl-5.24.3/hints/linux.sh perl-5.24.3-patched/hints/linux.sh
 --- perl-5.24.3/hints/linux.sh	2017-06-30 17:03:22.000000000 -0400
 +++ perl-5.24.3-patched/hints/linux.sh	2020-12-12 14:02:12.756103045 -0500
-@@ -150,25 +150,6 @@
+@@ -150,25 +150,7 @@
      ;;
  esac
  
@@ -179,7 +179,7 @@ diff -ru perl-5.24.3/hints/linux.sh perl-5.24.3-patched/hints/linux.sh
 -if [ -x /usr/bin/gcc ] ; then
 -    gcc=/usr/bin/gcc
 -else
--    gcc=gcc
+     gcc=gcc
 -fi
 -
  case "$plibpth" in
