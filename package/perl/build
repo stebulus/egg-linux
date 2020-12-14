@@ -4,7 +4,7 @@ patch -Np1 <"$here"/0001-Adapt-Configure-to-GCC-version-10.patch
 patch -Np1 <"$here"/0002-no-sys-dirs.patch
 pwd=$(type -P pwd)
 tmp=$(mktemp)
-awk -v pwd="$pwd" '{ gsub("/bin/pwd", pwd) }' \
+awk -v pwd="$pwd" '{ gsub("/bin/pwd", pwd); print }' \
     dist/PathTools/Cwd.pm >"$tmp"
 mv "$tmp" dist/PathTools/Cwd.pm
 ./Configure -des -Dprefix="$out"
